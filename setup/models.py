@@ -1,0 +1,223 @@
+from django.db import models
+from django.contrib.auth.models import User, Group
+from django.db.models import signals
+from .views import diz_settings
+
+
+'''
+IDEA:
+Ad un impiego si associano n controlli.
+Ad un dipendente si associa 1 impiego.
+
+'''
+
+
+class Controllo(models.Model):
+
+    titolo = models.CharField(max_length=40)
+    descrizione = models.CharField(default='', max_length=250, blank=True)
+    check = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.titolo
+
+    def getTitolo(self):
+        return self.titolo
+    def getDescrizione(self):
+        return self.descrizione
+
+    class Meta:
+        verbose_name_plural = "Controlli"
+
+'''
+class ControlloAggiuntivo(Controllo):
+    class Meta:
+        verbose_name_plural = "Controlli aggiuntivi"
+
+'''
+
+class ControlloAggiuntivo(models.Model):
+    titolo = models.CharField(max_length=40)
+    descrizione = models.CharField(default='', max_length=250, blank=True)
+    check = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.titolo
+
+    class Meta:
+        verbose_name_plural = "Controlli aggiuntivi"
+
+
+class Impiego(models.Model):
+    impiego = models.CharField(primary_key=True, max_length=20)
+    controlli = models.ManyToManyField(Controllo, blank=True)
+
+    def __unicode__(self):
+        return self.impiego
+
+    def getControlli(self):
+        return self.controlli.all()
+
+    class Meta:
+        verbose_name_plural = "Impieghi"
+
+
+class Responsabile(User):
+    class Meta:
+        verbose_name_plural = "Responsabili"
+    def __unicode__(self):
+        return self.last_name
+
+    def getEmail(self):
+        return self.email
+
+'''
+class Preposto(models.Model):
+
+    id = models.CharField(max_length=3,primary_key=True)
+    sottoposti = models.ManyToManyField(Impiego, blank=True)
+    superiore = models.ForeignKey(Responsabile, blank=True)
+
+    class Meta:
+        verbose_name_plural = "Preposti"
+
+    def __unicode__(self):
+        return self.id
+    def getSuperiore(self):
+        return str(self.superiore)
+    def getID(self):
+        return str(self.id)
+'''
+
+class Preposto(User):
+    n_matr = models.CharField(default='empty',max_length=10)
+    sottoposti = models.ManyToManyField(Impiego, blank=True)
+    superiore = models.ForeignKey(Responsabile, blank=True)
+
+    class Meta:
+        verbose_name_plural = "Preposti"
+    def __unicode__(self):
+        return self.last_name
+    def getSuperiore(self):
+        return str(self.superiore)
+    def getN_matr(self):
+        return str(self.n_matr)
+    def getID(self):
+        return str(self.id)
+    def getNome(self):
+        return self.first_name
+    def getCognome(self):
+        return self.last_name
+
+class Dipendente(models.Model):
+
+    n_matricola = models.CharField(max_length=4, primary_key=True)
+    nome = models.CharField(max_length=15)
+    cognome = models.CharField(max_length=15)
+    impiego = models.ForeignKey(Impiego)
+    controlli_adhoc = models.ManyToManyField(
+        ControlloAggiuntivo,
+        blank=True,
+        help_text="Selezionare o inserire ulteriori controlli specifici."
+    )
+    class Meta:
+        verbose_name_plural = "Dipendenti"
+        ordering = [
+            'cognome'
+            ]
+
+    @classmethod
+    def create(cls, matr, nome, cognome, impiego):
+        dipendente = cls(
+            matricola=matr,
+            nome=nome,
+            cognome=cognome,
+            impiego=Impiego.objects.get(impiego=impiego)
+        )
+        return dipendente
+
+    def __unicode__(self):
+        return self.n_matricola
+
+    def getN_matr(self):
+        return self.n_matricola
+    def getNome(self):
+        return self.nome
+    def getCognome(self):
+        return self.cognome
+    def getList_ContrAdHoc(self):
+        return self.controlli_adhoc.all()
+    def getImpiego(self):
+        return str(self.impiego)
+
+class Orario(models.Model):
+    nome = models.CharField(max_length=20)
+    orario = models.TimeField()
+
+    def __unicode__(self):
+        return self.nome
+    def getNome(self):
+        return self.nome
+    def getOrario_string(self):
+        return str(self.orario)
+    def getOrario_time(self):
+        pass
+    class Meta:
+        verbose_name_plural = "Orari"
+
+
+class Impostazione(models.Model):
+    creazione = models.DateTimeField(auto_now_add=True)
+
+    smtp_server = models.CharField(max_length=20, verbose_name="Server smtp")
+    smtp_username = models.CharField(max_length=30, verbose_name="Username (server smtp)")
+    smtp_password = models.CharField(max_length=30,verbose_name="Password (server smtp)")
+    port = models.IntegerField(default=587, help_text="Porta da usare (default=587).")
+
+    messaggio = models.TextField(
+        default="Il preposto non ha eseguito il giro controlli in data odierna.",
+        help_text="Contenuto dell'email inviata quando un preposto non esegue un giro di controlli.",
+
+    )
+    orari_selezione = models.ManyToManyField(
+        Orario,
+        help_text="Orari disponibili nella compilazione del piano settimanale.",
+    )
+
+    sogliaControllo_ore = models.IntegerField(
+        blank=False,
+        help_text="Ore a disposizione per concludere il giro dei controlli.",
+        verbose_name="Soglia ore"
+    )
+    sogliaControllo_minuti = models.IntegerField(
+        blank=False,
+        help_text="Minuti a disposizione per concludere il giro dei controlli.",
+        verbose_name="Soglia minuti"
+    )
+
+
+
+    class Meta:
+        verbose_name_plural = "Impostazioni"
+        ordering = [
+            '-creazione'
+        ]
+    def __unicode__(self):
+        return str(self.id)
+    def getSMTP_server(self):
+        return self.smtp_server
+    def getSMTP_username(self):
+        return self.smtp_username
+    def getSMTP_password(self):
+        return self.smtp_password
+    def inizializzazione(self):
+
+
+'''
+    def __init__(self):
+        settings.EMAIL_HOST = self.getSMTP_server()
+        settings.EMAIL_HOST_USER = self.getSMTP_username()
+        settings.EMAIL_HOST_PASSWORD = self.getSMTP_password()
+        print "Impostazioni: \n"+'Email host: '+ self.getSMTP_server()
+
+'''
