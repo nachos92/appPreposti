@@ -5,8 +5,6 @@ import datetime
 startdate ed enddate stabiliscono l'intervallo (centrato nella data odierna) 
 entro cui viene verificata la presenza di controlli da effettuare.  
 """
-startDate = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday())
-endDate = startDate + datetime.timedelta(days=6)
 
 
 """

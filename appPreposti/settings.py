@@ -126,9 +126,5 @@ CRONJOBS = [
 ]
 
 EMAIL_BACKEND= 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.mail.yahoo.it'
-EMAIL_HOST_USER = "piano_master92@yahoo.it"
-EMAIL_HOST_PASSWORD = "zanarkand92"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_MESSAGE = "Il preposto non ha eseguito il giro controlli in data odierna."

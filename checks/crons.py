@@ -1,12 +1,31 @@
 from subprocess import call
-from parametri import *
 from models import Settimana, SegnalazionePrep
 from datetime import date
 from django.core.mail import send_mail
 from setup.models import Responsabile,Preposto, Impostazione
+import datetime
 
 import smtplib
 
+
+
+# ------- Variabili modificati in base ai valori di Impostazione
+EMAIL_HOST = 'smtp.mail.yahoo.it'
+EMAIL_HOST_USER = "piano_master92@yahoo.it"
+EMAIL_HOST_PASSWORD = "zanarkand92"
+
+EMAIL_MESSAGE = "Il preposto non ha eseguito il giro controlli in data odierna."
+
+
+SOGLIA_ORE = 1
+SOGLIA_MINUTI = 0
+
+MITTENTE_USER = "piano_master92@yahoo.it"
+MITTENTE_PASSW = "zanarkand92"
+
+
+startDate = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday())
+endDate = startDate + datetime.timedelta(days=6)
 
 soglia_tot = datetime.timedelta(hours=SOGLIA_ORE, minutes=SOGLIA_MINUTI)
 
@@ -15,10 +34,10 @@ def invio_email(destinatario, messaggio):
         send_mail(
         subject='SEGNALAZIONE',
         message=messaggio,
-        from_email=mittente_user,
+        from_email=MITTENTE_USER,
         recipient_list=[destinatario,],
-        auth_user=mittente_user,
-        auth_password=mittente_passw,
+        auth_user=MITTENTE_USER,
+        auth_password=MITTENTE_PASSW,
         fail_silently=True
         )
     except:
@@ -50,20 +69,17 @@ def check_controlli():
                     if x.lun_fatto == False:
                         #invio segnalazione
                         prep = Preposto.objects.get(last_name=x.getCod_preposto())
-                        message = "Il preposto ID: " + \
-                                    prep.getID() + \
-                                    " non ha eseguito o non ha eseguito in tempo " + \
-                                    "i controlli in data odierna."
+                        message = EMAIL_MESSAGE,
                         # invio segnalazione via mail
                         send_mail(
                             subject='SEGNALAZIONE',
                             message=message,
-                            from_email=mittente_user,
+                            from_email=MITTENTE_USER,
                             recipient_list=[Responsabile.objects.get(
                                 last_name=prep.getSuperiore()
                             ).getEmail(), ],
-                            #auth_user=mittente_user,
-                            #auth_password=mittente_passw,
+                            #auth_user=MITTENTE_USER,
+                            #auth_password=MITTENTE_PASSW,
                             fail_silently=True
                         )
 
@@ -78,20 +94,17 @@ def check_controlli():
 
                         # invio segnalazione
                         prep = Preposto.objects.get(last_name=x.getCod_preposto())
-                        message = "Il preposto ID: " + \
-                                  prep.getID() + \
-                                  " non ha eseguito o non ha eseguito in tempo " + \
-                                  "i controlli in data odierna."
+                        message = EMAIL_MESSAGE,
                         # invio segnalazione via mail
                         send_mail(
                             subject='SEGNALAZIONE',
                             message=message,
-                            from_email=mittente_user,
+                            from_email=MITTENTE_USER,
                             recipient_list=[Responsabile.objects.get(
                                 last_name=prep.getSuperiore()
                             ).getEmail(), ],
-                            # auth_user=mittente_user,
-                            # auth_password=mittente_passw,
+                            # auth_user=MITTENTE_USER,
+                            # auth_password=MITTENTE_PASSW,
                             fail_silently=True
                         )
 
@@ -106,20 +119,17 @@ def check_controlli():
 
                         # invio segnalazione
                         prep = Preposto.objects.get(last_name=x.getCod_preposto())
-                        message = "Il preposto ID: " + \
-                                  prep.getID() + \
-                                  " non ha eseguito o non ha eseguito in tempo " + \
-                                  "i controlli in data odierna."
+                        message = EMAIL_MESSAGE,
                         # invio segnalazione via mail
                         send_mail(
                             subject='SEGNALAZIONE',
                             message=message,
-                            from_email=mittente_user,
+                            from_email=MITTENTE_USER,
                             recipient_list=[Responsabile.objects.get(
                                 last_name=prep.getSuperiore()
                             ).getEmail(), ],
-                            # auth_user=mittente_user,
-                            # auth_password=mittente_passw,
+                            # auth_user=MITTENTE_USER,
+                            # auth_password=MITTENTE_PASSW,
                             fail_silently=True
                         )
 
@@ -134,20 +144,17 @@ def check_controlli():
 
                         # invio segnalazione
                         prep = Preposto.objects.get(last_name=x.getCod_preposto())
-                        message = "Il preposto ID: " + \
-                                  prep.getID() + \
-                                  " non ha eseguito o non ha eseguito in tempo " + \
-                                  "i controlli in data odierna."
+                        message = EMAIL_MESSAGE,
                         # invio segnalazione via mail
                         send_mail(
                             subject='SEGNALAZIONE',
                             message=message,
-                            from_email=mittente_user,
+                            from_email=MITTENTE_USER,
                             recipient_list=[Responsabile.objects.get(
                                 last_name=prep.getSuperiore()
                             ).getEmail(), ],
-                            # auth_user=mittente_user,
-                            # auth_password=mittente_passw,
+                            # auth_user=MITTENTE_USER,
+                            # auth_password=MITTENTE_PASSW,
                             fail_silently=True
                         )
 
@@ -162,20 +169,17 @@ def check_controlli():
 
                         # invio segnalazione
                         prep = Preposto.objects.get(last_name=x.getCod_preposto())
-                        message = "Il preposto ID: " + \
-                                  prep.getID() + \
-                                  " non ha eseguito o non ha eseguito in tempo " + \
-                                  "i controlli in data odierna."
+                        message = EMAIL_MESSAGE
                         # invio segnalazione via mail
                         send_mail(
                             subject='SEGNALAZIONE',
                             message=message,
-                            from_email=mittente_user,
+                            from_email=MITTENTE_USER,
                             recipient_list=[Responsabile.objects.get(
                                 last_name=prep.getSuperiore()
                             ).getEmail(), ],
-                            # auth_user=mittente_user,
-                            # auth_password=mittente_passw,
+                            # auth_user=MITTENTE_USER,
+                            # auth_password=MITTENTE_PASSW,
                             fail_silently=True
                         )
 
