@@ -3,20 +3,19 @@ from django.http import HttpResponse,HttpResponseBadRequest
 from django.forms import *
 import django_excel as excel
 from .models import Dipendente, Impiego
-from django.contrib.auth.models import Group
-from pyexcel_xls import *
-from appPreposti.settings import *
+
 import csv
 
 
 
 diz_settings = {}
+'''
 diz_settings['smtp_server']= EMAIL_HOST
 diz_settings['smtp_username']= EMAIL_HOST_USER
 diz_settings['smtp_password']= EMAIL_HOST_PASSWORD
 diz_settings['port']= EMAIL_PORT
 diz_settings['messaggio']= EMAIL_MESSAGE
-
+'''
 
 
 
@@ -43,6 +42,7 @@ credenziali del tipo:
 """
 
 def uploadDip(request):
+
     if request == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
@@ -128,6 +128,4 @@ def impostazioni(request):
     Assegno i valori dell'entry di Impostazione piu' recente.
 
     """
-    if len(Impostazione.objects.all()) > 0:
-        pass
     return HttpResponse('')

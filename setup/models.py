@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
 from django.db.models import signals
-from .views import diz_settings
 
 
 '''
@@ -118,23 +117,13 @@ class Dipendente(models.Model):
     controlli_adhoc = models.ManyToManyField(
         ControlloAggiuntivo,
         blank=True,
-        help_text="Selezionare o inserire ulteriori controlli specifici."
+        help_text="Selezionare o inserire ulteriori controlli specifici.",
     )
     class Meta:
         verbose_name_plural = "Dipendenti"
         ordering = [
             'cognome'
             ]
-
-    @classmethod
-    def create(cls, matr, nome, cognome, impiego):
-        dipendente = cls(
-            matricola=matr,
-            nome=nome,
-            cognome=cognome,
-            impiego=Impiego.objects.get(impiego=impiego)
-        )
-        return dipendente
 
     def __unicode__(self):
         return self.n_matricola
@@ -149,6 +138,17 @@ class Dipendente(models.Model):
         return self.controlli_adhoc.all()
     def getImpiego(self):
         return str(self.impiego)
+
+    @classmethod
+    def create(cls, matr, nome, cognome, impiego):
+        dipendente = cls(
+            matricola=matr,
+            nome=nome,
+            cognome=cognome,
+            impiego=Impiego.objects.get(impiego=impiego)
+        )
+        return dipendente
+
 
 class Orario(models.Model):
     nome = models.CharField(max_length=20)
@@ -195,8 +195,6 @@ class Impostazione(models.Model):
         verbose_name="Soglia minuti"
     )
 
-
-
     class Meta:
         verbose_name_plural = "Impostazioni"
         ordering = [
@@ -210,14 +208,3 @@ class Impostazione(models.Model):
         return self.smtp_username
     def getSMTP_password(self):
         return self.smtp_password
-    def inizializzazione(self):
-
-
-'''
-    def __init__(self):
-        settings.EMAIL_HOST = self.getSMTP_server()
-        settings.EMAIL_HOST_USER = self.getSMTP_username()
-        settings.EMAIL_HOST_PASSWORD = self.getSMTP_password()
-        print "Impostazioni: \n"+'Email host: '+ self.getSMTP_server()
-
-'''

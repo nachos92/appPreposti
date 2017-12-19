@@ -42,18 +42,7 @@ class DipendenteAdmin(admin.ModelAdmin):
         'impiego',
     ]
 
-'''
-class PrepostoAdmin(admin.ModelAdmin):
-    fields = [
-        'id',
-        'sottoposti',
-        'superiore',
-        ]
-    list_diplay = [
-        'id',
-        'superiore',
-    ]
-'''
+
 
 class PrepostoAdmin(admin.ModelAdmin):
     fields = [
