@@ -7,11 +7,6 @@ from setup.models import Responsabile,Preposto, Impostazione
 
 import smtplib
 
-"""
-Esegue il controllo periodico per verificare che i preposti non abbiano
-dimenticato di fare un giro controlli o che non l'abbiano fatto fuori tempo limite (questo
-secondo caso vuol dire che magari hanno iniziato tardi e all'orario limite devono ancora finire).
-"""
 
 soglia_tot = datetime.timedelta(hours=SOGLIA_ORE, minutes=SOGLIA_MINUTI)
 
@@ -32,7 +27,12 @@ def invio_email(destinatario, messaggio):
         pass
 
 
-def my_job():
+"""
+Esegue il controllo periodico per verificare che i preposti non abbiano
+dimenticato di fare un giro controlli o che non l'abbiano fatto fuori tempo limite (questo
+secondo caso vuol dire che magari hanno iniziato tardi e all'orario limite devono ancora finire).
+"""
+def check_controlli():
     #Ottengo gli elem di Settimana nel periodo giusto
     totali = Settimana.objects.filter(data_inizio__range=[startDate, endDate], completato=False)
 

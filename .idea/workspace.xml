@@ -5,9 +5,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/appPreposti/settings.py" afterPath="$PROJECT_DIR$/appPreposti/settings.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/checks/crons.py" afterPath="$PROJECT_DIR$/checks/crons.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/checks/views.py" afterPath="$PROJECT_DIR$/checks/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setup/admin.py" afterPath="$PROJECT_DIR$/setup/admin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setup/models.py" afterPath="$PROJECT_DIR$/setup/models.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -48,11 +45,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="settings.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/appPreposti/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="219">
-              <caret line="124" column="9" lean-forward="false" selection-start-line="124" selection-start-column="9" selection-end-line="124" selection-end-column="9" />
+            <state relative-caret-position="390">
+              <caret line="133" column="35" lean-forward="true" selection-start-line="133" selection-start-column="35" selection-end-line="133" selection-end-column="35" />
               <folding />
             </state>
           </provider>
@@ -73,12 +70,9 @@
       <file leaf-file-name="crons.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/checks/crons.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="361">
-              <caret line="190" column="12" lean-forward="false" selection-start-line="190" selection-start-column="12" selection-end-line="190" selection-end-column="12" />
-              <folding>
-                <element signature="e#632#967#0" expanded="false" />
-                <element signature="e#988#8192#0" expanded="false" />
-              </folding>
+            <state relative-caret-position="335">
+              <caret line="34" column="19" lean-forward="false" selection-start-line="34" selection-start-column="19" selection-end-line="34" selection-end-column="19" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -127,7 +121,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="admin.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="admin.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/setup/admin.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="136">
@@ -209,10 +203,10 @@
         <option value="$PROJECT_DIR$/checks/models.py" />
         <option value="$PROJECT_DIR$/setup/views.py" />
         <option value="$PROJECT_DIR$/checks/views.py" />
-        <option value="$PROJECT_DIR$/appPreposti/settings.py" />
-        <option value="$PROJECT_DIR$/checks/crons.py" />
         <option value="$PROJECT_DIR$/setup/models.py" />
         <option value="$PROJECT_DIR$/setup/admin.py" />
+        <option value="$PROJECT_DIR$/checks/crons.py" />
+        <option value="$PROJECT_DIR$/appPreposti/settings.py" />
       </list>
     </option>
   </component>
@@ -712,31 +706,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/appPreposti/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="124" column="9" lean-forward="false" selection-start-line="124" selection-start-column="9" selection-end-line="124" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/checks/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="167">
           <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/checks/crons.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="190" column="12" lean-forward="false" selection-start-line="190" selection-start-column="12" selection-end-line="190" selection-end-column="12" />
-          <folding>
-            <element signature="e#632#967#0" expanded="false" />
-            <element signature="e#988#8192#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -768,6 +743,22 @@
             <element signature="e#1043#1353#1" expanded="false" />
             <element signature="e#1491#1727#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/checks/crons.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="335">
+          <caret line="34" column="19" lean-forward="false" selection-start-line="34" selection-start-column="19" selection-end-line="34" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/appPreposti/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="133" column="35" lean-forward="true" selection-start-line="133" selection-start-column="35" selection-end-line="133" selection-end-column="35" />
+          <folding />
         </state>
       </provider>
     </entry>
