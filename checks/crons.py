@@ -3,7 +3,7 @@ from parametri import *
 from models import Settimana, SegnalazionePrep
 from datetime import date
 from django.core.mail import send_mail
-from setup.models import Responsabile,Preposto
+from setup.models import Responsabile,Preposto, Impostazione
 
 import smtplib
 
@@ -184,4 +184,10 @@ def my_job():
                     x.ven_check = True
                     x.save()
 
+def check_impostazioni():
+    if(Impostazione.objects.get(pk=1).is_today()):
 
+        #ASSEGNAZIONE DEI VALORI
+        pass
+
+    pass

@@ -134,6 +134,7 @@ class ImpostazioneAdmin(admin.ModelAdmin):
 
     list_display = [
         'id',
+        'nuovo',
         'creazione',
         'data_inizio',
         'smtp_server',

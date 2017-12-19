@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
 from django.db.models import signals
+from datetime import date
 
 
 '''
@@ -167,10 +168,11 @@ class Orario(models.Model):
 
 
 class Impostazione(models.Model):
+    nuovo = models.BooleanField(default=True)
     creazione = models.DateTimeField(auto_now_add=True)
     data_inizio = models.DateField(
         help_text="Inserire data dell'entrata in vigore delle impostazioni.",
-        verbose_name="Inizio applicazione delle impostazioni.",
+        verbose_name="Data attivazione",
         blank=False,
     )
     smtp_server = models.CharField(max_length=20, verbose_name="Server smtp")
@@ -212,3 +214,8 @@ class Impostazione(models.Model):
         return self.smtp_username
     def getSMTP_password(self):
         return self.smtp_password
+    def is_today(self):
+        if self.data_inizio == date.today():
+            return True
+        else:
+            return False

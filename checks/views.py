@@ -9,6 +9,7 @@ import json
 from parametri import *
 
 
+
 """
 Costruisce un dizionario del tipo
 diz['impiego'] = [ <listacontrolliassociati> ]
