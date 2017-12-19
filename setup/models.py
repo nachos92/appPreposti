@@ -168,7 +168,11 @@ class Orario(models.Model):
 
 class Impostazione(models.Model):
     creazione = models.DateTimeField(auto_now_add=True)
-
+    data_inizio = models.DateField(
+        help_text="Inserire data dell'entrata in vigore delle impostazioni.",
+        verbose_name="Inizio applicazione delle impostazioni.",
+        blank=False,
+    )
     smtp_server = models.CharField(max_length=20, verbose_name="Server smtp")
     smtp_username = models.CharField(max_length=30, verbose_name="Username (server smtp)")
     smtp_password = models.CharField(max_length=30,verbose_name="Password (server smtp)")

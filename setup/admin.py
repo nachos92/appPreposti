@@ -108,6 +108,11 @@ class ResponsabileAdmin(admin.ModelAdmin):
 
 class ImpostazioneAdmin(admin.ModelAdmin):
     fieldsets = (
+        ('Generali', {
+            'fields': (
+                'data_inizio',
+            )
+        }),
         ('Parametri email', {
             'fields': (
                 'smtp_server',
@@ -130,6 +135,7 @@ class ImpostazioneAdmin(admin.ModelAdmin):
     list_display = [
         'id',
         'creazione',
+        'data_inizio',
         'smtp_server',
         'smtp_username',
     ]
