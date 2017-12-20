@@ -2,9 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="72cf107d-da9c-4f92-8678-167fb7e50fd4" name="Default" comment="Aggiunto campo data_inizio al modello Impostazione.">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/checks/parametri.py" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/appPreposti/settings.py" afterPath="$PROJECT_DIR$/appPreposti/settings.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/checks/crons.py" afterPath="$PROJECT_DIR$/checks/crons.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/checks/parametri.py" afterPath="$PROJECT_DIR$/checks/parametri.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/checks/models.py" afterPath="$PROJECT_DIR$/checks/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/checks/views.py" afterPath="$PROJECT_DIR$/checks/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setup/models.py" afterPath="$PROJECT_DIR$/setup/models.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -18,88 +22,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/setup/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="772">
-              <caret line="77" column="0" lean-forward="true" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#44#0" expanded="true" />
-                <element signature="e#458#772#1" expanded="false" />
-                <element signature="e#811#835#0" expanded="false" />
-                <element signature="e#2092#2731#0" expanded="false" />
-                <element signature="e#2762#3405#0" expanded="false" />
-                <element signature="e#3433#3484#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="settings.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/appPreposti/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="664">
-              <caret line="130" column="0" lean-forward="false" selection-start-line="130" selection-start-column="0" selection-end-line="130" selection-end-column="0" />
+            <state relative-caret-position="370">
+              <caret line="124" column="5" lean-forward="false" selection-start-line="124" selection-start-column="5" selection-end-line="124" selection-end-column="5" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/checks/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="167">
-              <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#35#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="parametri.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/checks/parametri.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="crons.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/checks/crons.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1972">
-              <caret line="28" column="0" lean-forward="true" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#27#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/checks/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="38">
-              <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-              <folding>
-                <element signature="e#2093#2624#0" expanded="false" />
-                <element signature="e#2665#3200#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="admin.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/checks/admin.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="969">
-              <caret line="71" column="0" lean-forward="false" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
-              <folding>
-                <element signature="e#111#460#0" expanded="false" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -107,32 +35,32 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/setup/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="274">
-              <caret line="174" column="38" lean-forward="false" selection-start-line="174" selection-start-column="38" selection-end-line="174" selection-end-column="38" />
+            <state relative-caret-position="229">
+              <caret line="215" column="34" lean-forward="false" selection-start-line="215" selection-start-column="8" selection-end-line="215" selection-end-column="34" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
-                <element signature="e#277#668#0" expanded="false" />
-                <element signature="e#832#1119#0" expanded="false" />
-                <element signature="e#1155#1455#0" expanded="false" />
-                <element signature="e#1488#1652#0" expanded="false" />
-                <element signature="e#1654#2091#1" expanded="false" />
-                <element signature="e#2119#2690#0" expanded="false" />
-                <element signature="e#3646#3836#0" expanded="false" />
+                <element signature="e#275#666#0" expanded="false" />
+                <element signature="e#668#783#1" expanded="false" />
+                <element signature="e#829#1116#0" expanded="false" />
+                <element signature="e#1152#1452#0" expanded="false" />
+                <element signature="e#1485#1649#0" expanded="false" />
+                <element signature="e#1651#2088#1" expanded="false" />
+                <element signature="e#2115#2686#0" expanded="false" />
+                <element signature="e#2725#3832#0" expanded="false" />
+                <element signature="e#3642#3832#0" expanded="false" />
+                <element signature="e#6314#6413#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="admin.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/setup/admin.py">
+      <file leaf-file-name="crons.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/checks/crons.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="137" column="13" lean-forward="false" selection-start-line="137" selection-start-column="13" selection-end-line="137" selection-end-column="13" />
+            <state relative-caret-position="2223">
+              <caret line="117" column="0" lean-forward="true" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
               <folding>
-                <element signature="e#0#32#0" expanded="true" />
-                <element signature="e#140#365#0" expanded="false" />
-                <element signature="e#1043#1353#1" expanded="false" />
-                <element signature="e#1491#1727#0" expanded="false" />
+                <element signature="e#0#46#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -201,15 +129,15 @@
         <option value="$PROJECT_DIR$/appPreposti/crons.py" />
         <option value="$PROJECT_DIR$/checks/urls.py" />
         <option value="$PROJECT_DIR$/setup/urls.py" />
-        <option value="$PROJECT_DIR$/checks/admin.py" />
-        <option value="$PROJECT_DIR$/checks/models.py" />
         <option value="$PROJECT_DIR$/setup/views.py" />
-        <option value="$PROJECT_DIR$/checks/views.py" />
-        <option value="$PROJECT_DIR$/setup/models.py" />
         <option value="$PROJECT_DIR$/setup/admin.py" />
+        <option value="$PROJECT_DIR$/checks/views.py" />
+        <option value="$PROJECT_DIR$/checks/models.py" />
+        <option value="$PROJECT_DIR$/checks/admin.py" />
+        <option value="$PROJECT_DIR$/setup/models.py" />
         <option value="$PROJECT_DIR$/appPreposti/settings.py" />
-        <option value="$PROJECT_DIR$/checks/parametri.py" />
         <option value="$PROJECT_DIR$/checks/crons.py" />
+        <option value="$PROJECT_DIR$/checks/parametri.py" />
       </list>
     </option>
   </component>
@@ -233,6 +161,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -260,7 +189,6 @@
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -331,17 +259,15 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.174189" sideWeight="0.49342105" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32769045" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33736396" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33736396" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19842407" sideWeight="0.5065789" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295129" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -350,6 +276,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -384,7 +311,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="14" />
+      <option name="time" value="15" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -622,13 +549,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/appPreposti/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="10" column="42" lean-forward="false" selection-start-line="10" selection-start-column="42" selection-end-line="10" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/checks/crons.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="38">
@@ -665,81 +585,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/checks/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding>
-            <element signature="e#2093#2624#0" expanded="false" />
-            <element signature="e#2665#3200#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/checks/admin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="969">
-          <caret line="71" column="0" lean-forward="false" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
-          <folding>
-            <element signature="e#111#460#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/checks/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/setup/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
-          <caret line="174" column="38" lean-forward="false" selection-start-line="174" selection-start-column="38" selection-end-line="174" selection-end-column="38" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-            <element signature="e#277#668#0" expanded="false" />
-            <element signature="e#832#1119#0" expanded="false" />
-            <element signature="e#1155#1455#0" expanded="false" />
-            <element signature="e#1488#1652#0" expanded="false" />
-            <element signature="e#1654#2091#1" expanded="false" />
-            <element signature="e#2119#2690#0" expanded="false" />
-            <element signature="e#3646#3836#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/setup/admin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="137" column="13" lean-forward="false" selection-start-line="137" selection-start-column="13" selection-end-line="137" selection-end-column="13" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-            <element signature="e#140#365#0" expanded="false" />
-            <element signature="e#1043#1353#1" expanded="false" />
-            <element signature="e#1491#1727#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/appPreposti/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="664">
-          <caret line="130" column="0" lean-forward="false" selection-start-line="130" selection-start-column="0" selection-end-line="130" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/setup/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="772">
-          <caret line="77" column="0" lean-forward="true" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
+        <state relative-caret-position="1311">
+          <caret line="77" column="0" lean-forward="false" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
           <folding>
-            <element signature="e#0#44#0" expanded="true" />
+            <element signature="e#0#44#0" expanded="false" />
             <element signature="e#458#772#1" expanded="false" />
             <element signature="e#811#835#0" expanded="false" />
             <element signature="e#2092#2731#0" expanded="false" />
@@ -749,20 +600,98 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/checks/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="148">
+          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#35#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setup/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="949">
+          <caret line="137" column="13" lean-forward="false" selection-start-line="137" selection-start-column="13" selection-end-line="137" selection-end-column="13" />
+          <folding>
+            <element signature="e#140#365#0" expanded="false" />
+            <element signature="e#1043#1353#1" expanded="false" />
+            <element signature="e#1491#1727#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/checks/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="15" lean-forward="false" selection-start-line="2" selection-start-column="15" selection-end-line="2" selection-end-column="15" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+            <element signature="e#2540#3071#0" expanded="false" />
+            <element signature="e#3112#3647#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/checks/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setup/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="229">
+          <caret line="215" column="34" lean-forward="false" selection-start-line="215" selection-start-column="8" selection-end-line="215" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+            <element signature="e#275#666#0" expanded="false" />
+            <element signature="e#668#783#1" expanded="false" />
+            <element signature="e#829#1116#0" expanded="false" />
+            <element signature="e#1152#1452#0" expanded="false" />
+            <element signature="e#1485#1649#0" expanded="false" />
+            <element signature="e#1651#2088#1" expanded="false" />
+            <element signature="e#2115#2686#0" expanded="false" />
+            <element signature="e#2725#3832#0" expanded="false" />
+            <element signature="e#3642#3832#0" expanded="false" />
+            <element signature="e#6314#6413#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/checks/crons.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1972">
-          <caret line="28" column="0" lean-forward="true" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+        <state relative-caret-position="2223">
+          <caret line="117" column="0" lean-forward="true" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
           <folding>
-            <element signature="e#0#27#0" expanded="true" />
+            <element signature="e#0#46#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/appPreposti/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="10" column="42" lean-forward="false" selection-start-line="10" selection-start-column="42" selection-end-line="10" selection-end-column="42" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/checks/parametri.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+        <state relative-caret-position="342">
+          <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/appPreposti/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="370">
+          <caret line="124" column="5" lean-forward="false" selection-start-line="124" selection-start-column="5" selection-end-line="124" selection-end-column="5" />
           <folding />
         </state>
       </provider>

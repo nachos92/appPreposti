@@ -1,11 +1,8 @@
-from subprocess import call
 from models import Settimana, SegnalazionePrep
 from datetime import date
 from django.core.mail import send_mail
 from setup.models import Responsabile,Preposto, Impostazione
 import datetime
-
-import smtplib
 
 
 
@@ -117,23 +114,26 @@ def check_controlli():
                 if datetime.datetime.now().time() > (datetime.datetime.strptime(x.mer,'%H:%M') + soglia_tot).time():
                     if x.mer_fatto == False:
 
-                        # invio segnalazione
                         prep = Preposto.objects.get(last_name=x.getCod_preposto())
-                        message = EMAIL_MESSAGE,
+
+
                         # invio segnalazione via mail
                         send_mail(
                             subject='SEGNALAZIONE',
-                            message=message,
+                            message=EMAIL_MESSAGE,
                             from_email=MITTENTE_USER,
-                            recipient_list=[Responsabile.objects.get(
-                                last_name=prep.getSuperiore()
-                            ).getEmail(), ],
-                            # auth_user=MITTENTE_USER,
-                            # auth_password=MITTENTE_PASSW,
+                            recipient_list=[
+                                Responsabile.objects.get(
+                                    last_name=prep.getSuperiore()
+                                ).getEmail(),
+                            ],
+                            auth_user=MITTENTE_USER,
+                            auth_password=MITTENTE_PASSW,
                             fail_silently=True
                         )
+                        
 
-                        SegnalazionePrep.create(matr=prep, dett=message).save()
+                        SegnalazionePrep.create(matr=prep, dett=EMAIL_MESSAGE).save()
                     x.mer_check = True
                     x.save()
 
@@ -189,9 +189,23 @@ def check_controlli():
                     x.save()
 
 def check_impostazioni():
-    if(Impostazione.objects.get(pk=1).is_today()):
+    sett = Impostazione.objects.get(pk=1)
+    if(sett.is_today()):
 
         #ASSEGNAZIONE DEI VALORI
-        pass
 
-    pass
+        EMAIL_HOST = sett.getSMTP_server()
+        EMAIL_HOST_USER = sett.getSMTP_username()
+        EMAIL_HOST_PASSWORD = sett.getSMTP_password()
+
+        EMAIL_MESSAGE = sett.getMessaggio()
+
+        SOGLIA_ORE = sett.get_sogliaControllo_ore()
+        SOGLIA_MINUTI = sett.get_sogliaControllo_minuti()
+
+        MITTENTE_USER = EMAIL_HOST_USER
+        MITTENTE_PASSW = EMAIL_HOST_PASSWORD
+
+        sett.nuovo = False
+        sett.save()
+

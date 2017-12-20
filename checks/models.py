@@ -1,6 +1,24 @@
 from django.db import models
-from setup.models import Preposto, Impiego, Dipendente
-from parametri import *
+from setup.models import Preposto, Impiego, Dipendente, Impostazione,Orario
+import datetime
+
+
+"""
+Orari in formato: datetime.time(HH,MM)
+"""
+inizio_turno = datetime.time(9, 0)
+fine_turno = datetime.time(18, 0)
+
+"""
+Ogni orario che si vuole aggiungere alle scelte
+deve essere prima creato come sopra, per poi essere aggiunto
+alla tupla degli orari, rispettando il formato.
+"""
+orari = (
+    (inizio_turno.strftime('%H:%M'), inizio_turno.strftime('%H:%M')),
+    (fine_turno.strftime('%H:%M'), fine_turno.strftime('%H:%M')),
+)
+
 
 
 
@@ -13,6 +31,7 @@ class Settimana(models.Model):
     cod_preposto = models.ForeignKey(Preposto)
     data_inizio = models.DateField(help_text="Deve essere un lunedi'.")
     area = models.ForeignKey(Impiego)
+
 
     lun = models.CharField(max_length=10, choices=orari, default='', null=False)
     mar = models.CharField(max_length=10, choices=orari, default='', null=False)

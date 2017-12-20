@@ -10,8 +10,6 @@ Ad un impiego si associano n controlli.
 Ad un dipendente si associa 1 impiego.
 
 '''
-
-
 class Controllo(models.Model):
 
     titolo = models.CharField(max_length=40)
@@ -35,7 +33,6 @@ class ControlloAggiuntivo(Controllo):
         verbose_name_plural = "Controlli aggiuntivi"
 
 '''
-
 class ControlloAggiuntivo(models.Model):
     titolo = models.CharField(max_length=40)
     descrizione = models.CharField(default='', max_length=250, blank=True)
@@ -88,7 +85,6 @@ class Preposto(models.Model):
     def getID(self):
         return str(self.id)
 '''
-
 class Preposto(User):
     n_matr = models.CharField(default='empty',max_length=10)
     sottoposti = models.ManyToManyField(Impiego, blank=True)
@@ -155,6 +151,8 @@ class Orario(models.Model):
     nome = models.CharField(max_length=20)
     orario = models.TimeField()
 
+    class Meta:
+        verbose_name_plural = "Orari"
     def __unicode__(self):
         return self.nome
     def getNome(self):
@@ -162,10 +160,9 @@ class Orario(models.Model):
     def getOrario_string(self):
         return str(self.orario)
     def getOrario_time(self):
+        return self.orario.strftime('%H:%M')
+    def getChoices(self):
         pass
-    class Meta:
-        verbose_name_plural = "Orari"
-
 
 class Impostazione(models.Model):
     nuovo = models.BooleanField(default=True)
@@ -214,8 +211,20 @@ class Impostazione(models.Model):
         return self.smtp_username
     def getSMTP_password(self):
         return self.smtp_password
+    def getMessaggio(self):
+        return self.messaggio
+    def get_sogliaControllo_minuti(self):
+        return self.sogliaControllo_minuti
+    def get_sogliaControllo_ore(self):
+        return self.sogliaControllo_ore
     def is_today(self):
         if self.data_inizio == date.today():
             return True
         else:
             return False
+    def getChoices_orari(self):
+        tupla = ()
+        for i in self.orari_selezione.all():
+            tupla += (i.getOrario_time,i.getOrario_time )
+
+        return tupla

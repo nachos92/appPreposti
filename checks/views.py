@@ -6,7 +6,6 @@ import datetime
 from datetime import *
 from django.views.decorators.csrf import csrf_exempt
 import json
-from parametri import *
 
 
 
