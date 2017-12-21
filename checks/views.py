@@ -6,6 +6,7 @@ import datetime
 from datetime import *
 from django.views.decorators.csrf import csrf_exempt
 import json
+from crons import startDate,endDate
 
 
 
@@ -193,18 +194,21 @@ Ritorna un oggetto di lunghezza 0 se nella giornata attuale
 e' gia' stato fatto il giro (se giornoattuale_fatto=true).
 """
 def getWeek(cod_prep):
-    planning = Settimana.objects.filter(data_inizio__range=[startDate, endDate],
-                                       cod_preposto=cod_prep,
-                                       completato=False).values_list('data_inizio',
-                                                                     'area',
-                                                                     'lun',
-                                                                     'mar',
-                                                                     'mer',
-                                                                     'gio',
-                                                                     'ven',
-                                                                     'completato',
-                                                                     'id'
-                                                                     )
+    planning = Settimana.objects.filter(
+        data_inizio__range=[startDate, endDate],
+        cod_preposto=cod_prep,
+        completato=False).values_list(
+        'data_inizio',
+        'area',
+        'lun',
+        'mar',
+        'mer',
+        'gio',
+        'ven',
+        'completato',
+        'id'
+    )
+
     '''
     k = date.today().weekday()
 
@@ -219,7 +223,6 @@ def getWeek(cod_prep):
     if (k == 4):
         planning = planning.filter(ven_fatto=False, ven_check=False)
     '''
-
 
     return planning
 

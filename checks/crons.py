@@ -11,7 +11,7 @@ EMAIL_HOST = 'smtp.mail.yahoo.it'
 EMAIL_HOST_USER = "piano_master92@yahoo.it"
 EMAIL_HOST_PASSWORD = "zanarkand92"
 
-EMAIL_MESSAGE = "Il preposto non ha eseguito il giro controlli in data odierna."
+MESSAGGIO = "Messaggio iniziale."
 
 
 SOGLIA_ORE = 1
@@ -26,15 +26,24 @@ endDate = startDate + datetime.timedelta(days=6)
 
 soglia_tot = datetime.timedelta(hours=SOGLIA_ORE, minutes=SOGLIA_MINUTI)
 
+
+def aggiornaMessaggio(prima,dopo):
+    prima = dopo
+
+###-------- Fine blocco variabili
+
+
+
 def invio_email(destinatario, messaggio):
     try:
+        sett = Impostazione.objects.get(pk=1)
         send_mail(
         subject='SEGNALAZIONE',
-        message=messaggio,
-        from_email=MITTENTE_USER,
+        message=sett.getMessaggio(),
+        from_email=sett.getSMTP_username(),
         recipient_list=[destinatario,],
-        auth_user=MITTENTE_USER,
-        auth_password=MITTENTE_PASSW,
+        auth_user= sett.getSMTP_username(),
+        auth_password= sett.getSMTP_password(),
         fail_silently=True
         )
     except:
@@ -64,23 +73,24 @@ def check_controlli():
             if x.lun_check == False:
                 if datetime.datetime.now().time() > (datetime.datetime.strptime(x.lun,'%H:%M') + soglia_tot).time():
                     if x.lun_fatto == False:
-                        #invio segnalazione
                         prep = Preposto.objects.get(last_name=x.getCod_preposto())
-                        message = EMAIL_MESSAGE,
+
                         # invio segnalazione via mail
                         send_mail(
                             subject='SEGNALAZIONE',
-                            message=message,
+                            message=EMAIL_MESSAGE,
                             from_email=MITTENTE_USER,
-                            recipient_list=[Responsabile.objects.get(
-                                last_name=prep.getSuperiore()
-                            ).getEmail(), ],
-                            #auth_user=MITTENTE_USER,
-                            #auth_password=MITTENTE_PASSW,
+                            recipient_list=[
+                                Responsabile.objects.get(
+                                    last_name=prep.getSuperiore()
+                                ).getEmail(),
+                            ],
+                            auth_user=MITTENTE_USER,
+                            auth_password=MITTENTE_PASSW,
                             fail_silently=True
                         )
 
-                        SegnalazionePrep.create(matr=prep,dett=message).save()
+                        SegnalazionePrep.create(matr=prep, dett=EMAIL_MESSAGE).save()
                     x.lun_check = True
                     x.save()
 
@@ -88,24 +98,24 @@ def check_controlli():
             if x.mar_check == False:
                 if datetime.datetime.now().time() > (datetime.datetime.strptime(x.mar,'%H:%M') + soglia_tot).time():
                     if x.mar_fatto == False:
-
-                        # invio segnalazione
                         prep = Preposto.objects.get(last_name=x.getCod_preposto())
-                        message = EMAIL_MESSAGE,
+
                         # invio segnalazione via mail
                         send_mail(
                             subject='SEGNALAZIONE',
-                            message=message,
+                            message=EMAIL_MESSAGE,
                             from_email=MITTENTE_USER,
-                            recipient_list=[Responsabile.objects.get(
-                                last_name=prep.getSuperiore()
-                            ).getEmail(), ],
-                            # auth_user=MITTENTE_USER,
-                            # auth_password=MITTENTE_PASSW,
+                            recipient_list=[
+                                Responsabile.objects.get(
+                                    last_name=prep.getSuperiore()
+                                ).getEmail(),
+                            ],
+                            auth_user=MITTENTE_USER,
+                            auth_password=MITTENTE_PASSW,
                             fail_silently=True
                         )
 
-                        SegnalazionePrep.create(matr=prep, dett=message).save()
+                        SegnalazionePrep.create(matr=prep, dett=EMAIL_MESSAGE).save()
                     x.mar_check = True
                     x.save()
 
@@ -120,7 +130,7 @@ def check_controlli():
                         # invio segnalazione via mail
                         send_mail(
                             subject='SEGNALAZIONE',
-                            message=EMAIL_MESSAGE,
+                            message=Impostazione.objects.get(pk=1).getMessaggio(),
                             from_email=MITTENTE_USER,
                             recipient_list=[
                                 Responsabile.objects.get(
@@ -141,24 +151,24 @@ def check_controlli():
             if x.gio_check == False:
                 if datetime.datetime.now().time() > (datetime.datetime.strptime(x.gio,'%H:%M') + soglia_tot).time():
                     if x.gio_fatto == False:
-
-                        # invio segnalazione
                         prep = Preposto.objects.get(last_name=x.getCod_preposto())
-                        message = EMAIL_MESSAGE,
+                        sett = Impostazione.objects.get(pk=1)
                         # invio segnalazione via mail
                         send_mail(
                             subject='SEGNALAZIONE',
-                            message=message,
+                            message=Impostazione.objects.get(pk=1).getMessaggio(),
                             from_email=MITTENTE_USER,
-                            recipient_list=[Responsabile.objects.get(
-                                last_name=prep.getSuperiore()
-                            ).getEmail(), ],
-                            # auth_user=MITTENTE_USER,
-                            # auth_password=MITTENTE_PASSW,
+                            recipient_list=[
+                                Responsabile.objects.get(
+                                    last_name=prep.getSuperiore()
+                                ).getEmail(),
+                            ],
+                            auth_user=MITTENTE_USER,
+                            auth_password=MITTENTE_PASSW,
                             fail_silently=True
                         )
 
-                        SegnalazionePrep.create(matr=prep, dett=message).save()
+                        SegnalazionePrep.create(matr=prep, dett=MESSAGGIO).save()
                     x.gio_check = True
                     x.save()
 
@@ -166,24 +176,24 @@ def check_controlli():
             if x.ven_check == False:
                 if datetime.datetime.now().time() > (datetime.datetime.strptime(x.ven,'%H:%M') + soglia_tot).time():
                     if x.ven_fatto == False:
-
-                        # invio segnalazione
                         prep = Preposto.objects.get(last_name=x.getCod_preposto())
-                        message = EMAIL_MESSAGE
+
                         # invio segnalazione via mail
                         send_mail(
                             subject='SEGNALAZIONE',
-                            message=message,
+                            message=EMAIL_MESSAGE,
                             from_email=MITTENTE_USER,
-                            recipient_list=[Responsabile.objects.get(
-                                last_name=prep.getSuperiore()
-                            ).getEmail(), ],
-                            # auth_user=MITTENTE_USER,
-                            # auth_password=MITTENTE_PASSW,
+                            recipient_list=[
+                                Responsabile.objects.get(
+                                    last_name=prep.getSuperiore()
+                                ).getEmail(),
+                            ],
+                            auth_user=MITTENTE_USER,
+                            auth_password=MITTENTE_PASSW,
                             fail_silently=True
                         )
 
-                        SegnalazionePrep.create(matr=prep, dett=message).save()
+                        SegnalazionePrep.create(matr=prep, dett=EMAIL_MESSAGE).save()
 
                     x.ven_check = True
                     x.save()
@@ -191,21 +201,22 @@ def check_controlli():
 def check_impostazioni():
     sett = Impostazione.objects.get(pk=1)
     if(sett.is_today()):
+        global MESSAGGIO
+        aggiornaMessaggio(MESSAGGIO,"ciaociao")
+        sett.nuovo = False
+        sett.save()
 
         #ASSEGNAZIONE DEI VALORI
-
+'''
         EMAIL_HOST = sett.getSMTP_server()
         EMAIL_HOST_USER = sett.getSMTP_username()
         EMAIL_HOST_PASSWORD = sett.getSMTP_password()
 
-        EMAIL_MESSAGE = sett.getMessaggio()
 
         SOGLIA_ORE = sett.get_sogliaControllo_ore()
         SOGLIA_MINUTI = sett.get_sogliaControllo_minuti()
 
         MITTENTE_USER = EMAIL_HOST_USER
         MITTENTE_PASSW = EMAIL_HOST_PASSWORD
-
-        sett.nuovo = False
-        sett.save()
+'''
 

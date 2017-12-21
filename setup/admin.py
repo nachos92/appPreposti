@@ -110,10 +110,12 @@ class ImpostazioneAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Generali', {
             'fields': (
+                'nuovo',
                 'data_inizio',
             )
         }),
         ('Parametri email', {
+            'classes': ('collapse',),
             'fields': (
                 'smtp_server',
                 'port',
@@ -123,7 +125,7 @@ class ImpostazioneAdmin(admin.ModelAdmin):
             )
         }),
         ('Parametri riguardanti i controlli', {
-            #'classes': ('collapse',),
+            'classes': ('collapse',),
             'fields': (
                 'orari_selezione',
                 'sogliaControllo_ore',

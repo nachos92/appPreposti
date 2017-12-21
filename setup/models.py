@@ -93,7 +93,7 @@ class Preposto(User):
     class Meta:
         verbose_name_plural = "Preposti"
     def __unicode__(self):
-        return self.last_name
+        return (self.n_matr+' - '+self.last_name)
     def getSuperiore(self):
         return str(self.superiore)
     def getN_matr(self):
@@ -177,7 +177,8 @@ class Impostazione(models.Model):
     smtp_password = models.CharField(max_length=30,verbose_name="Password (server smtp)")
     port = models.IntegerField(default=587, help_text="Porta da usare (default=587).")
 
-    messaggio = models.TextField(
+    messaggio = models.CharField(
+        max_length=150,
         default="Il preposto non ha eseguito il giro controlli in data odierna.",
         help_text="Contenuto dell'email inviata quando un preposto non esegue un giro di controlli.",
 
@@ -212,7 +213,7 @@ class Impostazione(models.Model):
     def getSMTP_password(self):
         return self.smtp_password
     def getMessaggio(self):
-        return self.messaggio
+        return "getMessaggio"
     def get_sogliaControllo_minuti(self):
         return self.sogliaControllo_minuti
     def get_sogliaControllo_ore(self):
