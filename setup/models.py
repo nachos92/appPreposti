@@ -40,6 +40,9 @@ class ControlloAggiuntivo(models.Model):
 
     def __unicode__(self):
         return self.titolo
+    def getTitolo(self):
+        return self.titolo
+
 
     class Meta:
         verbose_name_plural = "Controlli aggiuntivi"
@@ -93,7 +96,7 @@ class Preposto(User):
     class Meta:
         verbose_name_plural = "Preposti"
     def __unicode__(self):
-        return (self.n_matr+' - '+self.last_name)
+        return (self.getID()+' - '+self.last_name)
     def getSuperiore(self):
         return str(self.superiore)
     def getN_matr(self):

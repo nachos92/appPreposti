@@ -59,7 +59,9 @@ secondo caso vuol dire che magari hanno iniziato tardi e all'orario limite devon
 """
 def check_controlli():
     #Ottengo gli elem di Settimana nel periodo giusto
-    totali = Settimana.objects.filter(data_inizio__range=[startDate, endDate], completato=False)
+    totali = Settimana.objects.filter(
+        data_inizio__range=[startDate, endDate],
+    )
 
     '''
     Per ogni elem di totali devo prima fare uno switch-case per il weekday e poi verifico
@@ -78,7 +80,7 @@ def check_controlli():
                         # invio segnalazione via mail
                         send_mail(
                             subject='SEGNALAZIONE',
-                            message=EMAIL_MESSAGE,
+                            message=MESSAGGIO,
                             from_email=MITTENTE_USER,
                             recipient_list=[
                                 Responsabile.objects.get(
@@ -90,7 +92,7 @@ def check_controlli():
                             fail_silently=True
                         )
 
-                        SegnalazionePrep.create(matr=prep, dett=EMAIL_MESSAGE).save()
+                        SegnalazionePrep.create(matr=prep, dett=MESSAGGIO).save()
                     x.lun_check = True
                     x.save()
 
@@ -103,7 +105,7 @@ def check_controlli():
                         # invio segnalazione via mail
                         send_mail(
                             subject='SEGNALAZIONE',
-                            message=EMAIL_MESSAGE,
+                            message=MESSAGGIO,
                             from_email=MITTENTE_USER,
                             recipient_list=[
                                 Responsabile.objects.get(
@@ -115,7 +117,7 @@ def check_controlli():
                             fail_silently=True
                         )
 
-                        SegnalazionePrep.create(matr=prep, dett=EMAIL_MESSAGE).save()
+                        SegnalazionePrep.create(matr=prep, dett=MESSAGGIO).save()
                     x.mar_check = True
                     x.save()
 
@@ -143,16 +145,36 @@ def check_controlli():
                         )
                         
 
-                        SegnalazionePrep.create(matr=prep, dett=EMAIL_MESSAGE).save()
+                        SegnalazionePrep.create(matr=prep, dett=MESSAGGIO).save()
                     x.mer_check = True
                     x.save()
 
         if (k == 3):
+
+            if x.gio_check == False:
+                if datetime.datetime.now().time() > (datetime.datetime.strptime(x.gio,'%H:%M')+ soglia_tot).time():
+
+                    if x.gio_fatto == False:
+                        pass
+                        '''
+                        SegnalazionePrep.create(
+                            matr=Preposto.objects.get(pk=x.getCod_preposto),
+                            dett=MESSAGGIO
+                        ).save()
+                        '''
+
+                    x.gio_check = True
+                    x.save()
+
+
+            '''
             if x.gio_check == False:
                 if datetime.datetime.now().time() > (datetime.datetime.strptime(x.gio,'%H:%M') + soglia_tot).time():
                     if x.gio_fatto == False:
                         prep = Preposto.objects.get(last_name=x.getCod_preposto())
                         sett = Impostazione.objects.get(pk=1)
+
+                        
                         # invio segnalazione via mail
                         send_mail(
                             subject='SEGNALAZIONE',
@@ -167,11 +189,11 @@ def check_controlli():
                             auth_password=MITTENTE_PASSW,
                             fail_silently=True
                         )
-
+                        
                         SegnalazionePrep.create(matr=prep, dett=MESSAGGIO).save()
                     x.gio_check = True
                     x.save()
-
+            '''
         if (k == 4):
             if x.ven_check == False:
                 if datetime.datetime.now().time() > (datetime.datetime.strptime(x.ven,'%H:%M') + soglia_tot).time():
@@ -181,7 +203,7 @@ def check_controlli():
                         # invio segnalazione via mail
                         send_mail(
                             subject='SEGNALAZIONE',
-                            message=EMAIL_MESSAGE,
+                            message=MESSAGGIO,
                             from_email=MITTENTE_USER,
                             recipient_list=[
                                 Responsabile.objects.get(
@@ -193,11 +215,11 @@ def check_controlli():
                             fail_silently=True
                         )
 
-                        SegnalazionePrep.create(matr=prep, dett=EMAIL_MESSAGE).save()
+                        SegnalazionePrep.create(matr=prep, dett=MESSAGGIO).save()
 
                     x.ven_check = True
                     x.save()
-
+'''
 def check_impostazioni():
     sett = Impostazione.objects.get(pk=1)
     if(sett.is_today()):
@@ -207,7 +229,7 @@ def check_impostazioni():
         sett.save()
 
         #ASSEGNAZIONE DEI VALORI
-'''
+
         EMAIL_HOST = sett.getSMTP_server()
         EMAIL_HOST_USER = sett.getSMTP_username()
         EMAIL_HOST_PASSWORD = sett.getSMTP_password()
@@ -219,4 +241,3 @@ def check_impostazioni():
         MITTENTE_USER = EMAIL_HOST_USER
         MITTENTE_PASSW = EMAIL_HOST_PASSWORD
 '''
-

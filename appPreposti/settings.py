@@ -122,7 +122,7 @@ CRONJOBS = [
     ('*/1 * * * *', 'checks.crons.check_controlli'),
 
     #Esegue ogni 12 ore.
-    ('*/1 * * * *', 'checks.crons.check_impostazioni'),
+    #('*/1 * * * *', 'checks.crons.check_impostazioni'),
 ]
 
 EMAIL_BACKEND= 'django.core.mail.backends.smtp.EmailBackend'

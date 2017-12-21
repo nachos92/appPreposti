@@ -101,6 +101,7 @@ def makeJson(cod_prep, elenco, plan):
     out += '"nome":"'+prep.getNome()+\
            '","cognome":"'+prep.getCognome()+'",'
 
+    out += '"cod_prep":"'+prep.getID()+'",'
     # Aggiunta stato ('giro' completato o no)
     out += '"completato":"F",'
 
@@ -244,11 +245,98 @@ def controlloPlanning(request, cod_prep):
     planning = getWeek(cod_prep)
 
     print "Invio json a client."
+    print "++++++++++++++++++++++++++++"
 
+    preposto = Preposto.objects.get(pk=3)
+    foglio = '{"nome":"' + preposto.first_name + '","cognome":"' + preposto.last_name + '",'
+
+    foglio += '"reparti":['
+
+    gg = date.today().weekday()
+
+    reparti = Settimana.objects.filter(
+        cod_preposto__id=preposto.getID(),
+        data_inizio__range=[startDate,endDate]
+    )
+
+    if (gg == 0):
+        reparti = reparti.filter(lun_fatto=False, lun_check=False)
+    if (gg == 1):
+        reparti = reparti.filter(mar_fatto=False, mar_check=False)
+    if (gg == 2):
+        reparti = reparti.filter(mer_fatto=False, mer_check=False)
+    if (gg == 3):
+        reparti = reparti.filter(gio_fatto=False, gio_check=False)
+    if (gg == 4):
+        reparti = reparti.filter(ven_fatto=False, ven_check=False)
+
+    if len(reparti)==0:
+        foglio+=']'
+    else:
+        iter = 0
+        for r in reparti:
+
+            controlli_impiego = Impiego.objects.get(pk=r.getArea()).getControlli()
+
+            iter+=1
+            foglio += '{"nome":"'+r.getArea()+'",'
+            foglio += '"orario":{"lun":"'+r.getLun_orario()+'",'
+            foglio += '"mar":"' + r.getMar_orario() + '",'
+            foglio += '"mer":"' + r.getMer_orario() + '",'
+            foglio += '"gio":"' + r.getGio_orario() + '",'
+            foglio += '"ven":"' + r.getVen_orario() + '"},'
+            foglio += '"dipendenti":['
+
+            persone = Dipendente.objects.filter(impiego=r.getArea())
+            iter_dip = 0
+            for d in persone:
+                iter_dip+=1
+                foglio += '{"nome":"'+d.getNome()+'",'
+                foglio += '"cognome":"' + d.getCognome() + '",'
+                foglio += '"n_matr":"' + d.getN_matr() + '",'
+                foglio += '"controlli":['
+
+                iter_controlli = 0
+                for c in controlli_impiego:
+                    iter_controlli+=1
+                    foglio += '{"id":"'+str(c.id)+'",'
+                    foglio += '"titolo":"' + c.getTitolo() + '",'
+                    foglio += '"value":"F"}'
+
+                    if iter_controlli < len(controlli_impiego):
+                        foglio += ','
+
+                foglio += '], "controlli_adhoc":['
+
+                c_adhoc = d.getList_ContrAdHoc()
+                iter_c_adhoc = 0
+                for cc in c_adhoc:
+                    iter_c_adhoc +=1
+                    foglio += '{"titolo":"'+cc.getTitolo()+'","value":"F"}'
+
+                    if iter_c_adhoc < len(c_adhoc):
+                        foglio += ','
+
+                foglio += ']'
+                foglio +='}'
+
+                if iter_dip < len(persone):
+                    foglio += ','
+
+            foglio += ']'
+            foglio += '}'
+            if iter < len(reparti):
+                foglio += ','
+        foglio += ']'
+    foglio += '}'
     return HttpResponse(
-        makeJson(cod_prep, elenco=dipendenti, plan=planning),
+        #makeJson(cod_prep, elenco=dipendenti, plan=planning),
+        foglio,
         content_type='application/json'
     )
+
+
+
 
 
 
