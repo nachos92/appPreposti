@@ -58,6 +58,8 @@ class Settimana(models.Model):
 
     def getCod_preposto(self):
         return str(self.cod_preposto)
+    def getPreposto(self):
+        return self.cod_preposto
 
     def getArea(self):
         return str(self.area)

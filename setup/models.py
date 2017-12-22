@@ -216,7 +216,7 @@ class Impostazione(models.Model):
     def getSMTP_password(self):
         return self.smtp_password
     def getMessaggio(self):
-        return "getMessaggio"
+        return self.messaggio
     def get_sogliaControllo_minuti(self):
         return self.sogliaControllo_minuti
     def get_sogliaControllo_ore(self):

@@ -3,23 +3,16 @@ from datetime import date
 from django.core.mail import send_mail
 from setup.models import Responsabile,Preposto, Impostazione
 import datetime
+from appPreposti.settings import EMAIL_HOST_USER,EMAIL_HOST_PASSWORD
 
 
 
-# ------- Variabili modificati in base ai valori di Impostazione
-EMAIL_HOST = 'smtp.mail.yahoo.it'
-EMAIL_HOST_USER = "piano_master92@yahoo.it"
-EMAIL_HOST_PASSWORD = "zanarkand92"
-
-MESSAGGIO = "Messaggio iniziale."
-
+#------- Variabili modificati in base ai valori di Impostazione
 
 SOGLIA_ORE = 1
 SOGLIA_MINUTI = 0
 
-MITTENTE_USER = "piano_master92@yahoo.it"
-MITTENTE_PASSW = "zanarkand92"
-
+MESSAGGIO =''
 
 startDate = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday())
 endDate = startDate + datetime.timedelta(days=6)
@@ -68,10 +61,27 @@ def check_controlli():
     se gg_check==false; nel caso, se gg_fatto==false invio una notifica al superiore.
     '''
     k = date.today().weekday()
+    impo = Impostazione.objects.get(pk=1)
 
     for x in totali:
 
         if (k == 0):
+            if x.lun_check == False:
+                if datetime.datetime.now().time() > \
+                        (datetime.datetime.strptime(x.lun,'%H:%M')+ soglia_tot).time():
+
+                    if x.lun_fatto == False:
+                        pass
+                        '''
+                        SegnalazionePrep.create(
+                            matr=Preposto.objects.get(pk=x.getCod_preposto),
+                            dett=MESSAGGIO
+                        ).save()
+                        '''
+
+                    x.lun_check = True
+                    x.save()
+        '''
             if x.lun_check == False:
                 if datetime.datetime.now().time() > (datetime.datetime.strptime(x.lun,'%H:%M') + soglia_tot).time():
                     if x.lun_fatto == False:
@@ -95,8 +105,25 @@ def check_controlli():
                         SegnalazionePrep.create(matr=prep, dett=MESSAGGIO).save()
                     x.lun_check = True
                     x.save()
+        '''
 
         if (k == 1):
+            if x.mar_check == False:
+                if datetime.datetime.now().time() > \
+                        (datetime.datetime.strptime(x.mar,'%H:%M')+ soglia_tot).time():
+
+                    if x.mar_fatto == False:
+                        pass
+                        '''
+                        SegnalazionePrep.create(
+                            matr=Preposto.objects.get(pk=x.getCod_preposto),
+                            dett=MESSAGGIO
+                        ).save()
+                        '''
+
+                    x.mar_check = True
+                    x.save()
+            '''
             if x.mar_check == False:
                 if datetime.datetime.now().time() > (datetime.datetime.strptime(x.mar,'%H:%M') + soglia_tot).time():
                     if x.mar_fatto == False:
@@ -120,8 +147,25 @@ def check_controlli():
                         SegnalazionePrep.create(matr=prep, dett=MESSAGGIO).save()
                     x.mar_check = True
                     x.save()
+            '''
 
         if (k == 2):
+            if x.mer_check == False:
+                if datetime.datetime.now().time() > \
+                        (datetime.datetime.strptime(x.mer,'%H:%M')+ soglia_tot).time():
+
+                    if x.mer_fatto == False:
+                        pass
+                        '''
+                        SegnalazionePrep.create(
+                            matr=Preposto.objects.get(pk=x.getCod_preposto),
+                            dett=MESSAGGIO
+                        ).save()
+                        '''
+
+                    x.mer_check = True
+                    x.save()
+            '''
             if x.mer_check == False:
                 if datetime.datetime.now().time() > (datetime.datetime.strptime(x.mer,'%H:%M') + soglia_tot).time():
                     if x.mer_fatto == False:
@@ -148,11 +192,13 @@ def check_controlli():
                         SegnalazionePrep.create(matr=prep, dett=MESSAGGIO).save()
                     x.mer_check = True
                     x.save()
+            '''
 
         if (k == 3):
 
             if x.gio_check == False:
-                if datetime.datetime.now().time() > (datetime.datetime.strptime(x.gio,'%H:%M')+ soglia_tot).time():
+                if datetime.datetime.now().time() > \
+                        (datetime.datetime.strptime(x.gio,'%H:%M')+ soglia_tot).time():
 
                     if x.gio_fatto == False:
                         pass
@@ -195,6 +241,37 @@ def check_controlli():
                     x.save()
             '''
         if (k == 4):
+
+            if x.ven_check == False:
+                if datetime.datetime.now().time() > \
+                        (datetime.datetime.strptime(x.ven,'%H:%M')+ soglia_tot).time():
+
+                    if x.ven_fatto == False:
+                        pass
+
+                        SegnalazionePrep.create(
+                            matr=x.getPreposto(),
+                            dett=impo.getMessaggio()
+                        ).save()
+
+                        print "INVIO MAIL ----------"
+                        send_mail(
+                            subject='Prep. X - no giro controlli',
+                            message=MESSAGGIO,
+                            from_email=EMAIL_HOST_USER,
+                            recipient_list=[
+                                Responsabile.objects.get(
+                                    last_name=x.getPreposto().getSuperiore()
+                                ).getEmail(),
+                            ],
+                            auth_user=EMAIL_HOST_USER,
+                            auth_password=EMAIL_HOST_PASSWORD,
+                            fail_silently=True
+                        )
+
+                    x.ven_check = True
+                    x.save()
+            '''
             if x.ven_check == False:
                 if datetime.datetime.now().time() > (datetime.datetime.strptime(x.ven,'%H:%M') + soglia_tot).time():
                     if x.ven_fatto == False:
@@ -219,25 +296,32 @@ def check_controlli():
 
                     x.ven_check = True
                     x.save()
-'''
-def check_impostazioni():
+            '''
+
+"""
+Ricordarsi per la prima volta che si compila l'impostazione,
+di mettere la data odierna, in modo che vengano caricati i valori
+"""
+def aggiornamento():
     sett = Impostazione.objects.get(pk=1)
-    if(sett.is_today()):
+    if(sett.nuovo & sett.is_today()):
+
+        #DA SBLOCCARE DOPO AVER CREATO UN CUSTOM EMAIL BACKEND
+        '''
+        global EMAIL_HOST
+        EMAIL_HOST = sett.getSMTP_server()
+
+        global EMAIL_HOST_USER
+        EMAIL_HOST_USER = sett.getSMTP_username()
+
+        global EMAIL_HOST_PASSWORD
+        EMAIL_HOST_PASSWORD = sett.getSMTP_password()
+        '''
+
         global MESSAGGIO
-        aggiornaMessaggio(MESSAGGIO,"ciaociao")
+        MESSAGGIO = sett.getMessaggio()
+
         sett.nuovo = False
         sett.save()
 
-        #ASSEGNAZIONE DEI VALORI
 
-        EMAIL_HOST = sett.getSMTP_server()
-        EMAIL_HOST_USER = sett.getSMTP_username()
-        EMAIL_HOST_PASSWORD = sett.getSMTP_password()
-
-
-        SOGLIA_ORE = sett.get_sogliaControllo_ore()
-        SOGLIA_MINUTI = sett.get_sogliaControllo_minuti()
-
-        MITTENTE_USER = EMAIL_HOST_USER
-        MITTENTE_PASSW = EMAIL_HOST_PASSWORD
-'''
