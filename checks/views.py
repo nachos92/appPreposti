@@ -299,16 +299,19 @@ def controlloPlanning(request, cod_prep):
                 iter_controlli = 0
                 for c in controlli_impiego:
                     iter_controlli+=1
-                    foglio += '{"id":"'+str(c.id)+'",'
+                    foglio += '{'
+                    #foglio += '{"id":"'+str(c.id)+'",'
                     foglio += '"titolo":"' + c.getTitolo() + '",'
                     foglio += '"value":"F"}'
 
                     if iter_controlli < len(controlli_impiego):
                         foglio += ','
 
-                foglio += '], "controlli_adhoc":['
+                #foglio += '], "controlli_adhoc":['
 
                 c_adhoc = d.getList_ContrAdHoc()
+                if len(c_adhoc)>0:
+                    foglio+=','
                 iter_c_adhoc = 0
                 for cc in c_adhoc:
                     iter_c_adhoc +=1
