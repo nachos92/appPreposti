@@ -351,17 +351,25 @@ Viene quindi creata una Segnalazione che riporta l'accaduto.
 def ricezione(request, n_matricola):
 
     received_json_data = json.loads(request.body)
+    print str(received_json_data)
 
     if (len(received_json_data['controlli']) == 0):
+        print "0"
         return HttpResponse('')
 
     # Creo una segnalazione di controllo non positivo su un determinato dipendente.
     dip = Dipendente.objects.get(n_matricola=n_matricola)
-    testo = "Elenco controlli non rispettati da parte di "+str(received_json_data['nomeDip'])+' '+\
-            str(received_json_data['cognomeDip'])+': \n \n'
+
+    testo = ("Elenco controlli non rispettati da parte di "
+             +dip.getNome()
+             +' '
+             + dip.getCognome()
+             +': \n \n')
+
 
     for m in received_json_data['controlli']:
-        testo += "ID: "+str(m['id'])+'\t\t'+str(m['titolo'])+'\n'
+
+        testo += '-'+str(m['titolo'])+'\n'
 
     Segnalazione.create(dip, testo).save()
 
