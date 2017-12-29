@@ -6,6 +6,11 @@ from . import views
 urlpatterns = [
     url(r'^(?P<cod_prep>[0-9]+)/$', views.controlloPlanning, name='controlloPlanning'),
     url(r'^segnalazione/(?P<n_matricola>[0-9]+)/$', views.ricezione, name='ricezione'),
-    url(r'^planning/(?P<planningId>[0-9]+)/daydone/$', views.daydone, name='daydone'),
+    url(r'^planning/daydone/$', views.daydone, name='daydone'),
+    url(
+        r'^(?P<n_matricola>[0-9]+)/planning/(?P<id_sett>[0-9]+)/done/$',
+        views.fineGiro,
+        name='fineGiro'
+        ),
 
 ]

@@ -46,6 +46,7 @@ class DipendenteAdmin(admin.ModelAdmin):
 
 class PrepostoAdmin(admin.ModelAdmin):
     fields = [
+        'n_matr',
         'username',
         'password',
         'first_name',

@@ -9,7 +9,7 @@ from appPreposti.settings import EMAIL_HOST_USER,EMAIL_HOST_PASSWORD
 
 #------- Variabili modificati in base ai valori di Impostazione
 
-SOGLIA_ORE = 1
+SOGLIA_ORE = 4
 SOGLIA_MINUTI = 0
 
 MESSAGGIO =''

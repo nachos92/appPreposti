@@ -247,98 +247,105 @@ def controlloPlanning(request, cod_prep):
     print "Invio json a client."
     print "++++++++++++++++++++++++++++"
 
-    preposto = Preposto.objects.get(pk=3)
-    foglio = '{"nome":"' + preposto.first_name + '","cognome":"' + preposto.last_name + '",'
+    try:
+        preposto = Preposto.objects.get(n_matr=cod_prep)
+        foglio = '{"nome":"' + preposto.first_name + '","cognome":"' + preposto.last_name + '",'
+        foglio += '"n_matr":"'+ preposto.getN_matr()+'",'
+        foglio += '"reparti":['
 
-    foglio += '"reparti":['
+        gg = date.today().weekday()
 
-    gg = date.today().weekday()
+        reparti = Settimana.objects.filter(
+            cod_preposto__id=preposto.getID(),
+            data_inizio__range=[startDate,endDate]
+        )
 
-    reparti = Settimana.objects.filter(
-        cod_preposto__id=preposto.getID(),
-        data_inizio__range=[startDate,endDate]
-    )
+        if (gg == 0):
+            reparti = reparti.filter(lun_fatto=False, lun_check=False)
+        if (gg == 1):
+            reparti = reparti.filter(mar_fatto=False, mar_check=False)
+        if (gg == 2):
+            reparti = reparti.filter(mer_fatto=False, mer_check=False)
+        if (gg == 3):
+            reparti = reparti.filter(gio_fatto=False, gio_check=False)
+        if (gg == 4):
+            reparti = reparti.filter(ven_fatto=False, ven_check=False)
 
-    if (gg == 0):
-        reparti = reparti.filter(lun_fatto=False, lun_check=False)
-    if (gg == 1):
-        reparti = reparti.filter(mar_fatto=False, mar_check=False)
-    if (gg == 2):
-        reparti = reparti.filter(mer_fatto=False, mer_check=False)
-    if (gg == 3):
-        reparti = reparti.filter(gio_fatto=False, gio_check=False)
-    if (gg == 4):
-        reparti = reparti.filter(ven_fatto=False, ven_check=False)
+        if len(reparti)==0:
+            foglio+=']'
+        else:
+            iter = 0
+            for r in reparti:
 
-    if len(reparti)==0:
-        foglio+=']'
-    else:
-        iter = 0
-        for r in reparti:
+                controlli_impiego = Impiego.objects.get(pk=r.getArea()).getControlli()
 
-            controlli_impiego = Impiego.objects.get(pk=r.getArea()).getControlli()
+                iter+=1
+                foglio += '{"nome":"'+r.getArea()+'",'
+                foglio += '"id":"'+ r.getId()+'",'
+                foglio += '"fatto":"F",'
+                foglio += '"orario":{"lun":"'+r.getLun_orario()+'",'
+                foglio += '"mar":"' + r.getMar_orario() + '",'
+                foglio += '"mer":"' + r.getMer_orario() + '",'
+                foglio += '"gio":"' + r.getGio_orario() + '",'
+                foglio += '"ven":"' + r.getVen_orario() + '"},'
+                foglio += '"dipendenti":['
 
-            iter+=1
-            foglio += '{"nome":"'+r.getArea()+'",'
-            foglio += '"orario":{"lun":"'+r.getLun_orario()+'",'
-            foglio += '"mar":"' + r.getMar_orario() + '",'
-            foglio += '"mer":"' + r.getMer_orario() + '",'
-            foglio += '"gio":"' + r.getGio_orario() + '",'
-            foglio += '"ven":"' + r.getVen_orario() + '"},'
-            foglio += '"dipendenti":['
+                persone = Dipendente.objects.filter(impiego=r.getArea())
+                iter_dip = 0
+                for d in persone:
+                    iter_dip+=1
+                    foglio += '{"nome":"'+d.getNome()+'",'
+                    foglio += '"cognome":"' + d.getCognome() + '",'
+                    foglio += '"n_matr":"' + d.getN_matr() + '",'
+                    foglio += '"fatto":"F",'
+                    foglio += '"controlli":['
 
-            persone = Dipendente.objects.filter(impiego=r.getArea())
-            iter_dip = 0
-            for d in persone:
-                iter_dip+=1
-                foglio += '{"nome":"'+d.getNome()+'",'
-                foglio += '"cognome":"' + d.getCognome() + '",'
-                foglio += '"n_matr":"' + d.getN_matr() + '",'
-                foglio += '"controlli":['
+                    iter_controlli = 0
+                    for c in controlli_impiego:
+                        iter_controlli+=1
+                        foglio += '{'
+                        #foglio += '{"id":"'+str(c.id)+'",'
+                        foglio += '"titolo":"' + c.getTitolo() + '",'
+                        foglio += '"value":"F"}'
 
-                iter_controlli = 0
-                for c in controlli_impiego:
-                    iter_controlli+=1
-                    foglio += '{'
-                    #foglio += '{"id":"'+str(c.id)+'",'
-                    foglio += '"titolo":"' + c.getTitolo() + '",'
-                    foglio += '"value":"F"}'
+                        if iter_controlli < len(controlli_impiego):
+                            foglio += ','
 
-                    if iter_controlli < len(controlli_impiego):
-                        foglio += ','
+                    #foglio += '], "controlli_adhoc":['
 
-                #foglio += '], "controlli_adhoc":['
+                    c_adhoc = d.getList_ContrAdHoc()
+                    if len(c_adhoc)>0:
+                        foglio+=','
+                    iter_c_adhoc = 0
+                    for cc in c_adhoc:
+                        iter_c_adhoc +=1
+                        foglio += '{"titolo":"'+cc.getTitolo()+'","value":"F"}'
 
-                c_adhoc = d.getList_ContrAdHoc()
-                if len(c_adhoc)>0:
-                    foglio+=','
-                iter_c_adhoc = 0
-                for cc in c_adhoc:
-                    iter_c_adhoc +=1
-                    foglio += '{"titolo":"'+cc.getTitolo()+'","value":"F"}'
+                        if iter_c_adhoc < len(c_adhoc):
+                            foglio += ','
 
-                    if iter_c_adhoc < len(c_adhoc):
+                    foglio += ']'
+                    foglio +='}'
+
+                    if iter_dip < len(persone):
                         foglio += ','
 
                 foglio += ']'
-                foglio +='}'
-
-                if iter_dip < len(persone):
+                foglio += '}'
+                if iter < len(reparti):
                     foglio += ','
-
             foglio += ']'
-            foglio += '}'
-            if iter < len(reparti):
-                foglio += ','
-        foglio += ']'
-    foglio += '}'
+        foglio += '}'
+
+    except:
+        print "Nessun match col n_matr passato"
+        foglio='{}'
+
     return HttpResponse(
-        #makeJson(cod_prep, elenco=dipendenti, plan=planning),
+        # makeJson(cod_prep, elenco=dipendenti, plan=planning),
         foglio,
         content_type='application/json'
     )
-
-
 
 
 
@@ -380,9 +387,34 @@ def ricezione(request, n_matricola):
 
 
 @csrf_exempt
-def daydone(request, planningId):
-    plan = Settimana.objects.get(id=int(planningId))
+def daydone(request):
+    j = json.loads(request.body)
 
+    for s in j['reparti']:
+        plan = Settimana.objects.get(id=int(s['id_settimana']))
+
+        k = date.today().weekday()
+
+        if (k == 0):
+            plan.lun_fatto = True
+        if (k == 1):
+            plan.mar_fatto = True
+        if (k == 2):
+            plan.mer_fatto = True
+        if (k == 3):
+            plan.gio_fatto = True
+        if (k == 4):
+            plan.ven_fatto = True
+
+        plan.save()
+
+    return HttpResponse('')
+
+
+def fineGiro(request,n_matricola, id_sett):
+    plan = Settimana.objects.get(id=int(id_sett))
+
+    print "Ricevuto fineGiro dal preposto "+str(n_matricola)
     k = date.today().weekday()
 
     if (k == 0):
@@ -398,6 +430,6 @@ def daydone(request, planningId):
 
     plan.save()
 
-    return HttpResponse('')
 
+    return HttpResponse('')
 

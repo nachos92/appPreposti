@@ -89,7 +89,7 @@ class Preposto(models.Model):
         return str(self.id)
 '''
 class Preposto(User):
-    n_matr = models.CharField(default='empty',max_length=10)
+    n_matr = models.CharField(unique=True,max_length=8)
     sottoposti = models.ManyToManyField(Impiego, blank=True)
     superiore = models.ForeignKey(Responsabile, blank=True)
 
@@ -100,7 +100,7 @@ class Preposto(User):
     def getSuperiore(self):
         return str(self.superiore)
     def getN_matr(self):
-        return str(self.n_matr)
+        return self.n_matr
     def getID(self):
         return str(self.id)
     def getNome(self):

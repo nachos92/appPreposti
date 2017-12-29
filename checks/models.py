@@ -56,6 +56,8 @@ class Settimana(models.Model):
     def __unicode__(self):
         return str(self.id)
 
+    def getId(self):
+        return str(self.id)
     def getCod_preposto(self):
         return str(self.cod_preposto)
     def getPreposto(self):
