@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from setup.models import *
 from .models import Settimana, Segnalazione
 import datetime
@@ -233,6 +233,8 @@ mi stampa l'elenco dei dipendenti che il preposto 56
 non ha ancora controllato.
 """
 def controlloPlanning(request, cod_prep):
+
+    print "### Controllo planning in corso... ###"
     gruppo_sottoposti = Preposto.objects.filter(id=cod_prep).values_list('sottoposti')
 
     # elenco dipendenti del settore che il preposto deve controllare
@@ -244,8 +246,8 @@ def controlloPlanning(request, cod_prep):
     #print "Dipendenti totali: " + str(len(dipendenti)) + '\n' + str(dipendenti)
     planning = getWeek(cod_prep)
 
-    print "Invio json a client."
-    print "++++++++++++++++++++++++++++"
+
+
 
     try:
         preposto = Preposto.objects.get(n_matr=cod_prep)
@@ -283,11 +285,17 @@ def controlloPlanning(request, cod_prep):
                 foglio += '{"nome":"'+r.getArea()+'",'
                 foglio += '"id":"'+ r.getId()+'",'
                 foglio += '"fatto":"F",'
-                foglio += '"orario":{"lun":"'+r.getLun_orario()+'",'
-                foglio += '"mar":"' + r.getMar_orario() + '",'
-                foglio += '"mer":"' + r.getMer_orario() + '",'
-                foglio += '"gio":"' + r.getGio_orario() + '",'
-                foglio += '"ven":"' + r.getVen_orario() + '"},'
+                foglio += '"data_inizio":{'
+                foglio += '"giorno":"'+ r.getGiornoInizio()+'",'
+                foglio += '"mese":"'+ r.getMeseInizio()+'",'
+                foglio += '"anno":"' +r.getAnnoInizio()+'"},'
+                foglio += '"orario":{'
+                foglio += '"lun":{"hh":"'+r.getLun_HH()+'","mm":"'+r.getLun_MM()+'"},'
+                foglio += '"mar":{"hh":"' + r.getMar_HH() + '","mm":"' + r.getMar_MM() + '"},'
+                foglio += '"mer":{"hh":"' + r.getMer_HH() + '","mm":"' + r.getMer_MM() + '"},'
+                foglio += '"gio":{"hh":"' + r.getGio_HH() + '","mm":"' + r.getGio_MM() + '"},'
+                foglio += '"ven":{"hh":"' + r.getVen_HH() + '","mm":"' + r.getVen_MM() + '"}},'
+
                 foglio += '"dipendenti":['
 
                 persone = Dipendente.objects.filter(impiego=r.getArea())
@@ -336,16 +344,17 @@ def controlloPlanning(request, cod_prep):
                     foglio += ','
             foglio += ']'
         foglio += '}'
+        return HttpResponse(
+            foglio,
+            content_type='application/json'
+        )
 
-    except:
+    except Preposto.DoesNotExist:
         print "Nessun match col n_matr passato"
-        foglio='{}'
+        raise Http404
+        #return HttpResponse("Nessun match col n_matr passato")
 
-    return HttpResponse(
-        # makeJson(cod_prep, elenco=dipendenti, plan=planning),
-        foglio,
-        content_type='application/json'
-    )
+
 
 
 

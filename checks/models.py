@@ -67,17 +67,49 @@ class Settimana(models.Model):
         return str(self.area)
     def getDataInizio(self):
         return str(self.data_inizio)
+
+    def getGiornoInizio(self):
+        return self.data_inizio.strftime("%d")
+    def getMeseInizio(self):
+        return self.data_inizio.strftime("%m")
+    def getAnnoInizio(self):
+        return self.data_inizio.strftime("%Y")
+
+
     def getLun_orario(self):
         return self.lun
+    def getLun_HH(self):
+        return self.lun[:2]
+    def getLun_MM(self):
+        return self.lun[-2:]
+
     def getMar_orario(self):
         return self.mar
+    def getMar_HH(self):
+        return self.mar[:2]
+    def getMar_MM(self):
+        return self.mar[-2:]
+
     def getMer_orario(self):
         return self.mer
+    def getMer_HH(self):
+        return self.mer[:2]
+    def getMer_MM(self):
+        return self.mer[-2:]
+
     def getGio_orario(self):
         return self.gio
+    def getGio_HH(self):
+        return self.gio[:2]
+    def getGio_MM(self):
+        return self.gio[-2:]
+
     def getVen_orario(self):
         return self.ven
-
+    def getVen_HH(self):
+        return self.ven[:2]
+    def getVen_MM(self):
+        return self.ven[-2:]
 
     class Meta:
         ordering = [
