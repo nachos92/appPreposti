@@ -278,70 +278,70 @@ def controlloPlanning(request, cod_prep):
         else:
             iter = 0
             for r in reparti:
+                if r.periodo_attivo()== True:
+                    controlli_impiego = Impiego.objects.get(pk=r.getArea()).getControlli()
 
-                controlli_impiego = Impiego.objects.get(pk=r.getArea()).getControlli()
-
-                iter+=1
-                foglio += '{"nome":"'+r.getArea()+'",'
-                foglio += '"id":"'+ r.getId()+'",'
-                foglio += '"fatto":"F",'
-                foglio += '"data_inizio":{'
-                foglio += '"giorno":"'+ r.getGiornoInizio()+'",'
-                foglio += '"mese":"'+ r.getMeseInizio()+'",'
-                foglio += '"anno":"' +r.getAnnoInizio()+'"},'
-                foglio += '"orario":{'
-                foglio += '"lun":{"hh":"'+r.getLun_HH()+'","mm":"'+r.getLun_MM()+'"},'
-                foglio += '"mar":{"hh":"' + r.getMar_HH() + '","mm":"' + r.getMar_MM() + '"},'
-                foglio += '"mer":{"hh":"' + r.getMer_HH() + '","mm":"' + r.getMer_MM() + '"},'
-                foglio += '"gio":{"hh":"' + r.getGio_HH() + '","mm":"' + r.getGio_MM() + '"},'
-                foglio += '"ven":{"hh":"' + r.getVen_HH() + '","mm":"' + r.getVen_MM() + '"}},'
-
-                foglio += '"dipendenti":['
-
-                persone = Dipendente.objects.filter(impiego=r.getArea())
-                iter_dip = 0
-                for d in persone:
-                    iter_dip+=1
-                    foglio += '{"nome":"'+d.getNome()+'",'
-                    foglio += '"cognome":"' + d.getCognome() + '",'
-                    foglio += '"n_matr":"' + d.getN_matr() + '",'
+                    iter+=1
+                    foglio += '{"nome":"'+r.getArea()+'",'
+                    foglio += '"id":"'+ r.getId()+'",'
                     foglio += '"fatto":"F",'
-                    foglio += '"controlli":['
+                    foglio += '"data_inizio":{'
+                    foglio += '"giorno":"'+ r.getGiornoInizio()+'",'
+                    foglio += '"mese":"'+ r.getMeseInizio()+'",'
+                    foglio += '"anno":"' +r.getAnnoInizio()+'"},'
+                    foglio += '"orario":{'
+                    foglio += '"lun":{"hh":"'+r.getLun_HH()+'","mm":"'+r.getLun_MM()+'"},'
+                    foglio += '"mar":{"hh":"' + r.getMar_HH() + '","mm":"' + r.getMar_MM() + '"},'
+                    foglio += '"mer":{"hh":"' + r.getMer_HH() + '","mm":"' + r.getMer_MM() + '"},'
+                    foglio += '"gio":{"hh":"' + r.getGio_HH() + '","mm":"' + r.getGio_MM() + '"},'
+                    foglio += '"ven":{"hh":"' + r.getVen_HH() + '","mm":"' + r.getVen_MM() + '"}},'
 
-                    iter_controlli = 0
-                    for c in controlli_impiego:
-                        iter_controlli+=1
-                        foglio += '{'
-                        #foglio += '{"id":"'+str(c.id)+'",'
-                        foglio += '"titolo":"' + c.getTitolo() + '",'
-                        foglio += '"value":"F"}'
+                    foglio += '"dipendenti":['
 
-                        if iter_controlli < len(controlli_impiego):
-                            foglio += ','
+                    persone = Dipendente.objects.filter(impiego=r.getArea())
+                    iter_dip = 0
+                    for d in persone:
+                        iter_dip+=1
+                        foglio += '{"nome":"'+d.getNome()+'",'
+                        foglio += '"cognome":"' + d.getCognome() + '",'
+                        foglio += '"n_matr":"' + d.getN_matr() + '",'
+                        foglio += '"fatto":"F",'
+                        foglio += '"controlli":['
 
-                    #foglio += '], "controlli_adhoc":['
+                        iter_controlli = 0
+                        for c in controlli_impiego:
+                            iter_controlli+=1
+                            foglio += '{'
+                            #foglio += '{"id":"'+str(c.id)+'",'
+                            foglio += '"titolo":"' + c.getTitolo() + '",'
+                            foglio += '"value":"F"}'
 
-                    c_adhoc = d.getList_ContrAdHoc()
-                    if len(c_adhoc)>0:
-                        foglio+=','
-                    iter_c_adhoc = 0
-                    for cc in c_adhoc:
-                        iter_c_adhoc +=1
-                        foglio += '{"titolo":"'+cc.getTitolo()+'","value":"F"}'
+                            if iter_controlli < len(controlli_impiego):
+                                foglio += ','
 
-                        if iter_c_adhoc < len(c_adhoc):
+                        #foglio += '], "controlli_adhoc":['
+
+                        c_adhoc = d.getList_ContrAdHoc()
+                        if len(c_adhoc)>0:
+                            foglio+=','
+                        iter_c_adhoc = 0
+                        for cc in c_adhoc:
+                            iter_c_adhoc +=1
+                            foglio += '{"titolo":"'+cc.getTitolo()+'","value":"F"}'
+
+                            if iter_c_adhoc < len(c_adhoc):
+                                foglio += ','
+
+                        foglio += ']'
+                        foglio +='}'
+
+                        if iter_dip < len(persone):
                             foglio += ','
 
                     foglio += ']'
-                    foglio +='}'
-
-                    if iter_dip < len(persone):
+                    foglio += '}'
+                    if iter < len(reparti):
                         foglio += ','
-
-                foglio += ']'
-                foglio += '}'
-                if iter < len(reparti):
-                    foglio += ','
             foglio += ']'
         foglio += '}'
         return HttpResponse(

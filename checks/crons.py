@@ -9,7 +9,7 @@ from appPreposti.settings import EMAIL_HOST_USER,EMAIL_HOST_PASSWORD
 
 #------- Variabili modificati in base ai valori di Impostazione
 
-SOGLIA_ORE = 4
+SOGLIA_ORE = 1
 SOGLIA_MINUTI = 0
 
 MESSAGGIO =''
@@ -114,12 +114,26 @@ def check_controlli():
 
                     if x.mar_fatto == False:
                         pass
-                        '''
+
                         SegnalazionePrep.create(
-                            matr=Preposto.objects.get(pk=x.getCod_preposto),
-                            dett=MESSAGGIO
+                            matr=x.getPreposto(),
+                            dett=impo.getMessaggio()
                         ).save()
-                        '''
+
+                        print "INVIO MAIL ----------"
+                        send_mail(
+                            subject='Prep. X - no giro controlli',
+                            message=MESSAGGIO,
+                            from_email=EMAIL_HOST_USER,
+                            recipient_list=[
+                                Responsabile.objects.get(
+                                    last_name=x.getPreposto().getSuperiore()
+                                ).getEmail(),
+                            ],
+                            auth_user=EMAIL_HOST_USER,
+                            auth_password=EMAIL_HOST_PASSWORD,
+                            fail_silently=True
+                        )
 
                     x.mar_check = True
                     x.save()

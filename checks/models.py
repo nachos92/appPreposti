@@ -51,6 +51,12 @@ class Settimana(models.Model):
     gio_check = models.BooleanField(default=False)
     ven_check = models.BooleanField(default=False)
 
+    lun_festivo = models.BooleanField(default=False)
+    mar_festivo = models.BooleanField(default=False)
+    mer_festivo = models.BooleanField(default=False)
+    gio_festivo = models.BooleanField(default=False)
+    ven_festivo = models.BooleanField(default=False)
+
     completato = models.BooleanField(default=False)
 
     def __unicode__(self):
@@ -110,6 +116,22 @@ class Settimana(models.Model):
         return self.ven[:2]
     def getVen_MM(self):
         return self.ven[-2:]
+
+    def periodo_attivo(self):
+        '''
+        Se mi trovo dopo l'orario di inizio.
+
+        :return:
+        '''
+
+        d = datetime.datetime.strptime(self.getMar_HH()+':'+self.getMar_MM(),'%H:%M').time()
+        dnow = datetime.datetime.now().time()
+        if dnow > d:
+            print "Posso eseguire i controlli"
+            return True
+        else:
+            print "Non posso eseguire i controlli"
+            return False
 
     class Meta:
         ordering = [

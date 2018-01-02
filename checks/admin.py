@@ -3,27 +3,50 @@ from .models import *
 
 
 class SettimanaAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('Generali', {
+            'fields': (
+                'cod_preposto',
+                'area',
+                'data_inizio',
+            )
+        }),
+        ('Orari', {
 
-    fields = [
-        'cod_preposto',
-        'area',
-        'data_inizio',
-        'lun',
-        'mar',
-        'mer',
-        'gio',
-        'ven',
-	    'lun_fatto',
-	    'lun_check',
-        'mar_fatto',
-        'mar_check',
-        'mer_fatto',
-        'mer_check',
-        'gio_fatto',
-        'gio_check',
-        'ven_fatto',
-        'ven_check',
-    ]
+            'fields': (
+                'lun',
+                'mar',
+                'mer',
+                'gio',
+                'ven',
+            ),
+            },
+         ),
+        ('Selezione giorni chiusura', {
+            'classes': ('collapse',),
+            'fields': (
+                'lun_festivo',
+                'mar_festivo',
+                'mer_festivo',
+                'gio_festivo',
+                'ven_festivo',
+            ),
+        }),
+        ('Debug',{
+            'fields': (
+                'lun_fatto',
+                'lun_check',
+                'mar_fatto',
+                'mar_check',
+                'mer_fatto',
+                'mer_check',
+                'gio_fatto',
+                'gio_check',
+                'ven_fatto',
+                'ven_check',
+                )
+        }
+    ))
 
     list_display = [
         'id',
