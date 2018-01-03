@@ -189,31 +189,37 @@ def controlloPlanning(request, cod_prep):
                     foglio += '"anno":"' +r.getAnnoInizio()+'"},'
                     foglio += '"orario":{'
 
-                    foglio += '"lun":{"hh":"'+r.getLun_HH()+'","mm":"'+r.getLun_MM()+'",'
+                    #foglio += '"lun":{"hh":"'+r.getLun_HH()+'","mm":"'+r.getLun_MM()+'",'
+                    foglio += '"lun":{"orario":"'+r.getLun_orario()+'",'
                     if r.lun_festivo == False:
                         foglio += '"festivo":"F"},'
                     else:
                         foglio += '"festivo":"T"},'
 
-                    foglio += '"mar":{"hh":"' + r.getMar_HH() + '","mm":"' + r.getMar_MM() + '",'
+
+                    #foglio += '"mar":{"hh":"' + r.getMar_HH() + '","mm":"' + r.getMar_MM() + '",'
+                    foglio += '"mar":{"orario":"'+r.getMar_orario()+'",'
                     if r.mar_festivo == False:
                         foglio += '"festivo":"F"},'
                     else:
                         foglio += '"festivo":"T"},'
 
-                    foglio += '"mer":{"hh":"' + r.getMer_HH() + '","mm":"' + r.getMer_MM() + '",'
+                    #foglio += '"mer":{"hh":"' + r.getMer_HH() + '","mm":"' + r.getMer_MM() + '",'
+                    foglio += '"mer":{"orario":"'+r.getMer_orario()+'",'
                     if r.mer_festivo == False:
                         foglio += '"festivo":"F"},'
                     else:
                         foglio += '"festivo":"T"},'
 
-                    foglio += '"gio":{"hh":"' + r.getGio_HH() + '","mm":"' + r.getGio_MM() + '",'
+                    #foglio += '"gio":{"hh":"' + r.getGio_HH() + '","mm":"' + r.getGio_MM() + '",'
+                    foglio += '"gio":{"orario":"'+r.getGio_orario()+'",'
                     if r.gio_festivo == False:
                         foglio += '"festivo":"F"},'
                     else:
                         foglio += '"festivo":"T"},'
 
-                    foglio += '"ven":{"hh":"' + r.getVen_HH() + '","mm":"' + r.getVen_MM() + '",'
+                    #foglio += '"ven":{"hh":"' + r.getVen_HH() + '","mm":"' + r.getVen_MM() + '",'
+                    foglio += '"ven":{"orario":"'+r.getVen_orario()+'",'
                     if r.ven_festivo == False:
                         foglio += '"festivo":"F"}'
                     else:
