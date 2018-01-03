@@ -117,21 +117,27 @@ class Settimana(models.Model):
     def getVen_MM(self):
         return self.ven[-2:]
 
+
     def periodo_attivo(self):
-        '''
-        Se mi trovo dopo l'orario di inizio.
+        """
+        Ritorna true quando mi trovo nel periodo di tempo in cui posso eseguire i controlli,
+        ovvero a partire dall'orario di inizio ed entro la soglia max (es. 1 ora).
 
+        DEV --> ritorna sempre true
         :return:
-        '''
+        """
 
+        '''
         d = datetime.datetime.strptime(self.getMar_HH()+':'+self.getMar_MM(),'%H:%M').time()
         dnow = datetime.datetime.now().time()
         if dnow > d:
             print "Posso eseguire i controlli"
             return True
         else:
-            print "Non posso eseguire i controlli"
+            print "Non e' ancora l'orario di inizio."
             return False
+        '''
+        return True
 
     class Meta:
         ordering = [

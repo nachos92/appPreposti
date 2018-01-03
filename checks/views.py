@@ -82,112 +82,6 @@ Es. JSON generato:
     ]
     }
 """
-def makeJson(cod_prep, elenco, plan):
-
-    index = 0
-    diz = makeDict()
-    prep = Preposto.objects.get(pk=cod_prep)
-
-    if (len(plan) == 0):
-        return ('[]')
-
-    out = '{'
-    '''
-    Nome e cognome al momento non sono inseriti perche' prima
-    bisogna decidere come implementare l'entita' preposto.
-    '''
-
-    # Aggiunta nome e cognome preposto
-    out += '"nome":"'+prep.getNome()+\
-           '","cognome":"'+prep.getCognome()+'",'
-
-    out += '"cod_prep":"'+prep.getID()+'",'
-    # Aggiunta stato ('giro' completato o no)
-    out += '"completato":"F",'
-
-    # Aggiunta orario settimanale dei controlli.
-    # out += '"orario":{'
-    for k in plan:
-        out += '"id":"' + str(k[8]) + '",'
-        out += '"orario":{'
-        out += '"lun":"' + k[2] \
-               + '","mar":"' + k[3] \
-               + '","mer":"' + k[4] \
-               + '","gio":"' + k[5] \
-               + '","ven":"' + k[6] \
-               + '"},'
-
-    k = date.today().weekday()
-
-    if (k == 0):
-        plan = plan.filter(lun_fatto=False, lun_check=False)
-    if (k == 1):
-        plan = plan.filter(mar_fatto=False, mar_check=False)
-    if (k == 2):
-        plan = plan.filter(mer_fatto=False, mer_check=False)
-    if (k == 3):
-        plan = plan.filter(gio_fatto=False, gio_check=False)
-    if (k == 4):
-        plan = plan.filter(ven_fatto=False, ven_check=False)
-
-    out += '"dipendenti":['
-
-    if (len(plan)==0):
-        out += ']'
-    else:
-
-        for q in elenco:
-            index_controlli = 0
-            index += 1
-            out += '{ "n_matricola":"' + q[0] + '",'\
-                   + '"nome":"' + q[1] + '",' \
-                   + '"cognome":"' + q[2] \
-                   + '","impiego":"' \
-                   + q[3] + '"'
-
-
-            out += ',"controlli":['
-            controlli = Impiego.objects.get(pk=q[3]).getControlli()
-            if (len(controlli)>0):
-                index_controlli2 = 0
-                for controllo in controlli:
-                    index_controlli2 += 1
-                    out += '{"id":"'+str(controllo.id)+'","titolo":"'+str(controllo)+\
-                           '","value":"F"}'
-                    if index_controlli2 < len(controlli):
-                        out+=','
-
-            out += '],"controlli_adhoc":['
-
-            index_extra = 0
-            controlli_adhoc = Dipendente.objects.get(pk=q[0]).getList_ContrAdHoc()
-
-            for extra in Dipendente.objects.get(pk=q[0]).getList_ContrAdHoc():
-                index_extra += 1
-                out += '{"titolo":"'+str(extra)+'","value":"F"}'
-
-                if index_extra < len(controlli_adhoc):
-                    out += ','
-
-            out += ']'
-
-            out += '}'
-
-            if (index < len(elenco)):
-                out += ','
-
-
-        #Fine elenco dipendenti
-        out += ']'
-
-    #out += '"messaggio":'
-
-
-
-    #Fine json
-    out += '}'
-
-    return out
 
 
 """
@@ -209,6 +103,7 @@ def getWeek(cod_prep):
         'completato',
         'id'
     )
+
 
     '''
     k = date.today().weekday()
@@ -262,6 +157,7 @@ def controlloPlanning(request, cod_prep):
             data_inizio__range=[startDate,endDate]
         )
 
+
         if (gg == 0):
             reparti = reparti.filter(lun_fatto=False, lun_check=False)
         if (gg == 1):
@@ -273,8 +169,10 @@ def controlloPlanning(request, cod_prep):
         if (gg == 4):
             reparti = reparti.filter(ven_fatto=False, ven_check=False)
 
+
         if len(reparti)==0:
-            foglio+=']'
+            foglio += ']'
+            print "Len == 0"
         else:
             iter = 0
             for r in reparti:
@@ -290,13 +188,42 @@ def controlloPlanning(request, cod_prep):
                     foglio += '"mese":"'+ r.getMeseInizio()+'",'
                     foglio += '"anno":"' +r.getAnnoInizio()+'"},'
                     foglio += '"orario":{'
-                    foglio += '"lun":{"hh":"'+r.getLun_HH()+'","mm":"'+r.getLun_MM()+'"},'
-                    foglio += '"mar":{"hh":"' + r.getMar_HH() + '","mm":"' + r.getMar_MM() + '"},'
-                    foglio += '"mer":{"hh":"' + r.getMer_HH() + '","mm":"' + r.getMer_MM() + '"},'
-                    foglio += '"gio":{"hh":"' + r.getGio_HH() + '","mm":"' + r.getGio_MM() + '"},'
-                    foglio += '"ven":{"hh":"' + r.getVen_HH() + '","mm":"' + r.getVen_MM() + '"}},'
 
+                    foglio += '"lun":{"hh":"'+r.getLun_HH()+'","mm":"'+r.getLun_MM()+'",'
+                    if r.lun_festivo == False:
+                        foglio += '"festivo":"F"},'
+                    else:
+                        foglio += '"festivo":"T"},'
+
+                    foglio += '"mar":{"hh":"' + r.getMar_HH() + '","mm":"' + r.getMar_MM() + '",'
+                    if r.mar_festivo == False:
+                        foglio += '"festivo":"F"},'
+                    else:
+                        foglio += '"festivo":"T"},'
+
+                    foglio += '"mer":{"hh":"' + r.getMer_HH() + '","mm":"' + r.getMer_MM() + '",'
+                    if r.mer_festivo == False:
+                        foglio += '"festivo":"F"},'
+                    else:
+                        foglio += '"festivo":"T"},'
+
+                    foglio += '"gio":{"hh":"' + r.getGio_HH() + '","mm":"' + r.getGio_MM() + '",'
+                    if r.gio_festivo == False:
+                        foglio += '"festivo":"F"},'
+                    else:
+                        foglio += '"festivo":"T"},'
+
+                    foglio += '"ven":{"hh":"' + r.getVen_HH() + '","mm":"' + r.getVen_MM() + '",'
+                    if r.ven_festivo == False:
+                        foglio += '"festivo":"F"}'
+                    else:
+                        foglio += '"festivo":"T"}'
+
+                    foglio += '},'
                     foglio += '"dipendenti":['
+
+
+
 
                     persone = Dipendente.objects.filter(impiego=r.getArea())
                     iter_dip = 0
@@ -312,14 +239,12 @@ def controlloPlanning(request, cod_prep):
                         for c in controlli_impiego:
                             iter_controlli+=1
                             foglio += '{'
-                            #foglio += '{"id":"'+str(c.id)+'",'
                             foglio += '"titolo":"' + c.getTitolo() + '",'
                             foglio += '"value":"F"}'
 
                             if iter_controlli < len(controlli_impiego):
                                 foglio += ','
 
-                        #foglio += '], "controlli_adhoc":['
 
                         c_adhoc = d.getList_ContrAdHoc()
                         if len(c_adhoc)>0:

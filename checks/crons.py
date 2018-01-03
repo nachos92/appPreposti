@@ -66,19 +66,32 @@ def check_controlli():
     for x in totali:
 
         if (k == 0):
-            if x.lun_check == False:
+            if x.lun_festivo == False and x.lun_check == False:
                 if datetime.datetime.now().time() > \
                         (datetime.datetime.strptime(x.lun,'%H:%M')+ soglia_tot).time():
 
                     if x.lun_fatto == False:
-                        pass
-                        '''
-                        SegnalazionePrep.create(
-                            matr=Preposto.objects.get(pk=x.getCod_preposto),
-                            dett=MESSAGGIO
-                        ).save()
-                        '''
 
+
+                        SegnalazionePrep.create(
+                            matr=x.getPreposto(),
+                            dett=impo.getMessaggio()
+                        ).save()
+
+                        print "INVIO MAIL ----------"
+                        send_mail(
+                            subject='Prep. X - no giro controlli',
+                            message=MESSAGGIO,
+                            from_email=EMAIL_HOST_USER,
+                            recipient_list=[
+                                Responsabile.objects.get(
+                                    last_name=x.getPreposto().getSuperiore()
+                                ).getEmail(),
+                            ],
+                            auth_user=EMAIL_HOST_USER,
+                            auth_password=EMAIL_HOST_PASSWORD,
+                            fail_silently=True
+                        )
                     x.lun_check = True
                     x.save()
         '''
@@ -108,7 +121,7 @@ def check_controlli():
         '''
 
         if (k == 1):
-            if x.mar_check == False:
+            if x.mar_festivo == False and x.mar_check == False:
                 if datetime.datetime.now().time() > \
                         (datetime.datetime.strptime(x.mar,'%H:%M')+ soglia_tot).time():
 
@@ -164,18 +177,32 @@ def check_controlli():
             '''
 
         if (k == 2):
-            if x.mer_check == False:
+            if x.mer_festivo == False and x.mer_check == False:
                 if datetime.datetime.now().time() > \
                         (datetime.datetime.strptime(x.mer,'%H:%M')+ soglia_tot).time():
 
                     if x.mer_fatto == False:
                         pass
-                        '''
+
                         SegnalazionePrep.create(
-                            matr=Preposto.objects.get(pk=x.getCod_preposto),
-                            dett=MESSAGGIO
+                            matr=x.getPreposto(),
+                            dett=impo.getMessaggio()
                         ).save()
-                        '''
+
+                        print "INVIO MAIL ----------"
+                        send_mail(
+                            subject='Prep. X - no giro controlli',
+                            message=MESSAGGIO,
+                            from_email=EMAIL_HOST_USER,
+                            recipient_list=[
+                                Responsabile.objects.get(
+                                    last_name=x.getPreposto().getSuperiore()
+                                ).getEmail(),
+                            ],
+                            auth_user=EMAIL_HOST_USER,
+                            auth_password=EMAIL_HOST_PASSWORD,
+                            fail_silently=True
+                        )
 
                     x.mer_check = True
                     x.save()
@@ -210,18 +237,32 @@ def check_controlli():
 
         if (k == 3):
 
-            if x.gio_check == False:
+            if x.gio_festivo == False and x.gio_check == False:
                 if datetime.datetime.now().time() > \
                         (datetime.datetime.strptime(x.gio,'%H:%M')+ soglia_tot).time():
 
                     if x.gio_fatto == False:
                         pass
-                        '''
+
                         SegnalazionePrep.create(
-                            matr=Preposto.objects.get(pk=x.getCod_preposto),
-                            dett=MESSAGGIO
+                            matr=x.getPreposto(),
+                            dett=impo.getMessaggio()
                         ).save()
-                        '''
+
+                        print "INVIO MAIL ----------"
+                        send_mail(
+                            subject='Prep. X - no giro controlli',
+                            message=MESSAGGIO,
+                            from_email=EMAIL_HOST_USER,
+                            recipient_list=[
+                                Responsabile.objects.get(
+                                    last_name=x.getPreposto().getSuperiore()
+                                ).getEmail(),
+                            ],
+                            auth_user=EMAIL_HOST_USER,
+                            auth_password=EMAIL_HOST_PASSWORD,
+                            fail_silently=True
+                        )
 
                     x.gio_check = True
                     x.save()
@@ -256,7 +297,7 @@ def check_controlli():
             '''
         if (k == 4):
 
-            if x.ven_check == False:
+            if x.ven_festivo == False and x.ven_check == False:
                 if datetime.datetime.now().time() > \
                         (datetime.datetime.strptime(x.ven,'%H:%M')+ soglia_tot).time():
 
