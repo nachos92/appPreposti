@@ -113,6 +113,7 @@ class ImpostazioneAdmin(admin.ModelAdmin):
             'fields': (
                 'nuovo',
                 'data_inizio',
+                'attiva',
             )
         }),
         ('Parametri email', {
@@ -137,6 +138,8 @@ class ImpostazioneAdmin(admin.ModelAdmin):
 
     list_display = [
         'id',
+        'is_today',
+        'attiva',
         'nuovo',
         'creazione',
         'data_inizio',

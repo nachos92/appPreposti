@@ -167,8 +167,17 @@ class Orario(models.Model):
     def getChoices(self):
         pass
 
+
+
 class Impostazione(models.Model):
     nuovo = models.BooleanField(default=True)
+
+    '''
+    Quando mi servono degli attributi di impostazione (es. messaggio mail)
+    controllo che l'oggetto impostazione sia attivo: se si' prendo il valore dall'oggetto,
+    altrimenti prendo il valore standard (es. MESSAGGIO_EMAIL).
+    '''
+    attiva = models.BooleanField(default=False)
     creazione = models.DateTimeField(auto_now_add=True)
     data_inizio = models.DateField(
         help_text="Inserire data dell'entrata in vigore delle impostazioni.",

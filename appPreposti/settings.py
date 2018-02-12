@@ -122,8 +122,9 @@ CRONJOBS = [
     ('*/1 * * * *', 'checks.crons.check_controlli'),
 
     #Esegue ogni 12 ore.
-    ('*/1 * * * *', 'checks.crons.aggiornamento'),
+    ('*/1 * * * *', 'checks.crons.check_impostazioni'),
 ]
+
 
 EMAIL_BACKEND= 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_PORT = 587
@@ -137,3 +138,5 @@ da quelli di Impostazione.
 EMAIL_HOST = 'smtp.mail.yahoo.it'
 EMAIL_HOST_USER = "piano_master92@yahoo.it"
 EMAIL_HOST_PASSWORD = "zanarkand92"
+
+MESSAGGIO = "Messaggio standard (da file settings.py)."

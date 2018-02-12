@@ -61,10 +61,31 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
+            name='Impostazione',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('nuovo', models.BooleanField(default=True)),
+                ('attiva', models.BooleanField(default=False)),
+                ('creazione', models.DateTimeField(auto_now_add=True)),
+                ('data_inizio', models.DateField(help_text=b"Inserire data dell'entrata in vigore delle impostazioni.", verbose_name=b'Data attivazione')),
+                ('smtp_server', models.CharField(max_length=20, verbose_name=b'Server smtp')),
+                ('smtp_username', models.CharField(max_length=30, verbose_name=b'Username (server smtp)')),
+                ('smtp_password', models.CharField(max_length=30, verbose_name=b'Password (server smtp)')),
+                ('port', models.IntegerField(default=587, help_text=b'Porta da usare (default=587).')),
+                ('messaggio', models.CharField(default=b'Il preposto non ha eseguito il giro controlli in data odierna.', help_text=b"Contenuto dell'email inviata quando un preposto non esegue un giro di controlli.", max_length=150)),
+                ('sogliaControllo_ore', models.IntegerField(help_text=b'Ore a disposizione per concludere il giro dei controlli.', verbose_name=b'Soglia ore')),
+                ('sogliaControllo_minuti', models.IntegerField(help_text=b'Minuti a disposizione per concludere il giro dei controlli.', verbose_name=b'Soglia minuti')),
+            ],
+            options={
+                'ordering': ['-creazione'],
+                'verbose_name_plural': 'Impostazioni',
+            },
+        ),
+        migrations.CreateModel(
             name='Orario',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('nome', models.CharField(max_length=10)),
+                ('nome', models.CharField(max_length=20)),
                 ('orario', models.TimeField()),
             ],
             options={
@@ -75,7 +96,7 @@ class Migration(migrations.Migration):
             name='Preposto',
             fields=[
                 ('user_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL)),
-                ('n_matr', models.CharField(default=b'empty', max_length=10)),
+                ('n_matr', models.CharField(unique=True, max_length=8)),
                 ('sottoposti', models.ManyToManyField(to='setup.Impiego', blank=True)),
             ],
             options={
@@ -103,6 +124,11 @@ class Migration(migrations.Migration):
             model_name='preposto',
             name='superiore',
             field=models.ForeignKey(to='setup.Responsabile', blank=True),
+        ),
+        migrations.AddField(
+            model_name='impostazione',
+            name='orari_selezione',
+            field=models.ManyToManyField(help_text=b'Orari disponibili nella compilazione del piano settimanale.', to='setup.Orario'),
         ),
         migrations.AddField(
             model_name='dipendente',

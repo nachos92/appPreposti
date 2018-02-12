@@ -7,7 +7,6 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('setup', '0001_initial'),
     ]
 
     operations = [
@@ -17,7 +16,6 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('data', models.DateTimeField(auto_now_add=True)),
                 ('dettaglio', models.TextField(max_length=200, blank=True)),
-                ('matricola', models.ForeignKey(to='setup.Dipendente')),
             ],
             options={
                 'ordering': ['-id'],
@@ -30,7 +28,6 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('data', models.DateTimeField(auto_now_add=True)),
                 ('dettaglio', models.TextField(max_length=200, blank=True)),
-                ('matricola', models.ForeignKey(to='setup.Preposto')),
             ],
             options={
                 'ordering': ['-id'],
@@ -57,9 +54,12 @@ class Migration(migrations.Migration):
                 ('mer_check', models.BooleanField(default=False)),
                 ('gio_check', models.BooleanField(default=False)),
                 ('ven_check', models.BooleanField(default=False)),
+                ('lun_festivo', models.BooleanField(default=False)),
+                ('mar_festivo', models.BooleanField(default=False)),
+                ('mer_festivo', models.BooleanField(default=False)),
+                ('gio_festivo', models.BooleanField(default=False)),
+                ('ven_festivo', models.BooleanField(default=False)),
                 ('completato', models.BooleanField(default=False)),
-                ('area', models.ForeignKey(to='setup.Impiego')),
-                ('cod_preposto', models.ForeignKey(to='setup.Preposto')),
             ],
             options={
                 'ordering': ['-id'],

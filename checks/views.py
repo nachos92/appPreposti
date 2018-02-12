@@ -230,7 +230,6 @@ def controlloPlanning(request, cod_prep):
 
 
 
-
                     persone = Dipendente.objects.filter(impiego=r.getArea())
                     iter_dip = 0
                     for d in persone:

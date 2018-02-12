@@ -1,10 +1,9 @@
-from models import Settimana, SegnalazionePrep
+import datetime
 from datetime import date
 from django.core.mail import send_mail
-from setup.models import Responsabile,Preposto, Impostazione
-import datetime
-from appPreposti.settings import EMAIL_HOST_USER,EMAIL_HOST_PASSWORD
-
+from django.conf import settings
+from setup.models import Responsabile, Preposto, Impostazione
+from models import Settimana, SegnalazionePrep
 
 
 #------- Variabili modificati in base ai valori di Impostazione
@@ -12,7 +11,7 @@ from appPreposti.settings import EMAIL_HOST_USER,EMAIL_HOST_PASSWORD
 SOGLIA_ORE = 1
 SOGLIA_MINUTI = 0
 
-MESSAGGIO =''
+
 
 startDate = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday())
 endDate = startDate + datetime.timedelta(days=6)
@@ -25,24 +24,71 @@ def aggiornaMessaggio(prima,dopo):
 
 ###-------- Fine blocco variabili
 
+# ----------------------------------------->
+'''
+Gruppo di funzioni che vanno selezionano l'attributo "standard" o inserito in impostazioni,
+in base allo stato attivo/non attivo dell'oggetto impostazione.
+'''
 
-
-def invio_email(destinatario, messaggio):
+def selezMessaggio():
     try:
-        sett = Impostazione.objects.get(pk=1)
-        send_mail(
-        subject='SEGNALAZIONE',
-        message=sett.getMessaggio(),
-        from_email=sett.getSMTP_username(),
-        recipient_list=[destinatario,],
-        auth_user= sett.getSMTP_username(),
-        auth_password= sett.getSMTP_password(),
-        fail_silently=True
-        )
+        imp = Impostazione.objects.get(pk=1)
+        if (imp.attiva==True):
+            return imp.getMessaggio()
     except:
-        print "Errore invio email."
+        print "Impostazione(pk=1) inesistente."
+    else:
+        return getattr(settings, "MESSAGGIO", None)
+
+def selezMittente():
+    try:
+        imp = Impostazione.objects.get(pk=1)
+        if (imp.attiva==True):
+            return imp.getSMTP_username()
+    except:
+        print "Impostazione (pk=1) inesistente."
+    else:
+        return getattr(settings, "EMAIL_HOST_USER", None)
+
+def selezPassword():
+    try:
+        imp = Impostazione.objects.get(pk=1)
+        if (imp.attiva==True):
+            return imp.getSMTP_password()
+    except:
+        print "Impostazione (pk=1) inesistente."
+    else:
+        return getattr(settings, "EMAIL_HOST_PASSWORD", None)
+
+
+# <-----------------------------------------
+
+
+def invio_email(x):
+    try:
+        send_mail(
+            subject=('['+str(x.getPreposto())+'] Mancato giro controlli'),
+            message= selezMessaggio(),
+            from_email= selezMittente(),
+            recipient_list=[
+                Responsabile.objects.get(
+                    last_name=x.getPreposto().getSuperiore()
+                ).getEmail(),
+            ],
+            auth_user= selezMittente(),
+            auth_password= selezPassword(),
+            fail_silently=False
+        )
+        print "INVIO MAIL ----------"
+
+    except:
+        print "Errore send_mail"
     else:
         pass
+
+
+
+
 
 
 """
@@ -61,7 +107,7 @@ def check_controlli():
     se gg_check==false; nel caso, se gg_fatto==false invio una notifica al superiore.
     '''
     k = date.today().weekday()
-    impo = Impostazione.objects.get(pk=1)
+    
 
     for x in totali:
 
@@ -72,53 +118,22 @@ def check_controlli():
 
                     if x.lun_fatto == False:
 
+                        try:
+                            SegnalazionePrep.create(
+                                matr= x.getPreposto(),
+                                dett= selezMessaggio(),
+                            ).save()
 
-                        SegnalazionePrep.create(
-                            matr=x.getPreposto(),
-                            dett=impo.getMessaggio()
-                        ).save()
+                        except:
+                            print "Errore creazione SegnalazionePrep."
 
-                        print "INVIO MAIL ----------"
-                        send_mail(
-                            subject='Prep. X - no giro controlli',
-                            message=MESSAGGIO,
-                            from_email=EMAIL_HOST_USER,
-                            recipient_list=[
-                                Responsabile.objects.get(
-                                    last_name=x.getPreposto().getSuperiore()
-                                ).getEmail(),
-                            ],
-                            auth_user=EMAIL_HOST_USER,
-                            auth_password=EMAIL_HOST_PASSWORD,
-                            fail_silently=True
-                        )
+
+                        invio_email(x)
+
+
                     x.lun_check = True
                     x.save()
-        '''
-            if x.lun_check == False:
-                if datetime.datetime.now().time() > (datetime.datetime.strptime(x.lun,'%H:%M') + soglia_tot).time():
-                    if x.lun_fatto == False:
-                        prep = Preposto.objects.get(last_name=x.getCod_preposto())
 
-                        # invio segnalazione via mail
-                        send_mail(
-                            subject='SEGNALAZIONE',
-                            message=MESSAGGIO,
-                            from_email=MITTENTE_USER,
-                            recipient_list=[
-                                Responsabile.objects.get(
-                                    last_name=prep.getSuperiore()
-                                ).getEmail(),
-                            ],
-                            auth_user=MITTENTE_USER,
-                            auth_password=MITTENTE_PASSW,
-                            fail_silently=True
-                        )
-
-                        SegnalazionePrep.create(matr=prep, dett=MESSAGGIO).save()
-                    x.lun_check = True
-                    x.save()
-        '''
 
         if (k == 1):
             if x.mar_festivo == False and x.mar_check == False:
@@ -126,55 +141,22 @@ def check_controlli():
                         (datetime.datetime.strptime(x.mar,'%H:%M')+ soglia_tot).time():
 
                     if x.mar_fatto == False:
-                        pass
+                        try:
+                            SegnalazionePrep.create(
+                                matr= x.getPreposto(),
+                                dett= selezMessaggio(),
+                            ).save()
 
-                        SegnalazionePrep.create(
-                            matr=x.getPreposto(),
-                            dett=impo.getMessaggio()
-                        ).save()
+                        except:
+                            print "Errore creazione SegnalazionePrep."
 
-                        print "INVIO MAIL ----------"
-                        send_mail(
-                            subject='Prep. X - no giro controlli',
-                            message=MESSAGGIO,
-                            from_email=EMAIL_HOST_USER,
-                            recipient_list=[
-                                Responsabile.objects.get(
-                                    last_name=x.getPreposto().getSuperiore()
-                                ).getEmail(),
-                            ],
-                            auth_user=EMAIL_HOST_USER,
-                            auth_password=EMAIL_HOST_PASSWORD,
-                            fail_silently=True
-                        )
+
+                        invio_email(x)
+
 
                     x.mar_check = True
                     x.save()
-            '''
-            if x.mar_check == False:
-                if datetime.datetime.now().time() > (datetime.datetime.strptime(x.mar,'%H:%M') + soglia_tot).time():
-                    if x.mar_fatto == False:
-                        prep = Preposto.objects.get(last_name=x.getCod_preposto())
 
-                        # invio segnalazione via mail
-                        send_mail(
-                            subject='SEGNALAZIONE',
-                            message=MESSAGGIO,
-                            from_email=MITTENTE_USER,
-                            recipient_list=[
-                                Responsabile.objects.get(
-                                    last_name=prep.getSuperiore()
-                                ).getEmail(),
-                            ],
-                            auth_user=MITTENTE_USER,
-                            auth_password=MITTENTE_PASSW,
-                            fail_silently=True
-                        )
-
-                        SegnalazionePrep.create(matr=prep, dett=MESSAGGIO).save()
-                    x.mar_check = True
-                    x.save()
-            '''
 
         if (k == 2):
             if x.mer_festivo == False and x.mer_check == False:
@@ -182,58 +164,23 @@ def check_controlli():
                         (datetime.datetime.strptime(x.mer,'%H:%M')+ soglia_tot).time():
 
                     if x.mer_fatto == False:
-                        pass
+                        try:
+                            SegnalazionePrep.create(
+                                matr= x.getPreposto(),
+                                dett= selezMessaggio(),
+                            ).save()
 
-                        SegnalazionePrep.create(
-                            matr=x.getPreposto(),
-                            dett=impo.getMessaggio()
-                        ).save()
+                        except:
+                            print "Errore creazione SegnalazionePrep."
 
-                        print "INVIO MAIL ----------"
-                        send_mail(
-                            subject='Prep. X - no giro controlli',
-                            message=MESSAGGIO,
-                            from_email=EMAIL_HOST_USER,
-                            recipient_list=[
-                                Responsabile.objects.get(
-                                    last_name=x.getPreposto().getSuperiore()
-                                ).getEmail(),
-                            ],
-                            auth_user=EMAIL_HOST_USER,
-                            auth_password=EMAIL_HOST_PASSWORD,
-                            fail_silently=True
-                        )
+
+                        invio_email(x)
+
+
 
                     x.mer_check = True
                     x.save()
-            '''
-            if x.mer_check == False:
-                if datetime.datetime.now().time() > (datetime.datetime.strptime(x.mer,'%H:%M') + soglia_tot).time():
-                    if x.mer_fatto == False:
 
-                        prep = Preposto.objects.get(last_name=x.getCod_preposto())
-
-
-                        # invio segnalazione via mail
-                        send_mail(
-                            subject='SEGNALAZIONE',
-                            message=Impostazione.objects.get(pk=1).getMessaggio(),
-                            from_email=MITTENTE_USER,
-                            recipient_list=[
-                                Responsabile.objects.get(
-                                    last_name=prep.getSuperiore()
-                                ).getEmail(),
-                            ],
-                            auth_user=MITTENTE_USER,
-                            auth_password=MITTENTE_PASSW,
-                            fail_silently=True
-                        )
-                        
-
-                        SegnalazionePrep.create(matr=prep, dett=MESSAGGIO).save()
-                    x.mer_check = True
-                    x.save()
-            '''
 
         if (k == 3):
 
@@ -242,59 +189,24 @@ def check_controlli():
                         (datetime.datetime.strptime(x.gio,'%H:%M')+ soglia_tot).time():
 
                     if x.gio_fatto == False:
-                        pass
+                        try:
+                            SegnalazionePrep.create(
+                                matr= x.getPreposto(),
+                                dett= selezMessaggio(),
+                            ).save()
 
-                        SegnalazionePrep.create(
-                            matr=x.getPreposto(),
-                            dett=impo.getMessaggio()
-                        ).save()
+                        except:
+                            print "Errore creazione SegnalazionePrep."
 
-                        print "INVIO MAIL ----------"
-                        send_mail(
-                            subject='Prep. X - no giro controlli',
-                            message=MESSAGGIO,
-                            from_email=EMAIL_HOST_USER,
-                            recipient_list=[
-                                Responsabile.objects.get(
-                                    last_name=x.getPreposto().getSuperiore()
-                                ).getEmail(),
-                            ],
-                            auth_user=EMAIL_HOST_USER,
-                            auth_password=EMAIL_HOST_PASSWORD,
-                            fail_silently=True
-                        )
+
+                        invio_email(x)
+
 
                     x.gio_check = True
                     x.save()
 
 
-            '''
-            if x.gio_check == False:
-                if datetime.datetime.now().time() > (datetime.datetime.strptime(x.gio,'%H:%M') + soglia_tot).time():
-                    if x.gio_fatto == False:
-                        prep = Preposto.objects.get(last_name=x.getCod_preposto())
-                        sett = Impostazione.objects.get(pk=1)
 
-                        
-                        # invio segnalazione via mail
-                        send_mail(
-                            subject='SEGNALAZIONE',
-                            message=Impostazione.objects.get(pk=1).getMessaggio(),
-                            from_email=MITTENTE_USER,
-                            recipient_list=[
-                                Responsabile.objects.get(
-                                    last_name=prep.getSuperiore()
-                                ).getEmail(),
-                            ],
-                            auth_user=MITTENTE_USER,
-                            auth_password=MITTENTE_PASSW,
-                            fail_silently=True
-                        )
-                        
-                        SegnalazionePrep.create(matr=prep, dett=MESSAGGIO).save()
-                    x.gio_check = True
-                    x.save()
-            '''
         if (k == 4):
 
             if x.ven_festivo == False and x.ven_check == False:
@@ -302,56 +214,23 @@ def check_controlli():
                         (datetime.datetime.strptime(x.ven,'%H:%M')+ soglia_tot).time():
 
                     if x.ven_fatto == False:
-                        pass
+                        try:
+                            SegnalazionePrep.create(
+                                matr= x.getPreposto(),
+                                dett= selezMessaggio(),
+                            ).save()
 
-                        SegnalazionePrep.create(
-                            matr=x.getPreposto(),
-                            dett=impo.getMessaggio()
-                        ).save()
+                        except:
+                            print "Errore creazione SegnalazionePrep."
 
-                        print "INVIO MAIL ----------"
-                        send_mail(
-                            subject='Prep. X - no giro controlli',
-                            message=MESSAGGIO,
-                            from_email=EMAIL_HOST_USER,
-                            recipient_list=[
-                                Responsabile.objects.get(
-                                    last_name=x.getPreposto().getSuperiore()
-                                ).getEmail(),
-                            ],
-                            auth_user=EMAIL_HOST_USER,
-                            auth_password=EMAIL_HOST_PASSWORD,
-                            fail_silently=True
-                        )
+
+                        invio_email(x)
+
+
 
                     x.ven_check = True
                     x.save()
-            '''
-            if x.ven_check == False:
-                if datetime.datetime.now().time() > (datetime.datetime.strptime(x.ven,'%H:%M') + soglia_tot).time():
-                    if x.ven_fatto == False:
-                        prep = Preposto.objects.get(last_name=x.getCod_preposto())
 
-                        # invio segnalazione via mail
-                        send_mail(
-                            subject='SEGNALAZIONE',
-                            message=MESSAGGIO,
-                            from_email=MITTENTE_USER,
-                            recipient_list=[
-                                Responsabile.objects.get(
-                                    last_name=prep.getSuperiore()
-                                ).getEmail(),
-                            ],
-                            auth_user=MITTENTE_USER,
-                            auth_password=MITTENTE_PASSW,
-                            fail_silently=True
-                        )
-
-                        SegnalazionePrep.create(matr=prep, dett=MESSAGGIO).save()
-
-                    x.ven_check = True
-                    x.save()
-            '''
 
 """
 Ricordarsi per la prima volta che si compila l'impostazione,
@@ -373,10 +252,18 @@ def aggiornamento():
         EMAIL_HOST_PASSWORD = sett.getSMTP_password()
         '''
 
-        global MESSAGGIO
-        MESSAGGIO = sett.getMessaggio()
+        #global MESSAGGIO
+        #MESSAGGIO = sett.getMessaggio()
 
         sett.nuovo = False
         sett.save()
 
 
+
+def check_impostazioni():
+    imp = Impostazione.objects.get(pk=1)
+
+    if(imp):
+        if (imp.is_today()):
+            imp.attiva = True
+            imp.save()
