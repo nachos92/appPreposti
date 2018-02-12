@@ -16,7 +16,7 @@ SOGLIA_MINUTI = 0
 startDate = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday())
 endDate = startDate + datetime.timedelta(days=6)
 
-soglia_tot = datetime.timedelta(hours=SOGLIA_ORE, minutes=SOGLIA_MINUTI)
+
 
 
 def aggiornaMessaggio(prima,dopo):
@@ -60,9 +60,31 @@ def selezPassword():
     else:
         return getattr(settings, "EMAIL_HOST_PASSWORD", None)
 
+def selezSoglia_ore():
+    try:
+        imp = Impostazione.objects.get(pk=1)
+        if (imp.attiva==True):
+            return imp.get_sogliaControllo_ore()
+    except:
+        print "Impostazione (pk=1) inesistente."
+    else:
+        return getattr(settings, "SOGLIA_ORE", None)
+
+
+def selezSoglia_minuti():
+    try:
+        imp = Impostazione.objects.get(pk=1)
+        if (imp.attiva==True):
+            return imp.get_sogliaControllo_minuti()
+    except:
+        print "Impostazione (pk=1) inesistente."
+    else:
+        return getattr(settings, "SOGLIA_MINUTI", None)
+
 
 # <-----------------------------------------
 
+##Funzioni e variabili di supporto
 
 def invio_email(x):
     try:
@@ -86,7 +108,12 @@ def invio_email(x):
     else:
         pass
 
+soglia_tot = datetime.timedelta(
+    hours=selezSoglia_ore(),
+    minutes=selezSoglia_minuti()
+)
 
+##Fine funzioni e variabili di supporto
 
 
 

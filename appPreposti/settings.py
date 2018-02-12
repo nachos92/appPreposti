@@ -140,3 +140,6 @@ EMAIL_HOST_USER = "piano_master92@yahoo.it"
 EMAIL_HOST_PASSWORD = "zanarkand92"
 
 MESSAGGIO = "Messaggio standard (da file settings.py)."
+
+SOGLIA_ORE = 1
+SOGLIA_MINUTI = 0
