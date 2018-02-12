@@ -70,7 +70,6 @@ def selezSoglia_ore():
     else:
         return getattr(settings, "SOGLIA_ORE", None)
 
-
 def selezSoglia_minuti():
     try:
         imp = Impostazione.objects.get(pk=1)
@@ -288,9 +287,32 @@ def aggiornamento():
 
 
 def check_impostazioni():
-    imp = Impostazione.objects.get(pk=1)
 
-    if(imp):
-        if (imp.is_today()):
-            imp.attiva = True
-            imp.save()
+    try:
+        imp = Impostazione.objects.get(pk=1)
+        imp_fut = Impostazione.objects.get(pk=2)
+    except:
+        print "Imp. pk=1 e/o pk=2 mancanti."
+    else:
+
+        if (imp_fut.attiva == True):
+            if (imp_fut.is_today()):
+                #Copia dei valori di #2 in #1
+                imp.messaggio = imp_fut.getMessaggio()
+                imp.smtp_username = imp_fut.getSMTP_username()
+                imp.smtp_password = imp_fut.getSMTP_password()
+                imp.sogliaControllo_ore = imp_fut.get_sogliaControllo_ore()
+                imp.sogliaControllo_minuti = imp_fut.get_sogliaControllo_minuti()
+                #manca ORARI SELEZIONE
+
+                imp.data_inizio = imp_fut.data_inizio
+
+                imp.attiva = True
+                imp.save()
+
+                imp_fut.attiva = False
+                imp_fut.save()
+        else:
+            if (imp.is_today()):
+                imp.attiva = True
+                imp.save()

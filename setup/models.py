@@ -170,6 +170,7 @@ class Orario(models.Model):
 
 
 class Impostazione(models.Model):
+    titolo = models.CharField(max_length=20)
     nuovo = models.BooleanField(default=True)
 
     '''
@@ -214,7 +215,7 @@ class Impostazione(models.Model):
     class Meta:
         verbose_name_plural = "Impostazioni"
         ordering = [
-            '-creazione'
+            '-id'
         ]
     def __unicode__(self):
         return str(self.id)

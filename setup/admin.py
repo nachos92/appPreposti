@@ -111,6 +111,7 @@ class ImpostazioneAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Generali', {
             'fields': (
+                'titolo',
                 'data_inizio',
                 'attiva',
             )
@@ -136,7 +137,8 @@ class ImpostazioneAdmin(admin.ModelAdmin):
     )
 
     list_display = [
-        'id',
+
+        'titolo',
         'is_today',
         'attiva',
         'creazione',
