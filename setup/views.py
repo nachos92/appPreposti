@@ -2,7 +2,10 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse,HttpResponseBadRequest
 from django.forms import *
 import django_excel as excel
-from .models import Dipendente, Impiego
+from .models import Dipendente, Impiego, Impostazione
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 import csv
 
@@ -129,3 +132,7 @@ def impostazioni(request):
 
     """
     return HttpResponse('')
+
+@receiver(post_save, sender=Impostazione)
+def my_handler(sender, **kwargs):
+    print "Post-save handler: "+str(sender)
