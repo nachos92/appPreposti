@@ -111,7 +111,6 @@ class ImpostazioneAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Generali', {
             'fields': (
-                'nuovo',
                 'data_inizio',
                 'attiva',
             )
@@ -140,10 +139,8 @@ class ImpostazioneAdmin(admin.ModelAdmin):
         'id',
         'is_today',
         'attiva',
-        'nuovo',
         'creazione',
         'data_inizio',
-        'smtp_server',
         'smtp_username',
     ]
 

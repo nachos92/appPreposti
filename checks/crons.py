@@ -107,7 +107,7 @@ def check_controlli():
     se gg_check==false; nel caso, se gg_fatto==false invio una notifica al superiore.
     '''
     k = date.today().weekday()
-    
+
 
     for x in totali:
 

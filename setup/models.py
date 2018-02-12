@@ -184,7 +184,7 @@ class Impostazione(models.Model):
         verbose_name="Data attivazione",
         blank=False,
     )
-    smtp_server = models.CharField(max_length=20, verbose_name="Server smtp")
+    smtp_server = models.CharField(max_length=20, verbose_name="Server smtp", default="none")
     smtp_username = models.CharField(max_length=30, verbose_name="Username (server smtp)")
     smtp_password = models.CharField(max_length=30,verbose_name="Password (server smtp)")
     port = models.IntegerField(default=587, help_text="Porta da usare (default=587).")
