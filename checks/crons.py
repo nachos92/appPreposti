@@ -287,32 +287,44 @@ def aggiornamento():
 
 
 def check_impostazioni():
-
+    '''
     try:
         imp = Impostazione.objects.get(pk=1)
         imp_fut = Impostazione.objects.get(pk=2)
     except:
         print "Imp. pk=1 e/o pk=2 mancanti."
-    else:
+    '''
 
-        if (imp_fut.attiva == True):
-            if (imp_fut.is_today()):
-                #Copia dei valori di #2 in #1
-                imp.messaggio = imp_fut.getMessaggio()
-                imp.smtp_username = imp_fut.getSMTP_username()
-                imp.smtp_password = imp_fut.getSMTP_password()
-                imp.sogliaControllo_ore = imp_fut.get_sogliaControllo_ore()
-                imp.sogliaControllo_minuti = imp_fut.get_sogliaControllo_minuti()
-                #manca ORARI SELEZIONE
+    imp = Impostazione.objects.get(pk=1)
+    imp_fut = Impostazione.objects.get(pk=2)
 
-                imp.data_inizio = imp_fut.data_inizio
 
-                imp.attiva = True
-                imp.save()
+    if (imp_fut.attiva == True):
+        if (imp_fut.is_today()):
+            #Copia dei valori di #2 in #1
+            imp.messaggio = imp_fut.getMessaggio()
+            imp.smtp_username = imp_fut.getSMTP_username()
+            imp.smtp_password = imp_fut.getSMTP_password()
+            imp.sogliaControllo_ore = imp_fut.get_sogliaControllo_ore()
+            imp.sogliaControllo_minuti = imp_fut.get_sogliaControllo_minuti()
+            #manca ORARI SELEZIONE
 
-                imp_fut.attiva = False
-                imp_fut.save()
-        else:
-            if (imp.is_today()):
-                imp.attiva = True
-                imp.save()
+            imp.data_inizio = imp_fut.data_inizio
+
+            imp_fut.attiva = False
+            imp_fut.save()
+
+    if (imp_fut.attiva == False):
+        if (imp_fut.is_today()==False):
+            imp_fut.attiva=True
+            imp_fut.save()
+
+
+    if (imp.is_today()):
+        imp.attiva = True
+        imp.save()
+
+    if (imp.data_inizio > date.today()):
+        if imp.attiva == True:
+            imp.attiva = False
+            imp.save()
