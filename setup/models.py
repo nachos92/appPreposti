@@ -71,23 +71,8 @@ class Responsabile(User):
     def getEmail(self):
         return self.email
 
-'''
-class Preposto(models.Model):
 
-    id = models.CharField(max_length=3,primary_key=True)
-    sottoposti = models.ManyToManyField(Impiego, blank=True)
-    superiore = models.ForeignKey(Responsabile, blank=True)
 
-    class Meta:
-        verbose_name_plural = "Preposti"
-
-    def __unicode__(self):
-        return self.id
-    def getSuperiore(self):
-        return str(self.superiore)
-    def getID(self):
-        return str(self.id)
-'''
 class Preposto(User):
     n_matr = models.CharField(unique=True,max_length=8)
     sottoposti = models.ManyToManyField(Impiego, blank=True)

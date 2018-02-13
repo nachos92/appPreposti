@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="72cf107d-da9c-4f92-8678-167fb7e50fd4" name="Default" comment="Aggiunto campo data_inizio al modello Impostazione.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/checks/crons.py" afterPath="$PROJECT_DIR$/checks/crons.py" />
+      <change beforePath="$PROJECT_DIR$/setup/models.py" afterPath="$PROJECT_DIR$/setup/models.py" />
+      <change beforePath="$PROJECT_DIR$/setup/views.py" afterPath="$PROJECT_DIR$/setup/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -19,29 +22,25 @@
       <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/appPreposti/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="850">
+            <state relative-caret-position="2717">
               <caret line="144" column="17" lean-forward="false" selection-start-line="144" selection-start-column="17" selection-end-line="144" selection-end-column="17" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="crons.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="crons.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/checks/crons.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="737">
-              <caret line="326" column="25" lean-forward="false" selection-start-line="326" selection-start-column="25" selection-end-line="326" selection-end-column="25" />
+            <state relative-caret-position="19">
+              <caret line="1" column="25" lean-forward="true" selection-start-line="1" selection-start-column="25" selection-end-line="1" selection-end-column="25" />
               <folding>
-                <element signature="e#0#15#0" expanded="true" />
-                <element signature="e#796#1036#0" expanded="false" />
-                <element signature="e#1063#1314#0" expanded="false" />
-                <element signature="e#1341#1596#0" expanded="false" />
-                <element signature="e#1625#1878#0" expanded="false" />
-                <element signature="e#1910#2169#0" expanded="false" />
-                <element signature="e#2278#2866#0" expanded="false" />
-                <element signature="e#3306#7301#0" expanded="false" />
-                <element signature="e#7304#7438#1" expanded="false" />
-                <element signature="e#7464#7984#0" expanded="false" />
+                <element signature="e#453#693#0" expanded="false" />
+                <element signature="e#720#971#0" expanded="false" />
+                <element signature="e#998#1253#0" expanded="false" />
+                <element signature="e#1282#1535#0" expanded="false" />
+                <element signature="e#1567#1826#0" expanded="false" />
+                <element signature="e#1952#2540#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -50,8 +49,8 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/setup/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="603">
-              <caret line="127" column="0" lean-forward="false" selection-start-line="127" selection-start-column="0" selection-end-line="127" selection-end-column="0" />
+            <state relative-caret-position="228">
+              <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
               <folding>
                 <element signature="e#0#44#0" expanded="true" />
               </folding>
@@ -59,11 +58,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/setup/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="623">
-              <caret line="234" column="39" lean-forward="true" selection-start-line="234" selection-start-column="0" selection-end-line="235" selection-end-column="0" />
+            <state relative-caret-position="1349">
+              <caret line="74" column="0" lean-forward="true" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -80,12 +79,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>diz</find>
-      <find>diz_controlli</find>
-      <find>make</find>
-      <find>rice</find>
-      <find>Dipendenti to</find>
-      <find>plan</find>
       <find>getWee</find>
       <find>getWeek</find>
       <find>orari</find>
@@ -99,7 +92,6 @@
       <find>EMAIL_HOST</find>
       <find>getWe</find>
       <find>makeJ</find>
-      <find>startDate</find>
       <find>EMAIL_MESSAGE</find>
       <find>getMessaggio</find>
       <find>reparti</find>
@@ -110,6 +102,13 @@
       <find>MESSAGGIO</find>
       <find>selezMessaggio</find>
       <find>soglia_tot</find>
+      <find>aggiornamento</find>
+      <find>SOGLIA_ORE</find>
+      <find>aggiornaMessaggio</find>
+      <find>startD</find>
+      <find>startDate</find>
+      <find>endDate</find>
+      <find>diz_settings</find>
     </findStrings>
     <replaceStrings>
       <replace>Settimana</replace>
@@ -118,6 +117,7 @@
       <replace>Segnalazione</replace>
       <replace>MITTENTE_PASSW</replace>
       <replace>MESSAGGIO</replace>
+      <replace>fineSettimana</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -138,10 +138,10 @@
         <option value="$PROJECT_DIR$/checks/models.py" />
         <option value="$PROJECT_DIR$/checks/views.py" />
         <option value="$PROJECT_DIR$/appPreposti/settings.py" />
-        <option value="$PROJECT_DIR$/setup/models.py" />
         <option value="$PROJECT_DIR$/setup/admin.py" />
-        <option value="$PROJECT_DIR$/setup/views.py" />
         <option value="$PROJECT_DIR$/checks/crons.py" />
+        <option value="$PROJECT_DIR$/setup/views.py" />
+        <option value="$PROJECT_DIR$/setup/models.py" />
       </list>
     </option>
   </component>
@@ -269,13 +269,13 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20823096" sideWeight="0.49342105" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32736573" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.46805897" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19842407" sideWeight="0.5065789" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46805897" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19842407" sideWeight="0.5065789" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -627,48 +627,44 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/setup/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="603">
-          <caret line="127" column="0" lean-forward="false" selection-start-line="127" selection-start-column="0" selection-end-line="127" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#44#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/appPreposti/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="850">
+        <state relative-caret-position="2717">
           <caret line="144" column="17" lean-forward="false" selection-start-line="144" selection-start-column="17" selection-end-line="144" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/setup/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="623">
-          <caret line="234" column="39" lean-forward="true" selection-start-line="234" selection-start-column="0" selection-end-line="235" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/checks/crons.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="737">
-          <caret line="326" column="25" lean-forward="false" selection-start-line="326" selection-start-column="25" selection-end-line="326" selection-end-column="25" />
+        <state relative-caret-position="19">
+          <caret line="1" column="25" lean-forward="true" selection-start-line="1" selection-start-column="25" selection-end-line="1" selection-end-column="25" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
-            <element signature="e#796#1036#0" expanded="false" />
-            <element signature="e#1063#1314#0" expanded="false" />
-            <element signature="e#1341#1596#0" expanded="false" />
-            <element signature="e#1625#1878#0" expanded="false" />
-            <element signature="e#1910#2169#0" expanded="false" />
-            <element signature="e#2278#2866#0" expanded="false" />
-            <element signature="e#3306#7301#0" expanded="false" />
-            <element signature="e#7304#7438#1" expanded="false" />
-            <element signature="e#7464#7984#0" expanded="false" />
+            <element signature="e#453#693#0" expanded="false" />
+            <element signature="e#720#971#0" expanded="false" />
+            <element signature="e#998#1253#0" expanded="false" />
+            <element signature="e#1282#1535#0" expanded="false" />
+            <element signature="e#1567#1826#0" expanded="false" />
+            <element signature="e#1952#2540#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setup/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#44#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setup/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1349">
+          <caret line="74" column="0" lean-forward="true" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

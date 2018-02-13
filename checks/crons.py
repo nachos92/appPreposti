@@ -1,28 +1,12 @@
 import datetime
 from datetime import date
 from django.core.mail import send_mail
-from django.conf import settings
-from setup.models import Responsabile, Preposto, Impostazione
+from setup.models import Responsabile, Impostazione
 from models import Settimana, SegnalazionePrep
-
-
-#------- Variabili modificati in base ai valori di Impostazione
-
-SOGLIA_ORE = 1
-SOGLIA_MINUTI = 0
+from django.conf import settings
 
 
 
-startDate = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday())
-endDate = startDate + datetime.timedelta(days=6)
-
-
-
-
-def aggiornaMessaggio(prima,dopo):
-    prima = dopo
-
-###-------- Fine blocco variabili
 
 # ----------------------------------------->
 '''
@@ -83,7 +67,7 @@ def selezSoglia_minuti():
 
 # <-----------------------------------------
 
-##Funzioni e variabili di supporto
+################## Funzioni e variabili di supporto
 
 def invio_email(x):
     try:
@@ -112,7 +96,12 @@ soglia_tot = datetime.timedelta(
     minutes=selezSoglia_minuti()
 )
 
-##Fine funzioni e variabili di supporto
+
+inizioSettimana = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday())
+fineSettimana = inizioSettimana + datetime.timedelta(days=6)
+
+
+################## Fine funzioni e variabili di supporto
 
 
 
@@ -125,7 +114,7 @@ secondo caso vuol dire che magari hanno iniziato tardi e all'orario limite devon
 def check_controlli():
     #Ottengo gli elem di Settimana nel periodo giusto
     totali = Settimana.objects.filter(
-        data_inizio__range=[startDate, endDate],
+        data_inizio__range=[inizioSettimana, fineSettimana],
     )
 
     '''
@@ -167,6 +156,7 @@ def check_controlli():
                         (datetime.datetime.strptime(x.mar,'%H:%M')+ soglia_tot).time():
 
                     if x.mar_fatto == False:
+
                         try:
                             SegnalazionePrep.create(
                                 matr= x.getPreposto(),
@@ -190,6 +180,7 @@ def check_controlli():
                         (datetime.datetime.strptime(x.mer,'%H:%M')+ soglia_tot).time():
 
                     if x.mer_fatto == False:
+
                         try:
                             SegnalazionePrep.create(
                                 matr= x.getPreposto(),
@@ -215,6 +206,7 @@ def check_controlli():
                         (datetime.datetime.strptime(x.gio,'%H:%M')+ soglia_tot).time():
 
                     if x.gio_fatto == False:
+
                         try:
                             SegnalazionePrep.create(
                                 matr= x.getPreposto(),
@@ -240,6 +232,7 @@ def check_controlli():
                         (datetime.datetime.strptime(x.ven,'%H:%M')+ soglia_tot).time():
 
                     if x.ven_fatto == False:
+
                         try:
                             SegnalazionePrep.create(
                                 matr= x.getPreposto(),
@@ -253,36 +246,9 @@ def check_controlli():
                         invio_email(x)
 
 
-
                     x.ven_check = True
                     x.save()
 
-
-"""
-Ricordarsi per la prima volta che si compila l'impostazione,
-di mettere la data odierna, in modo che vengano caricati i valori
-"""
-def aggiornamento():
-    sett = Impostazione.objects.get(pk=1)
-    if(sett.nuovo & sett.is_today()):
-
-        #DA SBLOCCARE DOPO AVER CREATO UN CUSTOM EMAIL BACKEND
-        '''
-        global EMAIL_HOST
-        EMAIL_HOST = sett.getSMTP_server()
-
-        global EMAIL_HOST_USER
-        EMAIL_HOST_USER = sett.getSMTP_username()
-
-        global EMAIL_HOST_PASSWORD
-        EMAIL_HOST_PASSWORD = sett.getSMTP_password()
-        '''
-
-        #global MESSAGGIO
-        #MESSAGGIO = sett.getMessaggio()
-
-        sett.nuovo = False
-        sett.save()
 
 
 

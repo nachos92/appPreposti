@@ -11,17 +11,6 @@ import csv
 
 
 
-diz_settings = {}
-'''
-diz_settings['smtp_server']= EMAIL_HOST
-diz_settings['smtp_username']= EMAIL_HOST_USER
-diz_settings['smtp_password']= EMAIL_HOST_PASSWORD
-diz_settings['port']= EMAIL_PORT
-diz_settings['messaggio']= EMAIL_MESSAGE
-'''
-
-
-
 
 '''
 Funzioni di caricamento automatico.
