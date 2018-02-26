@@ -6,7 +6,7 @@ import datetime
 from datetime import *
 from django.views.decorators.csrf import csrf_exempt
 import json
-from crons import startDate,endDate
+from crons import inizioSettimana,fineSettimana
 
 
 
@@ -90,7 +90,7 @@ e' gia' stato fatto il giro (se giornoattuale_fatto=true).
 """
 def getWeek(cod_prep):
     planning = Settimana.objects.filter(
-        data_inizio__range=[startDate, endDate],
+        data_inizio__range=[inizioSettimana, fineSettimana],
         cod_preposto=cod_prep,
         completato=False).values_list(
         'data_inizio',
@@ -154,7 +154,7 @@ def controlloPlanning(request, cod_prep):
 
         reparti = Settimana.objects.filter(
             cod_preposto__id=preposto.getID(),
-            data_inizio__range=[startDate,endDate]
+            data_inizio__range=[inizioSettimana,fineSettimana]
         )
 
 

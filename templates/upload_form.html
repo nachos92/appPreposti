@@ -11,12 +11,13 @@
         </p>
     {% endif %}
 
-    <form action="" enctype="multipart/form-data"  method="post">
+    <form enctype="multipart/form-data"  method="post">
         <table>
             {{ form.as_table }}
         </table>
+
         {% csrf_token %}
-        <input type="submit" value="Conferma">
+        <input type="submit" value="Carica">
     </form>
 </body>
 </html>

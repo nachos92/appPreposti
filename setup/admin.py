@@ -18,6 +18,14 @@ class UserAdmin(admin.ModelAdmin):
     ]
 
 
+class ggChiusura(admin.ModelAdmin):
+    list_display = [
+        'data'
+    ]
+    fields = [
+        'data'
+    ]
+
 
 class ControlloAdmin(admin.ModelAdmin):
     fields = ['titolo',
@@ -119,10 +127,6 @@ class ImpostazioneAdmin(admin.ModelAdmin):
         ('Parametri email', {
             'classes': ('collapse',),
             'fields': (
-                'smtp_server',
-                'port',
-                'smtp_username',
-                'smtp_password',
                 'messaggio',
             )
         }),
@@ -143,7 +147,6 @@ class ImpostazioneAdmin(admin.ModelAdmin):
         'attiva',
         'creazione',
         'data_inizio',
-        'smtp_username',
     ]
 
 admin.site.unregister(User)

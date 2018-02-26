@@ -1,12 +1,11 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,HttpResponseBadRequest
-from django.forms import *
+from django import forms
 import django_excel as excel
 from .models import Dipendente, Impiego, Impostazione
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
 import csv
 
 
@@ -23,6 +22,12 @@ i valori.
 class UploadFileForm(forms.Form):
     file = forms.FileField()
 
+
+
+def carica(request):
+    return HttpResponse("OK")
+
+
 """
 Carico un xls con righe del tipo
 <cognome> <nome>
@@ -32,30 +37,25 @@ credenziali del tipo:
 -username: cognome+iniziale maiuscola nome
 -password: 0000 
 """
-
 def uploadDip(request):
 
-    if request == 'POST':
+    if request.method == 'POST':
+        print "Prova"
+
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            reader = csv.reader(open(request.FILES['file']))
+            f = (open(request.FILES['file'],encoding='utf-8'))
+            reader = csv.reader(f)
 
             for row in reader:
-                dip = Dipendente(
-                    n_matricola=row[0],
-                    nome=row[1],
-                    cognome=row[2],
-                    impiego= Impiego.objects.get(impiego=row[3]),
-                )
+                dip = Dipendente()
+                dip.n_matricola = unicode(row[0])
+                dip.nome = unicode(row[1])
+                dip.cognome = unicode(row[2])
+                dip.impiego = Impiego.objects.get(pk=1)
 
-                try:
-                    dip.save()
-                except:
-                    print "Errore \n"
-            return HttpResponse("OK!")
-        else:
-            return HttpResponseBadRequest('BAD')
-
+                dip.save()
+            return HttpResponse("File valido!!")
     else:
         form = UploadFileForm()
     return render(
@@ -66,12 +66,12 @@ def uploadDip(request):
                 'title': 'Excel file upload and download example',
                 'header': ('Seleziona il file CSV dei ' +
                            'dipendenti da importare:')
-            })
+    })
 
 
 
 def uploadPrep(request):
-    if request == 'POST':
+    if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             filehandle = request.FILES['file']
@@ -91,7 +91,7 @@ def uploadPrep(request):
             })
 
 def uploadResp(request):
-    if request == 'POST':
+    if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             filehandle = request.FILES['file']

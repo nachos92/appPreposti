@@ -93,6 +93,8 @@ class Preposto(User):
     def getCognome(self):
         return self.last_name
 
+
+
 class Dipendente(models.Model):
 
     n_matricola = models.CharField(max_length=4, primary_key=True)
@@ -170,10 +172,10 @@ class Impostazione(models.Model):
         verbose_name="Data attivazione",
         blank=False,
     )
-    smtp_server = models.CharField(max_length=20, verbose_name="Server smtp", default="none")
-    smtp_username = models.CharField(max_length=30, verbose_name="Username (server smtp)")
-    smtp_password = models.CharField(max_length=30,verbose_name="Password (server smtp)")
-    port = models.IntegerField(default=587, help_text="Porta da usare (default=587).")
+
+
+
+
 
     messaggio = models.CharField(
         max_length=150,
@@ -204,12 +206,6 @@ class Impostazione(models.Model):
         ]
     def __unicode__(self):
         return str(self.id)
-    def getSMTP_server(self):
-        return self.smtp_server
-    def getSMTP_username(self):
-        return self.smtp_username
-    def getSMTP_password(self):
-        return self.smtp_password
     def getMessaggio(self):
         return self.messaggio
     def get_sogliaControllo_minuti(self):
@@ -227,3 +223,13 @@ class Impostazione(models.Model):
             tupla += (i.getOrario_time,i.getOrario_time )
 
         return tupla
+
+class ggChiusura(models.Model):
+    data = models.DateField(unique=True)
+    def __unicode__(self):
+        return str(self.data)
+    class Meta:
+        verbose_name_plural = "Giorni chiusura"
+        ordering = [
+            'data'
+            ]
