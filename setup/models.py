@@ -143,6 +143,7 @@ class Orario(models.Model):
 
     class Meta:
         verbose_name_plural = "Orari"
+
     def __unicode__(self):
         return self.nome
     def getNome(self):
@@ -172,10 +173,6 @@ class Impostazione(models.Model):
         verbose_name="Data attivazione",
         blank=False,
     )
-
-
-
-
 
     messaggio = models.CharField(
         max_length=150,
@@ -223,6 +220,8 @@ class Impostazione(models.Model):
             tupla += (i.getOrario_time,i.getOrario_time )
 
         return tupla
+
+
 
 class ggChiusura(models.Model):
     data = models.DateField(unique=True)

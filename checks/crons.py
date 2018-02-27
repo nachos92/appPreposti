@@ -127,7 +127,7 @@ def check_controlli():
     for x in totali:
 
         if (k == 0):
-            if x.lun_festivo == False and x.lun_check == False:
+            if x.lun_check == False:
                 if datetime.datetime.now().time() > \
                         (datetime.datetime.strptime(x.lun,'%H:%M')+ soglia_tot).time():
 
@@ -151,7 +151,7 @@ def check_controlli():
 
 
         if (k == 1):
-            if x.mar_festivo == False and x.mar_check == False:
+            if x.mar_check == False:
                 if datetime.datetime.now().time() > \
                         (datetime.datetime.strptime(x.mar,'%H:%M')+ soglia_tot).time():
 
@@ -175,7 +175,7 @@ def check_controlli():
 
 
         if (k == 2):
-            if x.mer_festivo == False and x.mer_check == False:
+            if x.mer_check == False:
                 if datetime.datetime.now().time() > \
                         (datetime.datetime.strptime(x.mer,'%H:%M')+ soglia_tot).time():
 
@@ -201,7 +201,7 @@ def check_controlli():
 
         if (k == 3):
 
-            if x.gio_festivo == False and x.gio_check == False:
+            if x.gio_check == False:
                 if datetime.datetime.now().time() > \
                         (datetime.datetime.strptime(x.gio,'%H:%M')+ soglia_tot).time():
 
@@ -227,7 +227,7 @@ def check_controlli():
 
         if (k == 4):
 
-            if x.ven_festivo == False and x.ven_check == False:
+            if x.ven_check == False:
                 if datetime.datetime.now().time() > \
                         (datetime.datetime.strptime(x.ven,'%H:%M')+ soglia_tot).time():
 
@@ -250,8 +250,6 @@ def check_controlli():
                     x.save()
 
 
-
-
 def check_impostazioni():
     '''
     try:
@@ -267,10 +265,10 @@ def check_impostazioni():
 
     if (imp_fut.attiva == True):
         if (imp_fut.is_today()):
+
             #Copia dei valori di #2 in #1
             imp.messaggio = imp_fut.getMessaggio()
-            imp.smtp_username = imp_fut.getSMTP_username()
-            imp.smtp_password = imp_fut.getSMTP_password()
+
             imp.sogliaControllo_ore = imp_fut.get_sogliaControllo_ore()
             imp.sogliaControllo_minuti = imp_fut.get_sogliaControllo_minuti()
             #manca ORARI SELEZIONE

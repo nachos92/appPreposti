@@ -51,11 +51,6 @@ class Settimana(models.Model):
     gio_check = models.BooleanField(default=False)
     ven_check = models.BooleanField(default=False)
 
-    lun_festivo = models.BooleanField(default=False)
-    mar_festivo = models.BooleanField(default=False)
-    mer_festivo = models.BooleanField(default=False)
-    gio_festivo = models.BooleanField(default=False)
-    ven_festivo = models.BooleanField(default=False)
 
     completato = models.BooleanField(default=False)
 

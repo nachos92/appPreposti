@@ -22,16 +22,6 @@ class SettimanaAdmin(admin.ModelAdmin):
             ),
             },
          ),
-        ('Selezione giorni chiusura', {
-            'classes': ('collapse',),
-            'fields': (
-                'lun_festivo',
-                'mar_festivo',
-                'mer_festivo',
-                'gio_festivo',
-                'ven_festivo',
-            ),
-        }),
         ('Debug',{
             'fields': (
                 'lun_fatto',

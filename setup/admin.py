@@ -69,25 +69,6 @@ class PrepostoAdmin(admin.ModelAdmin):
         'first_name',
         'last_name',
     ]
-'''
-class PrepostoAdmin(admin.ModelAdmin):
-    fields = [
-        'username',
-        'password',
-        'last_name',
-        'first_name',
-        'sottoposti',
-        'email',
-        'groups',
-
-    ]
-    list_display = [
-        'cod',
-        'last_name',
-        'first_name',
-        'email',
-    ]
-'''
 
 
 
@@ -149,6 +130,17 @@ class ImpostazioneAdmin(admin.ModelAdmin):
         'data_inizio',
     ]
 
+
+class OrarioAdmin(admin.ModelAdmin):
+    list_display = [
+        'nome',
+        'orario'
+    ]
+    ordering = [
+        'orario'
+    ]
+
+
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(Responsabile, ResponsabileAdmin)
@@ -157,5 +149,5 @@ admin.site.register(Dipendente, DipendenteAdmin)
 admin.site.register(Controllo, ControlloAdmin)
 admin.site.register(ControlloAggiuntivo, ControlloAdmin)
 admin.site.register(Impiego, ImpiegoAdmin)
-admin.site.register(Orario)
+admin.site.register(Orario, OrarioAdmin)
 admin.site.register(Impostazione, ImpostazioneAdmin)
