@@ -14,6 +14,11 @@ class SettimanaAdmin(admin.ModelAdmin):
         ('Orari', {
 
             'fields': (
+                'lunedi',
+                'martedi',
+                'mercoledi',
+                'giovedi',
+                'venerdi',
                 'lun',
                 'mar',
                 'mer',

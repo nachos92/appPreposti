@@ -2,11 +2,12 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, Http404
 from setup.models import *
 from .models import Settimana, Segnalazione
-import datetime
-from datetime import *
+import datetime as dt
 from django.views.decorators.csrf import csrf_exempt
 import json
 from crons import inizioSettimana,fineSettimana
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 
@@ -372,3 +373,13 @@ def fineGiro(request,n_matricola, id_sett):
 
     return HttpResponse('')
 
+
+#Handler con uso per debug
+'''
+@receiver(post_save, sender=Settimana)
+def my_handler(sender, **kwargs):
+    print "PROVAPROVA"
+    #print str(Settimana.objects.get(id=4).martedi.getOrario() + timedelta(hours=1))
+    #print str(datetime(Settimana.objects.get(id=4).martedi.getOrario_time())+ datetime.timedelta(hours=1))
+    print((dt.datetime.combine(dt.date(1,1,1), Settimana.objects.get(id=4).martedi.getOrario()) + dt.timedelta(hours=1)).time())
+'''

@@ -145,13 +145,15 @@ class Orario(models.Model):
         verbose_name_plural = "Orari"
 
     def __unicode__(self):
-        return self.nome
+        return (self.nome + ' - '+self.getOrario_time())
     def getNome(self):
         return self.nome
     def getOrario_string(self):
         return str(self.orario)
     def getOrario_time(self):
         return self.orario.strftime('%H:%M')
+    def getOrario(self):
+        return self.orario
     def getChoices(self):
         pass
 

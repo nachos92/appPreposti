@@ -114,6 +114,20 @@ def check_giornochiusura():
         check_controlli()
 
 
+def check_fuoriorario(orario):
+    '''
+    Ritorna true se si e' oltre l'orario limite per eseguire i controlli
+    del giorno.
+    :param orario:
+    :return:
+    '''
+    if datetime.datetime.now().time() > ((datetime.datetime.combine(
+            datetime.date(1,1,1),
+            orario.getOrario()) + soglia_tot)).time():
+        return True
+    else:
+        return False
+
 
 """
 Esegue il controllo periodico per verificare che i preposti non abbiano
@@ -137,8 +151,9 @@ def check_controlli():
 
         if (k == 0):
             if x.lun_check == False:
-                if datetime.datetime.now().time() > \
-                        (datetime.datetime.strptime(x.lun,'%H:%M')+ soglia_tot).time():
+                #if datetime.datetime.now().time() > \
+                    #(datetime.datetime.strptime(x.lun,'%H:%M')+ soglia_tot).time():
+                if check_fuoriorario(x.lunedi) == True:
 
                     if x.lun_fatto == False:
 
@@ -161,9 +176,9 @@ def check_controlli():
 
         if (k == 1):
             if x.mar_check == False:
-                if datetime.datetime.now().time() > \
-                        (datetime.datetime.strptime(x.mar,'%H:%M')+ soglia_tot).time():
-
+                #if datetime.datetime.now().time() > \
+                    #(x.martedi.getOrario_time() + soglia_tot).time():
+                if check_fuoriorario(x.martedi) == True:
                     if x.mar_fatto == False:
 
                         try:
@@ -185,8 +200,9 @@ def check_controlli():
 
         if (k == 2):
             if x.mer_check == False:
-                if datetime.datetime.now().time() > \
-                        (datetime.datetime.strptime(x.mer,'%H:%M')+ soglia_tot).time():
+               # if datetime.datetime.now().time() > \
+                    #(datetime.datetime.strptime(x.mer,'%H:%M')+ soglia_tot).time():
+                if check_fuoriorario(x.mercoledi) == True:
 
                     if x.mer_fatto == False:
 
@@ -211,8 +227,9 @@ def check_controlli():
         if (k == 3):
 
             if x.gio_check == False:
-                if datetime.datetime.now().time() > \
-                        (datetime.datetime.strptime(x.gio,'%H:%M')+ soglia_tot).time():
+                #if datetime.datetime.now().time() > \
+                #        (datetime.datetime.strptime(x.gio,'%H:%M')+ soglia_tot).time():
+                if check_fuoriorario(x.giovedi) == True:
 
                     if x.gio_fatto == False:
 
@@ -237,8 +254,9 @@ def check_controlli():
         if (k == 4):
 
             if x.ven_check == False:
-                if datetime.datetime.now().time() > \
-                        (datetime.datetime.strptime(x.ven,'%H:%M')+ soglia_tot).time():
+                #if datetime.datetime.now().time() > \
+                #        (datetime.datetime.strptime(x.ven,'%H:%M')+ soglia_tot).time():
+                if check_fuoriorario(x.venerdi) == True:
 
                     if x.ven_fatto == False:
 

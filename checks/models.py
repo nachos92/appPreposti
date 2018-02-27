@@ -34,6 +34,11 @@ class Settimana(models.Model):
     data_inizio = models.DateField(help_text="Deve essere un lunedi'.")
     area = models.ForeignKey(Impiego)
 
+    lunedi = models.ForeignKey(Orario, null=True, related_name='lunedi')
+    martedi = models.ForeignKey(Orario, null=True, related_name='martedi')
+    mercoledi = models.ForeignKey(Orario, null=True, related_name='mercoledi')
+    giovedi = models.ForeignKey(Orario, null=True, related_name='giovedi')
+    venerdi = models.ForeignKey(Orario, null=True, related_name='venerdi')
 
     lun = models.CharField(max_length=10, choices=orari, null=False)
     mar = models.CharField(max_length=10, choices=orari, null=False)
@@ -87,7 +92,7 @@ class Settimana(models.Model):
         return self.lun[-2:]
 
     def getMar_orario(self):
-        return self.mar
+        return self.martedi
     def getMar_HH(self):
         return self.mar[:2]
     def getMar_MM(self):

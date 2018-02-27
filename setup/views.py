@@ -123,26 +123,4 @@ def impostazioni(request):
     """
     return HttpResponse('')
 
-@receiver(post_save, sender=Impostazione)
-def my_handler(sender, **kwargs):
-    print "Post-save handler: "+str(sender)
 
-
-@receiver(post_save, sender=Orario)
-def aggiornaScelteOrari(sender, instance, **kwargs):
-
-    global lista_scelte
-    lista_scelte = []
-
-
-    for x in Orario.objects.all():
-        lista_scelte.append(
-            (
-            x.getOrario_time(),
-            x.getOrario_time()
-            )
-        )
-
-
-    print "AGGIORNAMENTO LISTA SCELTE!"
-    print str(lista_scelte)
