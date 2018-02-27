@@ -1,7 +1,7 @@
 import datetime
 from datetime import date
 from django.core.mail import send_mail
-from setup.models import Responsabile, Impostazione
+from setup.models import Responsabile, Impostazione, ggChiusura
 from models import Settimana, SegnalazionePrep
 from django.conf import settings
 
@@ -106,16 +106,21 @@ fineSettimana = inizioSettimana + datetime.timedelta(days=6)
 
 
 
+def check_giornochiusura():
+    oggi = datetime.date.today()
+    if(ggChiusura.objects.filter(data=oggi).exists() == True):
+        pass
+    else:
+        check_controlli()
+
+
+
 """
 Esegue il controllo periodico per verificare che i preposti non abbiano
 dimenticato di fare un giro controlli o che non l'abbiano fatto fuori tempo limite (questo
 secondo caso vuol dire che magari hanno iniziato tardi e all'orario limite devono ancora finire).
 """
 def check_controlli():
-    #Ottengo gli elem di Settimana nel periodo giusto
-    totali = Settimana.objects.filter(
-        data_inizio__range=[inizioSettimana, fineSettimana],
-    )
 
     '''
     Per ogni elem di totali devo prima fare uno switch-case per il weekday e poi verifico
@@ -123,6 +128,10 @@ def check_controlli():
     '''
     k = date.today().weekday()
 
+
+
+    #Ottengo gli elem di Settimana nel periodo giusto
+    totali = Settimana.objects.all()
 
     for x in totali:
 

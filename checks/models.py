@@ -1,6 +1,7 @@
 from django.db import models
 from setup.models import Preposto, Impiego, Dipendente, Impostazione,Orario
 import datetime
+from setup.views import lista_scelte
 
 
 """
@@ -29,15 +30,16 @@ orari = (
 """
 class Settimana(models.Model):
     cod_preposto = models.ForeignKey(Preposto)
+    creazione = models.DateTimeField(auto_now_add=True)
     data_inizio = models.DateField(help_text="Deve essere un lunedi'.")
     area = models.ForeignKey(Impiego)
 
 
-    lun = models.CharField(max_length=10, choices=orari, default='', null=False)
-    mar = models.CharField(max_length=10, choices=orari, default='', null=False)
-    mer = models.CharField(max_length=10, choices=orari, default='', null=False)
-    gio = models.CharField(max_length=10, choices=orari, default='', null=False)
-    ven = models.CharField(max_length=10, choices=orari, default='', null=False)
+    lun = models.CharField(max_length=10, choices=orari, null=False)
+    mar = models.CharField(max_length=10, choices=orari, null=False)
+    mer = models.CharField(max_length=10, choices=orari, null=False)
+    gio = models.CharField(max_length=10, choices=orari, null=False)
+    ven = models.CharField(max_length=10, choices=orari, null=False)
 
     lun_fatto = models.BooleanField(default=False)
     mar_fatto = models.BooleanField(default=False)

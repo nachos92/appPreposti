@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse,HttpResponseBadRequest
 from django import forms
 import django_excel as excel
-from .models import Dipendente, Impiego, Impostazione
+from .models import Dipendente, Impiego, Impostazione, Orario
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -10,6 +10,7 @@ import csv
 
 
 
+lista_scelte = []
 
 '''
 Funzioni di caricamento automatico.
@@ -125,3 +126,23 @@ def impostazioni(request):
 @receiver(post_save, sender=Impostazione)
 def my_handler(sender, **kwargs):
     print "Post-save handler: "+str(sender)
+
+
+@receiver(post_save, sender=Orario)
+def aggiornaScelteOrari(sender, instance, **kwargs):
+
+    global lista_scelte
+    lista_scelte = []
+
+
+    for x in Orario.objects.all():
+        lista_scelte.append(
+            (
+            x.getOrario_time(),
+            x.getOrario_time()
+            )
+        )
+
+
+    print "AGGIORNAMENTO LISTA SCELTE!"
+    print str(lista_scelte)
