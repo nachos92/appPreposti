@@ -76,6 +76,9 @@ class ImpiegoAdmin(admin.ModelAdmin):
     list_display = [
         'impiego',
     ]
+    fields = [
+        'impiego',
+    ]
 
 
 class ResponsabileAdmin(admin.ModelAdmin):

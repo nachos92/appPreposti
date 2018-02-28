@@ -38,6 +38,7 @@ credenziali del tipo:
 -username: cognome+iniziale maiuscola nome
 -password: 0000 
 """
+
 def uploadDip(request):
 
     if request.method == 'POST':
@@ -45,15 +46,31 @@ def uploadDip(request):
 
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            f = (open(request.FILES['file'],encoding='utf-8'))
+            f = request.FILES['file']
+            #reader = f.read().decode("utf-8")
             reader = csv.reader(f)
+            #lines = reader.split("\n")
 
             for row in reader:
+                #Correzioni delle stringhe.
+                row = row[0].split(';')
+                row[0] = "".join(row[0].split())
+                row[1] = "".join(row[1].split())
+                row[2] = "".join(row[2].split())
+                row[3] = "".join(row[3].split())
+
+
                 dip = Dipendente()
-                dip.n_matricola = unicode(row[0])
-                dip.nome = unicode(row[1])
-                dip.cognome = unicode(row[2])
-                dip.impiego = Impiego.objects.get(pk=1)
+                dip.n_matricola = row[0]
+                dip.nome = row[1]
+                dip.cognome = row[2]
+
+
+                imp = Impiego.objects.filter(pk=str(row[3]))
+                print "Conteggio: "+str(imp.count())
+                if imp.count()== 1:
+                    dip.impiego = Impiego.objects.get(pk="Falegnameria")
+
 
                 dip.save()
             return HttpResponse("File valido!!")
@@ -122,5 +139,19 @@ def impostazioni(request):
 
     """
     return HttpResponse('')
+
+
+def dipProva(request):
+
+    print "Match? "
+
+    a = Impiego.objects.filter(pk="")
+    if a.count() == 0:
+        print "No"
+    else:
+        print "Yes"
+
+
+    return HttpResponse("Prova")
 
 

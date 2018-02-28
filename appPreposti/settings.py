@@ -141,7 +141,7 @@ EMAIL_HOST_PASSWORD = "zanarkand92"
 
 
 '''
-Parametri (valori standard).
+Parametri (valori standard)
 '''
 
 MESSAGGIO = "Messaggio standard (da file settings.py)."

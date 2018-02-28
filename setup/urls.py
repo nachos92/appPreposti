@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^dipendenti/upload/$', views.uploadDip, name='uploadDip'),
     url(r'^preposti/upload/$', views.uploadPrep, name='uploadPrep'),
     url(r'^responsabili/upload/$', views.uploadResp, name='uploadResp'),
+    url(r'^dipendenti/prova/$', views.dipProva, name='dipProva'),
 ]

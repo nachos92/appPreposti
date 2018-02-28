@@ -100,7 +100,7 @@ class Dipendente(models.Model):
     n_matricola = models.CharField(max_length=4, primary_key=True)
     nome = models.CharField(max_length=15)
     cognome = models.CharField(max_length=15)
-    impiego = models.ForeignKey(Impiego)
+    impiego = models.ForeignKey(Impiego, blank=True,null=True)
     controlli_adhoc = models.ManyToManyField(
         ControlloAggiuntivo,
         blank=True,
