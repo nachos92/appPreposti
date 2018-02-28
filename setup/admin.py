@@ -106,15 +106,14 @@ class ImpostazioneAdmin(admin.ModelAdmin):
             )
         }),
         ('Parametri email', {
-            'classes': ('collapse',),
+            #'classes': ('collapse',),
             'fields': (
                 'messaggio',
             )
         }),
         ('Parametri riguardanti i controlli', {
-            'classes': ('collapse',),
+            #'classes': ('collapse',),
             'fields': (
-                'orari_selezione',
                 'sogliaControllo_ore',
                 'sogliaControllo_minuti',
             )

@@ -182,10 +182,6 @@ class Impostazione(models.Model):
         help_text="Contenuto dell'email inviata quando un preposto non esegue un giro di controlli.",
 
     )
-    orari_selezione = models.ManyToManyField(
-        Orario,
-        help_text="Orari disponibili nella compilazione del piano settimanale.",
-    )
 
     sogliaControllo_ore = models.IntegerField(
         blank=False,
@@ -216,12 +212,6 @@ class Impostazione(models.Model):
             return True
         else:
             return False
-    def getChoices_orari(self):
-        tupla = ()
-        for i in self.orari_selezione.all():
-            tupla += (i.getOrario_time,i.getOrario_time )
-
-        return tupla
 
 
 

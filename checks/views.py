@@ -5,7 +5,7 @@ from .models import Settimana, Segnalazione
 import datetime as dt
 from django.views.decorators.csrf import csrf_exempt
 import json
-from crons import inizioSettimana,fineSettimana
+from crons import inizioSettimana,fineSettimana, check_fuoriorario
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -337,11 +337,10 @@ def fineGiro(request,n_matricola, id_sett):
 
 
 #Handler con uso per debug
+
 '''
 @receiver(post_save, sender=Settimana)
 def my_handler(sender, **kwargs):
     print "PROVAPROVA"
-    #print str(Settimana.objects.get(id=4).martedi.getOrario() + timedelta(hours=1))
-    #print str(datetime(Settimana.objects.get(id=4).martedi.getOrario_time())+ datetime.timedelta(hours=1))
-    print((dt.datetime.combine(dt.date(1,1,1), Settimana.objects.get(id=4).martedi.getOrario()) + dt.timedelta(hours=1)).time())
+    print check_fuoriorario(Settimana.objects.get(pk=4).mercoledi)
 '''

@@ -155,6 +155,14 @@ def check_controlli():
                     #(datetime.datetime.strptime(x.lun,'%H:%M')+ soglia_tot).time():
                 if check_fuoriorario(x.lunedi) == True:
 
+                    '''
+                    Azzeramento dei valori di tutti i gg_check (impostazione a False)
+                    '''
+                    x.mar_check = False
+                    x.mer_check = False
+                    x.gio_check = False
+                    x.ven_check = False
+
                     if x.lun_fatto == False:
 
                         try:
@@ -205,7 +213,6 @@ def check_controlli():
                 if check_fuoriorario(x.mercoledi) == True:
 
                     if x.mer_fatto == False:
-
                         try:
                             SegnalazionePrep.create(
                                 matr= x.getPreposto(),
@@ -217,7 +224,6 @@ def check_controlli():
 
 
                         invio_email(x)
-
 
 
                     x.mer_check = True
@@ -257,6 +263,8 @@ def check_controlli():
                 #if datetime.datetime.now().time() > \
                 #        (datetime.datetime.strptime(x.ven,'%H:%M')+ soglia_tot).time():
                 if check_fuoriorario(x.venerdi) == True:
+
+                    x.lun_check = False
 
                     if x.ven_fatto == False:
 
