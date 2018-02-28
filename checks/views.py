@@ -11,12 +11,13 @@ from django.dispatch import receiver
 
 
 
-"""
-Costruisce un dizionario del tipo
-diz['impiego'] = [ <listacontrolliassociati> ]
 
-"""
 def makeDict():
+    """
+    Costruisce un dizionario del tipo
+    diz['impiego'] = [ <listacontrolliassociati> ]
+
+    """
     diz = {}
     lista_impieghi = Impiego.objects.values_list('impiego', flat=True).all()
 
@@ -33,56 +34,6 @@ def makeDict():
     return diz
 
 
-"""
-Prende in ingresso l'elenco dei dipendenti.
-Per la lista dei controlli accede al campo "impiego" del dipendente e lo usa come chiave di ricerca
-nel dizionario.
-
-Es. JSON generato:
-
-{
-  "nome": "<nome>",
-  "cognome": "<cognome>",
-  "completato": "F",
-  "id": "12",
-  "lun": "09:00",
-  "mar": "09:00",
-  "mer": "09:00",
-  "gio": "09:00",
-  "ven": "09:00",
-  "dipendenti": [
-    {
-      "n_matricola": "524",
-      "nome": "Paolo",
-      "cognome": "Bianchi",
-      "impiego": "Operaio",
-      "controlli": [
-        {
-          "id": "1",
-          "titolo": "Controllo 1",
-          "value": "F"
-        },
-        {
-          "id": "3",
-          "titolo": "Controllo 3",
-          "value": "F"
-        },
-        {
-          "id": "5",
-          "titolo": "Abbigliamento antinfortunistico",
-          "value": "F"
-        }
-      ],
-      "controlli_adhoc": [
-        {
-          "titolo": "Controllo auto",
-          "value": "F"
-        }
-      ]
-    },
-    ]
-    }
-"""
 
 
 """
@@ -90,6 +41,57 @@ Ritorna un oggetto di lunghezza 0 se nella giornata attuale
 e' gia' stato fatto il giro (se giornoattuale_fatto=true).
 """
 def getWeek(cod_prep):
+    """
+    Prende in ingresso l'elenco dei dipendenti.
+    Per la lista dei controlli accede al campo "impiego" del dipendente e lo usa come chiave di ricerca
+    nel dizionario.
+
+    Es. JSON generato:
+
+    {
+      "nome": "<nome>",
+      "cognome": "<cognome>",
+      "completato": "F",
+      "id": "12",
+      "lun": "09:00",
+      "mar": "09:00",
+      "mer": "09:00",
+      "gio": "09:00",
+      "ven": "09:00",
+      "dipendenti": [
+        {
+          "n_matricola": "524",
+          "nome": "Paolo",
+          "cognome": "Bianchi",
+          "impiego": "Operaio",
+          "controlli": [
+            {
+              "id": "1",
+              "titolo": "Controllo 1",
+              "value": "F"
+            },
+            {
+              "id": "3",
+              "titolo": "Controllo 3",
+              "value": "F"
+            },
+            {
+              "id": "5",
+              "titolo": "Abbigliamento antinfortunistico",
+              "value": "F"
+            }
+          ],
+          "controlli_adhoc": [
+            {
+              "titolo": "Controllo auto",
+              "value": "F"
+            }
+          ]
+        },
+        ]
+        }
+    """
+
     planning = Settimana.objects.filter(
         data_inizio__range=[inizioSettimana, fineSettimana],
         cod_preposto=cod_prep,
@@ -104,31 +106,15 @@ def getWeek(cod_prep):
         'completato',
         'id'
     )
-
-
-    '''
-    k = date.today().weekday()
-
-    if (k == 0):
-        planning = planning.filter(lun_fatto=False, lun_check=False)
-    if (k == 1):
-        planning = planning.filter(mar_fatto=False, mar_check=False)
-    if (k == 2):
-        planning = planning.filter(mer_fatto=False, mer_check=False)
-    if (k == 3):
-        planning = planning.filter(gio_fatto=False, gio_check=False)
-    if (k == 4):
-        planning = planning.filter(ven_fatto=False, ven_check=False)
-    '''
-
     return planning
 
 
-""" Es. se io vado su localhost/8000/checks/56
-mi stampa l'elenco dei dipendenti che il preposto 56
-non ha ancora controllato.
-"""
+
 def controlloPlanning(request, cod_prep):
+    """ Es. se io vado su localhost/8000/checks/56
+    mi stampa l'elenco dei dipendenti che il preposto 56
+    non ha ancora controllato.
+    """
 
     print "### Controllo planning in corso... ###"
     gruppo_sottoposti = Preposto.objects.filter(id=cod_prep).values_list('sottoposti')
@@ -142,9 +128,6 @@ def controlloPlanning(request, cod_prep):
     #print "Dipendenti totali: " + str(len(dipendenti)) + '\n' + str(dipendenti)
     planning = getWeek(cod_prep)
 
-
-
-
     try:
         preposto = Preposto.objects.get(n_matr=cod_prep)
         foglio = '{"nome":"' + preposto.first_name + '","cognome":"' + preposto.last_name + '",'
@@ -155,7 +138,7 @@ def controlloPlanning(request, cod_prep):
 
         reparti = Settimana.objects.filter(
             cod_preposto__id=preposto.getID(),
-            data_inizio__range=[inizioSettimana,fineSettimana]
+            #data_inizio__range=[inizioSettimana,fineSettimana]
         )
 
 
@@ -191,40 +174,19 @@ def controlloPlanning(request, cod_prep):
                     foglio += '"orario":{'
 
                     #foglio += '"lun":{"hh":"'+r.getLun_HH()+'","mm":"'+r.getLun_MM()+'",'
-                    foglio += '"lun":{"orario":"'+r.getLun_orario()+'",'
-                    if r.lun_festivo == False:
-                        foglio += '"festivo":"F"},'
-                    else:
-                        foglio += '"festivo":"T"},'
-
+                    foglio += '"lun":{"orario":"'+r.lunedi.getOrario_time()+'"},'
 
                     #foglio += '"mar":{"hh":"' + r.getMar_HH() + '","mm":"' + r.getMar_MM() + '",'
-                    foglio += '"mar":{"orario":"'+r.getMar_orario()+'",'
-                    if r.mar_festivo == False:
-                        foglio += '"festivo":"F"},'
-                    else:
-                        foglio += '"festivo":"T"},'
+                    foglio += '"mar":{"orario":"'+r.martedi.getOrario_time()+'"},'
 
                     #foglio += '"mer":{"hh":"' + r.getMer_HH() + '","mm":"' + r.getMer_MM() + '",'
-                    foglio += '"mer":{"orario":"'+r.getMer_orario()+'",'
-                    if r.mer_festivo == False:
-                        foglio += '"festivo":"F"},'
-                    else:
-                        foglio += '"festivo":"T"},'
+                    foglio += '"mer":{"orario":"'+r.mercoledi.getOrario_time()+'"},'
 
                     #foglio += '"gio":{"hh":"' + r.getGio_HH() + '","mm":"' + r.getGio_MM() + '",'
-                    foglio += '"gio":{"orario":"'+r.getGio_orario()+'",'
-                    if r.gio_festivo == False:
-                        foglio += '"festivo":"F"},'
-                    else:
-                        foglio += '"festivo":"T"},'
+                    foglio += '"gio":{"orario":"'+r.giovedi.getOrario_time()+'"},'
 
                     #foglio += '"ven":{"hh":"' + r.getVen_HH() + '","mm":"' + r.getVen_MM() + '",'
-                    foglio += '"ven":{"orario":"'+r.getVen_orario()+'",'
-                    if r.ven_festivo == False:
-                        foglio += '"festivo":"F"}'
-                    else:
-                        foglio += '"festivo":"T"}'
+                    foglio += '"ven":{"orario":"'+r.venerdi.getOrario_time()+'"}'
 
                     foglio += '},'
                     foglio += '"dipendenti":['
