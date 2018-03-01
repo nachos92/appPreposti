@@ -1,14 +1,12 @@
-from django.shortcuts import render,redirect
-from django.http import HttpResponse,HttpResponseBadRequest
+from django.shortcuts import render
+from django.http import HttpResponse
 from django import forms
-import django_excel as excel
-from .models import Dipendente, Impiego, Impostazione, Orario
-
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+from .models import *
 import csv
-
-
+from django.contrib.auth.models import Group,Permission
+import datetime
+from django.db.models.signals import pre_save, post_save
+from django.dispatch import receiver
 
 lista_scelte = []
 
@@ -22,12 +20,6 @@ i valori.
 '''
 class UploadFileForm(forms.Form):
     file = forms.FileField()
-
-
-
-def carica(request):
-    return HttpResponse("OK")
-
 
 """
 Carico un xls con righe del tipo
@@ -87,7 +79,129 @@ def uploadDip(request):
     })
 
 
+def start(request):
+    messaggio = "Setup in corso:\n"
 
+    messaggio = creaImpostazioniBase(messaggio)
+    messaggio = creaGruppi(messaggio)
+
+    return HttpResponse(messaggio)
+
+def creaImpostazioniBase(testo):
+    testo += "\nCreazione 'Impostazione' 1... \t\t"
+    try:
+        att = Impostazione(
+            id=1,
+            titolo="ATTUALE",
+            data_inizio= datetime.date.today(),
+            messaggio= "Messaggio predefinito.",
+        ).save()
+    except:
+        #print "Errore creazione 'Impostazione' attuale."
+        testo += "ERRORE"
+    else:
+        testo += "OK"
+
+    testo += "\nCreazione 'Impostazione' 2... \t\t"
+    try:
+        fut = Impostazione(
+            id=2,
+            titolo="IN PROGRAMMA",
+            data_inizio= datetime.date.today(),
+            messaggio="Messaggio (futuro) predefinito.",
+        ).save()
+    except:
+        #print "Errore creazione 'Impostazione' in programma."
+        testo += "ERRORE"
+    else:
+        testo += "OK"
+
+    return testo
+
+def creaGruppi(testo):
+
+
+    testo += "\nCreazione gruppo 'Responsabile'... \t"
+    try:
+        g = Group(name="Responsabile", id=1)
+        g.save()
+    except:
+        testo += "ERRORE"
+    else:
+        elenco_permessi = [
+        'add_controllo',
+        'change_controllo',
+        'delete_controllo',
+        'add_controlloaggiuntivo',
+        'change_controlloaggiuntivo',
+        'delete_controlloaggiuntivo',
+        'add_impiego',
+        'change_impiego',
+        'delete_impiego',
+        'add_preposto',
+        'change_preposto',
+        'delete_preposto',
+        'add_dipendente',
+        'change_dipendente',
+        'delete_dipendente',
+        'add_orario',
+        'change_orario',
+        'delete_orario',
+        'change_impostazione',
+        'add_settimana',
+        'change_settimana',
+        'delete_settimana',
+        'change_segnalazioneprep',
+        'change_segnalazione',
+        'add_ggchiusura',
+        'change_ggchiusura',
+        'delete_ggchiusura',
+    ]
+
+        lista_permessi = []
+
+        for p in elenco_permessi:
+            lista_permessi.append(
+                Permission.objects.get(
+                    codename=p
+                )
+            )
+        g.permissions = lista_permessi
+        g.save()
+        testo += "OK"
+
+    testo += "\nCreazione gruppo 'Preposto'... \t\t"
+    try:
+        g = Group(name="Preposto", id=2)
+        g.save()
+    except:
+
+        testo += "ERRORE"
+    else:
+        elenco_permessi = [
+            'add_controllo',
+            'change_controllo',
+            'delete_controllo',
+            'add_controlloaggiuntivo',
+            'change_controlloaggiuntivo',
+            'delete_controlloaggiuntivo',
+        ]
+
+        lista_permessi = []
+
+        for p in elenco_permessi:
+            lista_permessi.append(
+                Permission.objects.get(
+                    codename=p
+                )
+            )
+        g.permissions = lista_permessi
+        g.save()
+        messaggio += "OK"
+
+    return testo
+
+'''
 def uploadPrep(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
@@ -127,31 +241,49 @@ def uploadResp(request):
                 'header': ('Seleziona il file .xls dei ' +
                            'responsabili da importare:')
             })
+'''
 
 
-def start(request):
-
-    return HttpResponse("Inizializzazione completata!")
-
-def impostazioni(request):
-    """
-    Assegno i valori dell'entry di Impostazione piu' recente.
-
-    """
-    return HttpResponse('')
 
 
-def dipProva(request):
 
-    print "Match? "
+### Handler per assegnare in automatico il gruppo di appartenenza all'utente
+'''
+@receiver(pre_save, sender=Responsabile)
+def aaa(sender, instance, **kwargs):
+    print "Pre-save"
+    try:
+        instance.groups.add(pk=1)
 
-    a = Impiego.objects.filter(pk="")
-    if a.count() == 0:
-        print "No"
+    except:
+        print "Errore assegnazione gruppo: 'Responsabile'"
     else:
-        print "Yes"
+        print str(instance)
+'''
 
+'''
+@receiver(pre_save, sender=Responsabile)
+def hhh(sender, instance, **kwargs):
+    try:
+        g = Group.objects.get(name="responsabile")
 
-    return HttpResponse("Prova")
+        g.user_set.add(instance)
+
+    except:
+        print "Errore assegnazione gruppo: 'Responsabile'"
+
+    else:
+        print g.save()
+        #instance.save()
+'''
+
+'''
+@receiver(pre_save, sender=Preposto)
+def bbb(sender, instance, **kwargs):
+    try:
+        super(instance).groups.add(id=2)
+    except:
+        print "Errore assegnazione gruppo: 'Preposto'"
+'''
 
 

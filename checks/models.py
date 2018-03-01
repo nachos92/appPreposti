@@ -145,7 +145,7 @@ class Settimana(models.Model):
         ordering = [
             '-id'
         ]
-        verbose_name_plural = 'settimane'
+        verbose_name_plural = 'Planning settimanali'
 
 class SegnalazionePrep(models.Model):
     data = models.DateTimeField(auto_now_add=True)

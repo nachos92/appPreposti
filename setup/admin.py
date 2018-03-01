@@ -55,6 +55,7 @@ class DipendenteAdmin(admin.ModelAdmin):
 class PrepostoAdmin(admin.ModelAdmin):
     fields = [
         'n_matr',
+
         'username',
         'password',
         'first_name',
@@ -62,6 +63,8 @@ class PrepostoAdmin(admin.ModelAdmin):
 
         'sottoposti',
         'superiore',
+
+        'groups',
     ]
     list_display = [
         'id',
@@ -86,16 +89,18 @@ class ResponsabileAdmin(admin.ModelAdmin):
     fields = [
         'username',
         'password',
-        'last_name',
         'first_name',
+        'last_name',
+
         'email',
+
         'groups',
 
     ]
     list_display = [
         'id',
-        'last_name',
         'first_name',
+        'last_name',
         'email',
     ]
 

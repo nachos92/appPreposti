@@ -51,6 +51,7 @@ def selezSoglia_ore():
             return imp.get_sogliaControllo_ore()
     except:
         print "Impostazione (pk=1) inesistente."
+        return 1
     else:
         return getattr(settings, "SOGLIA_ORE", None)
 
@@ -61,6 +62,7 @@ def selezSoglia_minuti():
             return imp.get_sogliaControllo_minuti()
     except:
         print "Impostazione (pk=1) inesistente."
+        return 0
     else:
         return getattr(settings, "SOGLIA_MINUTI", None)
 

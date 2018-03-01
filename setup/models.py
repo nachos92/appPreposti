@@ -45,7 +45,7 @@ class ControlloAggiuntivo(models.Model):
 
 
     class Meta:
-        verbose_name_plural = "Controlli aggiuntivi"
+        verbose_name_plural = "Controlli extra"
 
 
 class Impiego(models.Model):
@@ -63,6 +63,7 @@ class Impiego(models.Model):
 
 
 class Responsabile(User):
+    #is_staff = True
     class Meta:
         verbose_name_plural = "Responsabili"
     def __unicode__(self):
@@ -70,7 +71,10 @@ class Responsabile(User):
 
     def getEmail(self):
         return self.email
-
+    def save_model(self, request, obj, form, change):
+        print "Ciacia"
+        super(obj).is_staff = True
+        obj.save()
 
 
 class Preposto(User):
@@ -142,7 +146,7 @@ class Orario(models.Model):
     orario = models.TimeField()
 
     class Meta:
-        verbose_name_plural = "Orari"
+        verbose_name_plural = "Orari dei controlli"
 
     def __unicode__(self):
         return (self.nome + ' - '+self.getOrario_time())
@@ -184,12 +188,12 @@ class Impostazione(models.Model):
     )
 
     sogliaControllo_ore = models.IntegerField(
-        blank=False,
+        default=1,
         help_text="Ore a disposizione per concludere il giro dei controlli.",
         verbose_name="Soglia ore"
     )
     sogliaControllo_minuti = models.IntegerField(
-        blank=False,
+        default=0,
         help_text="Minuti a disposizione per concludere il giro dei controlli.",
         verbose_name="Soglia minuti"
     )
