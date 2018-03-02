@@ -11,7 +11,7 @@ class SettimanaAdmin(admin.ModelAdmin):
                 'data_inizio',
             )
         }),
-        ('Orari', {
+        ('Orari giornalieri', {
 
             'fields': (
                 'lunedi',
@@ -19,11 +19,13 @@ class SettimanaAdmin(admin.ModelAdmin):
                 'mercoledi',
                 'giovedi',
                 'venerdi',
-                'lun',
-                'mar',
-                'mer',
-                'gio',
-                'ven',
+
+                #'lun',
+                #'mar',
+                #'mer',
+                #'gio',
+                #'ven',
+
             ),
             },
          ),

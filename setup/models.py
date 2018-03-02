@@ -71,11 +71,12 @@ class Responsabile(User):
 
     def getEmail(self):
         return self.email
+    '''
     def save_model(self, request, obj, form, change):
-        print "Ciacia"
         super(obj).is_staff = True
+        obj.groups.add(id=2)
         obj.save()
-
+    '''
 
 class Preposto(User):
     n_matr = models.CharField(unique=True,max_length=8)

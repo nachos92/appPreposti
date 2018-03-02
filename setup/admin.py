@@ -6,15 +6,27 @@ from django.contrib.auth.models import User
 class UserAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.is_staff = True
+        obj.is_active = True
+        obj.set_password(obj.password)
         obj.save()
+
 
     list_display = [
         'username',
-        'last_name',
         'first_name',
+        'last_name',
         'email',
         'is_staff',
+    ]
 
+    fields = [
+        'username',
+        'password',
+        'first_name',
+        'last_name',
+        'email',
+        'groups',
+        'user_permissions'
     ]
 
 
@@ -85,7 +97,18 @@ class ImpiegoAdmin(admin.ModelAdmin):
 
 
 class ResponsabileAdmin(admin.ModelAdmin):
+    def save_model(self, request, obj, form, change):
+        obj.is_staff = True
+        obj.is_active = True
+        obj.set_password(obj.password)
 
+        try:
+            print Group.objects.all()[0]
+            obj.groups.add(Group.objects.all()[0])
+        except:
+            print "Errore assegnamento gruppo"
+
+        obj.save()
     fields = [
         'username',
         'password',

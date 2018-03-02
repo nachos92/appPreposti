@@ -6,6 +6,6 @@ from . import views
 
 urlpatterns = [
     url(r'^start/$', views.start, name='start'),
-    url(r'^dipendenti/upload/$', views.uploadDip, name='uploadDip'),
+    url(r'^upload/dipendenti/$', views.uploadDip, name='uploadDip'),
 
 ]
