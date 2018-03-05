@@ -81,7 +81,7 @@ def getWeek(cod_prep):
               "value": "F"
             }
           ],
-          "controlli_adhoc": [
+          "controlli_extra": [
             {
               "titolo": "Controllo auto",
               "value": "F"
@@ -98,11 +98,6 @@ def getWeek(cod_prep):
         completato=False).values_list(
         'data_inizio',
         'area',
-        'lun',
-        'mar',
-        'mer',
-        'gio',
-        'ven',
         'completato',
         'id'
     )
@@ -167,10 +162,12 @@ def controlloPlanning(request, cod_prep):
                     foglio += '{"nome":"'+r.getArea()+'",'
                     foglio += '"id":"'+ r.getId()+'",'
                     foglio += '"fatto":"F",'
-                    foglio += '"data_inizio":{'
-                    foglio += '"giorno":"'+ r.getGiornoInizio()+'",'
-                    foglio += '"mese":"'+ r.getMeseInizio()+'",'
-                    foglio += '"anno":"' +r.getAnnoInizio()+'"},'
+                    foglio += '"data_inizio":"'
+                    foglio += r.getDataInizio() +'",'
+                    #foglio += '"data_inizio":{'
+                    #foglio += '"giorno":"'+ r.getGiornoInizio()+'",'
+                    #foglio += '"mese":"'+ r.getMeseInizio()+'",'
+                    #foglio += '"anno":"' +r.getAnnoInizio()+'"},'
                     foglio += '"orario":{'
 
                     #foglio += '"lun":{"hh":"'+r.getLun_HH()+'","mm":"'+r.getLun_MM()+'",'

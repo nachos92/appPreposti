@@ -7,13 +7,13 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('setup', '0009_auto_20180228_1714'),
+        ('setup', '0001_initial'),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='dipendente',
-            name='impiego',
-            field=models.ForeignKey(to='setup.Impiego'),
+            model_name='orario',
+            name='orario',
+            field=models.TimeField(unique=True),
         ),
     ]

@@ -4,22 +4,6 @@ import datetime
 from setup.views import lista_scelte
 
 
-"""
-Orari in formato: datetime.time(HH,MM)
-"""
-inizio_turno = datetime.time(9, 0)
-fine_turno = datetime.time(18, 0)
-
-"""
-Ogni orario che si vuole aggiungere alle scelte
-deve essere prima creato come sopra, per poi essere aggiunto
-alla tupla degli orari, rispettando il formato.
-"""
-orari = (
-    (inizio_turno.strftime('%H:%M'), inizio_turno.strftime('%H:%M')),
-    (fine_turno.strftime('%H:%M'), fine_turno.strftime('%H:%M')),
-)
-
 
 
 
@@ -40,12 +24,6 @@ class Settimana(models.Model):
     giovedi = models.ForeignKey(Orario, null=True, related_name='giovedi')
     venerdi = models.ForeignKey(Orario, null=True, related_name='venerdi')
 
-    lun = models.CharField(max_length=10, choices=orari, null=False)
-    mar = models.CharField(max_length=10, choices=orari, null=False)
-    mer = models.CharField(max_length=10, choices=orari, null=False)
-    gio = models.CharField(max_length=10, choices=orari, null=False)
-    ven = models.CharField(max_length=10, choices=orari, null=False)
-
     lun_fatto = models.BooleanField(default=False)
     mar_fatto = models.BooleanField(default=False)
     mer_fatto = models.BooleanField(default=False)
@@ -57,7 +35,6 @@ class Settimana(models.Model):
     mer_check = models.BooleanField(default=False)
     gio_check = models.BooleanField(default=False)
     ven_check = models.BooleanField(default=False)
-
 
     completato = models.BooleanField(default=False)
 
@@ -76,6 +53,7 @@ class Settimana(models.Model):
     def getDataInizio(self):
         return str(self.data_inizio)
 
+    '''
     def getGiornoInizio(self):
         return self.data_inizio.strftime("%d")
     def getMeseInizio(self):
@@ -83,7 +61,7 @@ class Settimana(models.Model):
     def getAnnoInizio(self):
         return self.data_inizio.strftime("%Y")
 
-
+    
     def getLun_orario(self):
         return self.lun
     def getLun_HH(self):
@@ -118,7 +96,7 @@ class Settimana(models.Model):
         return self.ven[:2]
     def getVen_MM(self):
         return self.ven[-2:]
-
+    '''
 
     def periodo_attivo(self):
         """
@@ -168,7 +146,6 @@ class SegnalazionePrep(models.Model):
             '-id'
         ]
         verbose_name_plural = 'segnalazioni (preposti)'
-
 
 class Segnalazione(models.Model):
     data = models.DateTimeField(auto_now_add=True)

@@ -52,7 +52,7 @@ class DipendenteAdmin(admin.ModelAdmin):
         'cognome',
         'n_matricola',
         'impiego',
-        'controlli_adhoc'
+        'controlli_extra'
     ]
 
     list_display = [
@@ -73,8 +73,8 @@ class PrepostoAdmin(admin.ModelAdmin):
         'first_name',
         'last_name',
 
-        'sottoposti',
         'superiore',
+        #'sottoposti',
 
         'groups',
     ]
@@ -93,6 +93,7 @@ class ImpiegoAdmin(admin.ModelAdmin):
     ]
     fields = [
         'impiego',
+        'controlli',
     ]
 
 
@@ -170,8 +171,29 @@ class OrarioAdmin(admin.ModelAdmin):
         'orario'
     ]
 
+class UtenteAdmin(admin.ModelAdmin):
+    fields = [
+
+        'username',
+        'password',
+
+        'nome',
+        'cognome',
+
+        'n_matr',
+        #'superiore',
+
+    ]
+    list_display = [
+
+        'username',
+        'n_matr',
+        'nome',
+        'cognome',
+    ]
 
 admin.site.unregister(User)
+admin.site.register(Utente, UtenteAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Responsabile, ResponsabileAdmin)
 admin.site.register(Preposto, PrepostoAdmin)

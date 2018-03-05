@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django import forms
 from .models import *
-import csv
+import csv, random
 from django.contrib.auth.models import Group,Permission
 import datetime
 from django.db.models.signals import pre_save, post_save
@@ -34,7 +34,6 @@ credenziali del tipo:
 def uploadDip(request):
 
     if request.method == 'POST':
-        print "Prova"
 
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
@@ -57,11 +56,11 @@ def uploadDip(request):
                 dip.nome = row[1]
                 dip.cognome = row[2]
 
-
+                #print "Row[3]: "+row[3]+", str(row3): "+str(row[3])
                 imp = Impiego.objects.filter(pk=str(row[3]))
                 print "Conteggio: "+str(imp.count())
                 if imp.count()== 1:
-                    dip.impiego = Impiego.objects.get(pk="Falegnameria")
+                    dip.impiego = Impiego.objects.get(pk=row[3])
 
 
                 dip.save()
@@ -79,13 +78,6 @@ def uploadDip(request):
     })
 
 
-def start(request):
-    messaggio = "Setup in corso:\n"
-
-    messaggio = creaImpostazioniBase(messaggio)
-    messaggio = creaGruppi(messaggio)
-
-    return HttpResponse(messaggio)
 
 def creaImpostazioniBase(testo):
     testo += "\nCreazione 'Impostazione' 1... \t\t"
@@ -209,48 +201,141 @@ def creaGruppi(testo):
         testo += "ERRORE"
     return testo
 
-'''
-def uploadPrep(request):
-    if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            filehandle = request.FILES['file']
-            return excel.make_response(filehandle.get_sheet(), "csv",
-                                       file_name="download")
+def creaImpieghi(testo):
+    x = Impiego(impiego="Falegnameria")
+    x.controlli.add(random.randint(1, 5))
+    x.controlli.add(random.randint(1, 5))
+    x.save()
 
+    testo += "\nCreazione esempi di Impiego... \t\t"
+
+    try:
+        for i in xrange(3):
+            x = Impiego(
+                impiego=("Impiego esempio "+str(i))
+            )
+            x.controlli.add(random.randint(1, 5))
+            x.controlli.add(random.randint(1, 5))
+            x.save()
+    except:
+        testo += "ERRORE"
     else:
-        form = UploadFileForm()
-    return render(
-            request,
-            'upload_form.html',
-            {
-                'form': form,
-                'title': 'Excel file upload and download example',
-                'header': ('Seleziona il file .xls dei ' +
-                           'preposti da importare:')
-            })
+        testo += "OK"
 
-def uploadResp(request):
-    if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            filehandle = request.FILES['file']
-            return excel.make_response(filehandle.get_sheet(), "csv",
-                                       file_name="download")
+    return testo
 
+def creaControlli(testo):
+
+    testo += "\nCreazione esempi di Controllo... \t"
+    try:
+        for i in xrange(5):
+            c = Controllo(
+                id=i+1,
+                titolo=("Controllo "+str(i+1))
+            ).save()
+    except:
+        testo += "ERRORE"
     else:
-        form = UploadFileForm()
-    return render(
-            request,
-            'upload_form.html',
-            {
-                'form': form,
-                'title': 'Excel file upload and download example',
-                'header': ('Seleziona il file .xls dei ' +
-                           'responsabili da importare:')
-            })
-'''
+        testo += "OK"
+    return testo
 
+def creaDipendenti(testo):
+    testo += "\nCreazione esempi di Dipendente... \t"
+
+    try:
+        for i in xrange(10):
+            d = Dipendente(
+                n_matricola=random.randint(10,100),
+                nome="Nome",
+                cognome=("Esempio "+str(i)),
+            )
+            d.impiego= (Impiego.objects.all()[random.randint(0,3)])
+            d.save()
+    except:
+        testo +="ERRORE"
+    else:
+        testo += "OK"
+
+    return testo
+
+def creaOrariControlli(testo):
+    testo += "\nCreazione esempi di Orario...\t\t"
+    try:
+        o = Orario(
+        nome="Mattino",
+        orario="9:00"
+        ).save()
+
+        o = Orario(
+            nome="Sera",
+            orario="18:00"
+        ).save()
+
+        o = Orario(
+            nome="Pomeriggio",
+            orario="15:00"
+        ).save()
+    except:
+        testo+= "ERRORE"
+    else:
+        testo += "OK"
+    return testo
+
+def creaSuperiore(testo):
+    testo += "\nCreazione esempio di Responsabile...\t"
+    try:
+        r = Responsabile(
+            first_name="Luca",
+            last_name="Rossi",
+            email="aa@example.it",
+
+            username="resp1",
+            password="resp",
+
+
+        ).save()
+
+    except:
+        testo += "ERRORE"
+    else:
+        testo += "OK"
+    return testo
+
+
+def creaPreposto(testo):
+    testo +="\nCreazione esempio di Preposto...\t"
+    try:
+        p = Preposto(
+            n_matr="56",
+            first_name="Mauro",
+            last_name="Bianchi",
+            username="prep1",
+            password="prep",
+            email="bb@example.com",
+            superiore=Responsabile.objects.all()[0],
+
+        ).save()
+
+    except:
+        testo += "ERRORE"
+    else:
+        testo += "OK"
+
+    return testo
+
+def start(request):
+    messaggio = "Setup in corso:\n"
+
+    messaggio = creaImpostazioniBase(messaggio)
+    messaggio = creaGruppi(messaggio)
+    messaggio = creaControlli(messaggio)
+    messaggio = creaImpieghi(messaggio)
+    messaggio = creaDipendenti(messaggio)
+    messaggio = creaOrariControlli(messaggio)
+    messaggio = creaSuperiore(messaggio)
+    messaggio = creaPreposto(messaggio)
+
+    return HttpResponse(messaggio)
 
 
 

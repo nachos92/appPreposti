@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User, Group, AbstractBaseUser
 from django.db.models import signals
 from datetime import date
 
@@ -27,12 +27,7 @@ class Controllo(models.Model):
     class Meta:
         verbose_name_plural = "Controlli"
 
-'''
-class ControlloAggiuntivo(Controllo):
-    class Meta:
-        verbose_name_plural = "Controlli aggiuntivi"
 
-'''
 class ControlloAggiuntivo(models.Model):
     titolo = models.CharField(max_length=40)
     descrizione = models.CharField(default='', max_length=250, blank=True)
@@ -42,7 +37,6 @@ class ControlloAggiuntivo(models.Model):
         return self.titolo
     def getTitolo(self):
         return self.titolo
-
 
     class Meta:
         verbose_name_plural = "Controlli extra"
@@ -99,6 +93,21 @@ class Preposto(User):
         return self.last_name
 
 
+class Utente(AbstractBaseUser):
+
+    username = models.CharField(unique=True, max_length=15)
+    #password = models.CharField(max_length=15)
+    nome = models.CharField(max_length=20)
+    cognome = models.CharField(max_length=20)
+    n_matr = models.CharField(max_length=8)
+    #superiore = models.ForeignKey(Responsabile, blank=True)
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = [
+        'nome',
+        'cognome'
+    ]
+
 
 class Dipendente(models.Model):
 
@@ -106,7 +115,7 @@ class Dipendente(models.Model):
     nome = models.CharField(max_length=15)
     cognome = models.CharField(max_length=15)
     impiego = models.ForeignKey(Impiego, blank=True,null=True)
-    controlli_adhoc = models.ManyToManyField(
+    controlli_extra = models.ManyToManyField(
         ControlloAggiuntivo,
         blank=True,
         help_text="Selezionare o inserire ulteriori controlli specifici.",
@@ -127,7 +136,7 @@ class Dipendente(models.Model):
     def getCognome(self):
         return self.cognome
     def getList_ContrAdHoc(self):
-        return self.controlli_adhoc.all()
+        return self.controlli_extra.all()
     def getImpiego(self):
         return str(self.impiego)
 
@@ -144,7 +153,7 @@ class Dipendente(models.Model):
 
 class Orario(models.Model):
     nome = models.CharField(max_length=20)
-    orario = models.TimeField()
+    orario = models.TimeField(unique=True)
 
     class Meta:
         verbose_name_plural = "Orari dei controlli"
@@ -159,8 +168,6 @@ class Orario(models.Model):
         return self.orario.strftime('%H:%M')
     def getOrario(self):
         return self.orario
-    def getChoices(self):
-        pass
 
 
 
@@ -208,9 +215,9 @@ class Impostazione(models.Model):
         return str(self.id)
     def getMessaggio(self):
         return self.messaggio
-    def get_sogliaControllo_minuti(self):
+    def getSogliaControllo_minuti(self):
         return self.sogliaControllo_minuti
-    def get_sogliaControllo_ore(self):
+    def getSogliaControllo_ore(self):
         return self.sogliaControllo_ore
     def is_today(self):
         if self.data_inizio == date.today():

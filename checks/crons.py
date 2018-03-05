@@ -48,7 +48,7 @@ def selezSoglia_ore():
     try:
         imp = Impostazione.objects.get(pk=1)
         if (imp.attiva==True):
-            return imp.get_sogliaControllo_ore()
+            return imp.getSogliaControllo_ore()
     except:
         print "Impostazione (pk=1) inesistente."
         return 1
@@ -59,7 +59,7 @@ def selezSoglia_minuti():
     try:
         imp = Impostazione.objects.get(pk=1)
         if (imp.attiva==True):
-            return imp.get_sogliaControllo_minuti()
+            return imp.getSogliaControllo_minuti()
     except:
         print "Impostazione (pk=1) inesistente."
         return 0
@@ -306,8 +306,8 @@ def check_impostazioni():
             #Copia dei valori di #2 in #1
             imp.messaggio = imp_fut.getMessaggio()
 
-            imp.sogliaControllo_ore = imp_fut.get_sogliaControllo_ore()
-            imp.sogliaControllo_minuti = imp_fut.get_sogliaControllo_minuti()
+            imp.sogliaControllo_ore = imp_fut.getSogliaControllo_ore()
+            imp.sogliaControllo_minuti = imp_fut.getSogliaControllo_minuti()
             #manca ORARI SELEZIONE
 
             imp.data_inizio = imp_fut.data_inizio
