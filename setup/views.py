@@ -323,17 +323,30 @@ def creaPreposto(testo):
 
     return testo
 
-def start(request):
-    messaggio = "Setup in corso:\n"
-
-    messaggio = creaImpostazioniBase(messaggio)
-    messaggio = creaGruppi(messaggio)
+def esempio(request):
+    messaggio = "Popolamento database d'esempio.\n"
     messaggio = creaControlli(messaggio)
     messaggio = creaImpieghi(messaggio)
     messaggio = creaDipendenti(messaggio)
     messaggio = creaOrariControlli(messaggio)
     messaggio = creaSuperiore(messaggio)
     messaggio = creaPreposto(messaggio)
+
+    return HttpResponse(messaggio)
+
+def start(request):
+    messaggio = "Setup in corso:\n"
+
+    messaggio = creaImpostazioniBase(messaggio)
+    messaggio = creaGruppi(messaggio)
+    '''
+    messaggio = creaControlli(messaggio)
+    messaggio = creaImpieghi(messaggio)
+    messaggio = creaDipendenti(messaggio)
+    messaggio = creaOrariControlli(messaggio)
+    messaggio = creaSuperiore(messaggio)
+    messaggio = creaPreposto(messaggio)
+    '''
 
     return HttpResponse(messaggio)
 

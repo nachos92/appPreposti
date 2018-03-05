@@ -138,16 +138,17 @@ secondo caso vuol dire che magari hanno iniziato tardi e all'orario limite devon
 """
 def check_controlli():
 
+
+
+
+    #Ottengo gli elem di Settimana nel periodo giusto
+    totali = Settimana.objects.filter(data_inizio__lte=date.today())
+
     '''
     Per ogni elem di totali devo prima fare uno switch-case per il weekday e poi verifico
     se gg_check==false; nel caso, se gg_fatto==false invio una notifica al superiore.
     '''
     k = date.today().weekday()
-
-
-
-    #Ottengo gli elem di Settimana nel periodo giusto
-    totali = Settimana.objects.all()
 
     for x in totali:
 

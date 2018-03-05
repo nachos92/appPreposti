@@ -115,12 +115,13 @@ def controlloPlanning(request, cod_prep):
     gruppo_sottoposti = Preposto.objects.filter(id=cod_prep).values_list('sottoposti')
 
     # elenco dipendenti del settore che il preposto deve controllare
+    '''
     dipendenti = Dipendente.objects.filter(impiego__in=gruppo_sottoposti).values_list('n_matricola',
                                                                                       'nome',
                                                                                       'cognome',
                                                                                       'impiego',
                                                                                       )
-    #print "Dipendenti totali: " + str(len(dipendenti)) + '\n' + str(dipendenti)
+    '''
     planning = getWeek(cod_prep)
 
     try:
@@ -129,13 +130,14 @@ def controlloPlanning(request, cod_prep):
         foglio += '"n_matr":"'+ preposto.getN_matr()+'",'
         foglio += '"reparti":['
 
-        gg = date.today().weekday()
 
         reparti = Settimana.objects.filter(
             cod_preposto__id=preposto.getID(),
-            #data_inizio__range=[inizioSettimana,fineSettimana]
+            data_inizio__lte=date.today()
         )
+        print "Oggetti: "+str(len(reparti))
 
+        gg = date.today().weekday()
 
         if (gg == 0):
             reparti = reparti.filter(lun_fatto=False, lun_check=False)
@@ -148,10 +150,9 @@ def controlloPlanning(request, cod_prep):
         if (gg == 4):
             reparti = reparti.filter(ven_fatto=False, ven_check=False)
 
-
         if len(reparti)==0:
             foglio += ']'
-            print "Len == 0"
+
         else:
             iter = 0
             for r in reparti:
@@ -242,7 +243,7 @@ def controlloPlanning(request, cod_prep):
     except Preposto.DoesNotExist:
         print "Nessun match col n_matr passato"
         raise Http404
-        #return HttpResponse("Nessun match col n_matr passato")
+
 
 
 
@@ -284,7 +285,10 @@ def ricezione(request, n_matricola):
     return HttpResponse('')
 
 
-
+"""
+Se la conferma del giro completato arriva fuori orario (prima dell'inizio
+o dopo tempo_inizio+soglia_ore e minuti, non si imposta a True. 
+"""
 @csrf_exempt
 def daydone(request):
     j = json.loads(request.body)
@@ -293,19 +297,20 @@ def daydone(request):
         plan = Settimana.objects.get(id=int(s['id_settimana']))
 
         k = date.today().weekday()
+        if plan.periodo_attivo()==True:
 
-        if (k == 0):
-            plan.lun_fatto = True
-        if (k == 1):
-            plan.mar_fatto = True
-        if (k == 2):
-            plan.mer_fatto = True
-        if (k == 3):
-            plan.gio_fatto = True
-        if (k == 4):
-            plan.ven_fatto = True
+            if (k == 0):
+                plan.lun_fatto = True
+            if (k == 1):
+                plan.mar_fatto = True
+            if (k == 2):
+                plan.mer_fatto = True
+            if (k == 3):
+                plan.gio_fatto = True
+            if (k == 4):
+                plan.ven_fatto = True
 
-        plan.save()
+            plan.save()
 
     return HttpResponse('')
 
