@@ -2,3 +2,5 @@
 *.xml
 setup/models.pyc
 setup/models.pyc
+setup/migrations/0*
+checks/migrations/0*

@@ -202,21 +202,29 @@ def creaGruppi(testo):
     return testo
 
 def creaImpieghi(testo):
-    x = Impiego(impiego="Falegnameria")
-    x.controlli.add(random.randint(1, 5))
-    x.controlli.add(random.randint(1, 5))
-    x.save()
 
     testo += "\nCreazione esempi di Impiego... \t\t"
+    c = Controllo.objects.all()
+
+    g = Impiego(
+        impiego="Falegnameria",
+    ).save()
+    g = Impiego.objects.get(pk="Falegnameria")
+    g.controlli = c
+    g.save()
 
     try:
+
+
         for i in xrange(3):
             x = Impiego(
-                impiego=("Impiego esempio "+str(i))
-            )
-            x.controlli.add(random.randint(1, 5))
-            x.controlli.add(random.randint(1, 5))
-            x.save()
+                pk=("Impiego esempio "+str(i))
+            ).save()
+            y = Impiego.objects.get(pk=("Impiego esempio "+str(i)))
+            y.controlli.add(random.randint(0, 4))
+            y.controlli.add(random.randint(0, 4))
+            y.save()
+
     except:
         testo += "ERRORE"
     else:
@@ -325,6 +333,7 @@ def creaPreposto(testo):
 
 def esempio(request):
     messaggio = "Popolamento database d'esempio.\n"
+
     messaggio = creaControlli(messaggio)
     messaggio = creaImpieghi(messaggio)
     messaggio = creaDipendenti(messaggio)
