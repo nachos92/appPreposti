@@ -1,6 +1,7 @@
 from django.db import models
 from setup.models import Preposto, Impiego, Dipendente, Impostazione,Orario
 import datetime
+from datetime import date
 from setup.views import lista_scelte
 
 
@@ -37,6 +38,7 @@ class Settimana(models.Model):
     ven_check = models.BooleanField(default=False)
 
     completato = models.BooleanField(default=False)
+    debug = models.BooleanField(default=True)
 
     def __unicode__(self):
         return str(self.id)
@@ -52,6 +54,19 @@ class Settimana(models.Model):
         return str(self.area)
     def getDataInizio(self):
         return str(self.data_inizio)
+    def getOrario_oggi(self):
+        k = date.today().weekday()
+        if k==0:
+            return self.lunedi.orario
+        if k==1:
+            return self.martedi.orario
+        if k==2:
+            return self.mercoledi.orario
+        if k==3:
+            return self.giovedi.orario
+        if k==4:
+            return self.venerdi.orario
+
 
     '''
     def getGiornoInizio(self):
@@ -103,21 +118,23 @@ class Settimana(models.Model):
         Ritorna true quando mi trovo nel periodo di tempo in cui posso eseguire i controlli,
         ovvero a partire dall'orario di inizio ed entro la soglia max (es. 1 ora).
 
-        DEV --> ritorna sempre true
         :return:
         """
-
-        '''
-        d = datetime.datetime.strptime(self.getMar_HH()+':'+self.getMar_MM(),'%H:%M').time()
+        imp = Impostazione.objects.get(pk=1)
         dnow = datetime.datetime.now().time()
-        if dnow > d:
-            print "Posso eseguire i controlli"
+        if (dnow > self.getOrario_oggi() and dnow <= (
+            datetime.datetime.combine(
+                datetime.date(1,1,1),
+                self.getOrario_oggi()
+            ) + datetime.timedelta(
+                    hours=imp.getSogliaControllo_ore(),
+                    minutes=imp.getSogliaControllo_minuti()
+                )).time()
+        ):
             return True
         else:
-            print "Non e' ancora l'orario di inizio."
             return False
-        '''
-        return True
+
 
     class Meta:
         ordering = [

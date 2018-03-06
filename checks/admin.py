@@ -31,6 +31,7 @@ class SettimanaAdmin(admin.ModelAdmin):
          ),
         ('Debug',{
             'fields': (
+                'debug',
                 'lun_fatto',
                 'lun_check',
                 'mar_fatto',
@@ -47,7 +48,8 @@ class SettimanaAdmin(admin.ModelAdmin):
 
     list_display = [
         'id',
-        'completato',
+        'periodo_attivo',
+        'debug',
         'cod_preposto',
         'area',
         'data_inizio',

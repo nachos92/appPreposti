@@ -285,6 +285,7 @@ def ricezione(request, n_matricola):
     return HttpResponse('')
 
 
+"""## VARIABILE DI DEBUG ##"""
 """
 Se la conferma del giro completato arriva fuori orario (prima dell'inizio
 o dopo tempo_inizio+soglia_ore e minuti, non si imposta a True. 
@@ -297,7 +298,7 @@ def daydone(request):
         plan = Settimana.objects.get(id=int(s['id_settimana']))
 
         k = date.today().weekday()
-        if plan.periodo_attivo()==True:
+        if plan.debug==True or plan.periodo_attivo()==True:
 
             if (k == 0):
                 plan.lun_fatto = True
