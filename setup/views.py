@@ -122,6 +122,12 @@ def creaGruppi(testo):
             testo += "ERRORE"
         else:
             elenco_permessi = [
+                'add_user',
+                'change_user',
+                'delete_user',
+                'add_logentry',
+                'change_logentry',
+                'delete_logentry',
                 'add_controllo',
                 'change_controllo',
                 'delete_controllo',
@@ -177,6 +183,9 @@ def creaGruppi(testo):
             testo += "ERRORE"
         else:
             elenco_permessi = [
+                'add_logentry',
+                'change_logentry',
+                'delete_logentry',
                 'add_controllo',
                 'change_controllo',
                 'delete_controllo',
@@ -293,6 +302,7 @@ def creaSuperiore(testo):
     testo += "\nCreazione esempio di Responsabile...\t"
     try:
         r = Responsabile(
+
             first_name="Luca",
             last_name="Rossi",
             email="aa@example.it",
@@ -315,11 +325,14 @@ def creaPreposto(testo):
     try:
         p = Preposto(
             n_matr="56",
+
             first_name="Mauro",
             last_name="Bianchi",
+            email="bb@example.com",
+
             username="prep1",
             password="prep",
-            email="bb@example.com",
+
             superiore=Responsabile.objects.all()[0],
 
         ).save()
@@ -363,18 +376,23 @@ def start(request):
 
 
 ### Handler per assegnare in automatico il gruppo di appartenenza all'utente
-'''
-@receiver(pre_save, sender=Responsabile)
-def aaa(sender, instance, **kwargs):
+
+@receiver(pre_save, sender=Preposto)
+def signPreposto(sender, instance, **kwargs):
     print "Pre-save"
     try:
-        instance.groups.add(pk=1)
-
+        instance.set_password(instance.passw)
     except:
-        print "Errore assegnazione gruppo: 'Responsabile'"
-    else:
-        print str(instance)
-'''
+        print "Errore set-password Preposto (signPreposto())"
+
+
+@receiver(pre_save, sender=Responsabile)
+def signResponsabile(sender, instance, **kwargs):
+    print "Pre-save"
+    try:
+        instance.set_password(instance.passw)
+    except:
+        print "Errore set-password Responsabile (signResponsabile())"
 
 '''
 @receiver(pre_save, sender=Responsabile)

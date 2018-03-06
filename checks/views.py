@@ -156,7 +156,7 @@ def controlloPlanning(request, cod_prep):
         else:
             iter = 0
             for r in reparti:
-                if r.periodo_attivo()== True:
+                if r.debug or r.periodo_attivo()== True:
                     controlli_impiego = Impiego.objects.get(pk=r.getArea()).getControlli()
 
                     iter+=1
@@ -165,31 +165,19 @@ def controlloPlanning(request, cod_prep):
                     foglio += '"fatto":"F",'
                     foglio += '"data_inizio":"'
                     foglio += r.getDataInizio() +'",'
-                    #foglio += '"data_inizio":{'
-                    #foglio += '"giorno":"'+ r.getGiornoInizio()+'",'
-                    #foglio += '"mese":"'+ r.getMeseInizio()+'",'
-                    #foglio += '"anno":"' +r.getAnnoInizio()+'"},'
+
                     foglio += '"orario":{'
 
-                    #foglio += '"lun":{"hh":"'+r.getLun_HH()+'","mm":"'+r.getLun_MM()+'",'
                     foglio += '"lun":{"orario":"'+r.lunedi.getOrario_time()+'"},'
-
-                    #foglio += '"mar":{"hh":"' + r.getMar_HH() + '","mm":"' + r.getMar_MM() + '",'
                     foglio += '"mar":{"orario":"'+r.martedi.getOrario_time()+'"},'
-
-                    #foglio += '"mer":{"hh":"' + r.getMer_HH() + '","mm":"' + r.getMer_MM() + '",'
                     foglio += '"mer":{"orario":"'+r.mercoledi.getOrario_time()+'"},'
-
-                    #foglio += '"gio":{"hh":"' + r.getGio_HH() + '","mm":"' + r.getGio_MM() + '",'
                     foglio += '"gio":{"orario":"'+r.giovedi.getOrario_time()+'"},'
-
-                    #foglio += '"ven":{"hh":"' + r.getVen_HH() + '","mm":"' + r.getVen_MM() + '",'
                     foglio += '"ven":{"orario":"'+r.venerdi.getOrario_time()+'"}'
 
                     foglio += '},'
+
+
                     foglio += '"dipendenti":['
-
-
 
                     persone = Dipendente.objects.filter(impiego=r.getArea())
                     iter_dip = 0

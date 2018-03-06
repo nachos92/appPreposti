@@ -69,14 +69,14 @@ class PrepostoAdmin(admin.ModelAdmin):
         'n_matr',
 
         'username',
-        'password',
+        'passw',
         'first_name',
         'last_name',
 
         'superiore',
-        #'sottoposti',
 
         'groups',
+        'is_staff',
     ]
     list_display = [
         'id',
@@ -112,13 +112,14 @@ class ResponsabileAdmin(admin.ModelAdmin):
         obj.save()
     fields = [
         'username',
-        'password',
+        'passw',
         'first_name',
         'last_name',
 
         'email',
 
         'groups',
+        'is_staff',
 
     ]
     list_display = [
