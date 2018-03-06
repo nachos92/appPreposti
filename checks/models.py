@@ -115,25 +115,33 @@ class Settimana(models.Model):
 
     def periodo_attivo(self):
         """
-        Ritorna true quando mi trovo nel periodo di tempo in cui posso eseguire i controlli,
-        ovvero a partire dall'orario di inizio ed entro la soglia max (es. 1 ora).
+        Ritorna TRUE se l'ora attuale e' compresa tra l'orario di inizio
+        e l'orario massimo entro cui si possono eseguire i controlli
+        (ora inizio+soglia_ore+soglia_minuti).
 
-        :return:
         """
-        imp = Impostazione.objects.get(pk=1)
-        dnow = datetime.datetime.now().time()
-        if (dnow > self.getOrario_oggi() and dnow <= (
-            datetime.datetime.combine(
-                datetime.date(1,1,1),
-                self.getOrario_oggi()
-            ) + datetime.timedelta(
-                    hours=imp.getSogliaControllo_ore(),
-                    minutes=imp.getSogliaControllo_minuti()
-                )).time()
-        ):
-            return True
-        else:
+        try:
+            imp = Impostazione.objects.get(pk=1)
+        except:
+            print "-> periodo_attivo(): errore get Impostazione (pk=1)."
             return False
+        else:
+            ora_attuale = datetime.datetime.now().time()
+
+
+            if (ora_attuale > self.getOrario_oggi() and
+                    ora_attuale <= (
+                        datetime.datetime.combine(
+                            datetime.date(1,1,1),
+                            self.getOrario_oggi()
+                        ) + datetime.timedelta(
+                            hours=imp.getSogliaControllo_ore(),
+                            minutes=imp.getSogliaControllo_minuti()
+                    )).time()
+            ):
+                return True
+            else:
+                return False
 
 
     class Meta:
