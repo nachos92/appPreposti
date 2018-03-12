@@ -11,123 +11,18 @@ from django.dispatch import receiver
 
 
 
-
-def makeDict():
-    """
-    Costruisce un dizionario del tipo
-    diz['impiego'] = [ <listacontrolliassociati> ]
-
-    """
-    diz = {}
-    lista_impieghi = Impiego.objects.values_list('impiego', flat=True).all()
-
-    for q in lista_impieghi:
-
-        elenco_controlli = Impiego.objects.filter(impiego=q).values_list('controlli', flat=True).all()
-
-        elenco_controlli = list(elenco_controlli)
-
-        for x in range(0, len(elenco_controlli)):
-            elenco_controlli[x] = str(elenco_controlli[x])
-        diz[str(q)] = elenco_controlli
-
-    return diz
-
-
-
-
-"""
-Ritorna un oggetto di lunghezza 0 se nella giornata attuale
-e' gia' stato fatto il giro (se giornoattuale_fatto=true).
-"""
-def getWeek(cod_prep):
-    """
-    Prende in ingresso l'elenco dei dipendenti.
-    Per la lista dei controlli accede al campo "impiego" del dipendente e lo usa come chiave di ricerca
-    nel dizionario.
-
-    Es. JSON generato:
-
-    {
-      "nome": "<nome>",
-      "cognome": "<cognome>",
-      "completato": "F",
-      "id": "12",
-      "lun": "09:00",
-      "mar": "09:00",
-      "mer": "09:00",
-      "gio": "09:00",
-      "ven": "09:00",
-      "dipendenti": [
-        {
-          "n_matricola": "524",
-          "nome": "Paolo",
-          "cognome": "Bianchi",
-          "impiego": "Operaio",
-          "controlli": [
-            {
-              "id": "1",
-              "titolo": "Controllo 1",
-              "value": "F"
-            },
-            {
-              "id": "3",
-              "titolo": "Controllo 3",
-              "value": "F"
-            },
-            {
-              "id": "5",
-              "titolo": "Abbigliamento antinfortunistico",
-              "value": "F"
-            }
-          ],
-          "controlli_extra": [
-            {
-              "titolo": "Controllo auto",
-              "value": "F"
-            }
-          ]
-        },
-        ]
-        }
-    """
-
-    planning = Settimana.objects.filter(
-        data_inizio__range=[inizioSettimana, fineSettimana],
-        cod_preposto=cod_prep,
-        completato=False).values_list(
-        'data_inizio',
-        'area',
-        'completato',
-        'id'
-    )
-    return planning
-
-
-
 def controlloPlanning(request, cod_prep):
-    """ Es. se io vado su localhost/8000/checks/56
-    mi stampa l'elenco dei dipendenti che il preposto 56
-    non ha ancora controllato.
+    """ Es. <url> localhost/8000/checks/56
+    Produce un json con la informazioni sui dipendenti da controllare e gli orari dei controlli.
     """
 
     print "### Controllo planning in corso... ###"
-    gruppo_sottoposti = Preposto.objects.filter(id=cod_prep).values_list('sottoposti')
 
-    # elenco dipendenti del settore che il preposto deve controllare
-    '''
-    dipendenti = Dipendente.objects.filter(impiego__in=gruppo_sottoposti).values_list('n_matricola',
-                                                                                      'nome',
-                                                                                      'cognome',
-                                                                                      'impiego',
-                                                                                      )
-    '''
-    planning = getWeek(cod_prep)
 
     try:
         preposto = Preposto.objects.get(n_matr=cod_prep)
-        foglio = '{"nome":"' + preposto.first_name + '","cognome":"' + preposto.last_name + '",'
-        foglio += '"n_matr":"'+ preposto.getN_matr()+'",'
+        foglio = '{"n_matr":"'+ preposto.getN_matr()+'",'
+        foglio += '"nome":"' + preposto.first_name + '","cognome":"' + preposto.last_name + '",'
         foglio += '"reparti":['
 
 
@@ -135,8 +30,9 @@ def controlloPlanning(request, cod_prep):
             cod_preposto__id=preposto.getID(),
             data_inizio__lte=date.today()
         )
-        print "Oggetti: "+str(len(reparti))
+        print "Numero 'reparti': "+str(len(reparti))
 
+        '''
         gg = date.today().weekday()
 
         if (gg == 0):
@@ -149,10 +45,11 @@ def controlloPlanning(request, cod_prep):
             reparti = reparti.filter(gio_fatto=False, gio_check=False)
         if (gg == 4):
             reparti = reparti.filter(ven_fatto=False, ven_check=False)
+        '''
+
 
         if len(reparti)==0:
             foglio += ']'
-
         else:
             iter = 0
             for r in reparti:
@@ -160,69 +57,95 @@ def controlloPlanning(request, cod_prep):
                     controlli_impiego = Impiego.objects.get(pk=r.getArea()).getControlli()
 
                     iter+=1
-                    foglio += '{"nome":"'+r.getArea()+'",'
-                    foglio += '"id":"'+ r.getId()+'",'
-                    foglio += '"fatto":"F",'
+
+                    foglio += '{"id":"'+ r.getId()+'",'
+                    foglio += '"nome":"'+r.getArea()+'",'
                     foglio += '"data_inizio":"'
                     foglio += r.getDataInizio() +'",'
+                    foglio += '"fatto":"F",'
 
                     foglio += '"orario":{'
-
                     foglio += '"lun":{"orario":"'+r.lunedi.getOrario_time()+'"},'
                     foglio += '"mar":{"orario":"'+r.martedi.getOrario_time()+'"},'
                     foglio += '"mer":{"orario":"'+r.mercoledi.getOrario_time()+'"},'
                     foglio += '"gio":{"orario":"'+r.giovedi.getOrario_time()+'"},'
                     foglio += '"ven":{"orario":"'+r.venerdi.getOrario_time()+'"}'
-
                     foglio += '},'
-
 
                     foglio += '"dipendenti":['
 
-                    persone = Dipendente.objects.filter(impiego=r.getArea())
-                    iter_dip = 0
-                    for d in persone:
-                        iter_dip+=1
-                        foglio += '{"nome":"'+d.getNome()+'",'
-                        foglio += '"cognome":"' + d.getCognome() + '",'
-                        foglio += '"n_matr":"' + d.getN_matr() + '",'
-                        foglio += '"fatto":"F",'
-                        foglio += '"controlli":['
-
-                        iter_controlli = 0
-                        for c in controlli_impiego:
-                            iter_controlli+=1
-                            foglio += '{'
-                            foglio += '"titolo":"' + c.getTitolo() + '",'
-                            foglio += '"value":"F"}'
-
-                            if iter_controlli < len(controlli_impiego):
-                                foglio += ','
 
 
-                        c_adhoc = d.getList_ContrAdHoc()
-                        if len(c_adhoc)>0:
-                            foglio+=','
-                        iter_c_adhoc = 0
-                        for cc in c_adhoc:
-                            iter_c_adhoc +=1
-                            foglio += '{"titolo":"'+cc.getTitolo()+'","value":"F"}'
+                    gg = date.today().weekday()
+                    r = Settimana.objects.filter(pk=r.id)
 
-                            if iter_c_adhoc < len(c_adhoc):
-                                foglio += ','
+                    if (gg == 0):
+                        r = r.filter(lun_fatto=False, lun_check=False)
+                    if (gg == 1):
+                        r = r.filter(mar_fatto=False, mar_check=False)
+                    if (gg == 2):
+                        r = r.filter(mer_fatto=False, mer_check=False)
+                    if (gg == 3):
+                        r = r.filter(gio_fatto=False, gio_check=False)
+                    if (gg == 4):
+                        r = r.filter(ven_fatto=False, ven_check=False)
 
-                        foglio += ']'
-                        foglio +='}'
+
+                    if len(r)!=0:
+
+                        persone = Dipendente.objects.filter(impiego=r[0].getArea())
+                        iter_dip = 0
+                        for d in persone:
+                            iter_dip+=1
+                            foglio += '{"n_matr":"' + d.getN_matr() + '",'
+                            foglio += '"nome":"'+d.getNome()+'",'
+                            foglio += '"cognome":"' + d.getCognome() + '",'
+                            foglio += '"fatto":"F",'
+                            foglio += '"controlli":['
+
+                            iter_controlli = 0
+                            for c in controlli_impiego:
+                                iter_controlli+=1
+                                foglio += '{'
+                                foglio += '"titolo":"' + c.getTitolo() + '",'
+                                foglio += '"value":"F"}'
+
+                                if iter_controlli < len(controlli_impiego):
+                                    foglio += ','
+
+
+                            c_adhoc = d.getList_ContrAdHoc()
+                            if len(c_adhoc)>0:
+                                foglio+=','
+                            #else:
+                            #    foglio += ']'
+
+                            iter_c_adhoc = 0
+                            for cc in c_adhoc:
+                                iter_c_adhoc +=1
+                                foglio += '{"titolo":"'+cc.getTitolo()+'","value":"F"}'
+
+                                if iter_c_adhoc < len(c_adhoc):
+                                    foglio += ','
+
+                            foglio += ']'   #fine controlli
+
+                            foglio += '}'   #fine dipendente
 
                         if iter_dip < len(persone):
                             foglio += ','
 
-                    foglio += ']'
-                    foglio += '}'
-                    if iter < len(reparti):
-                        foglio += ','
-            foglio += ']'
-        foglio += '}'
+                    foglio += ']'   #fine dipendenti
+
+
+                    foglio += '}'       #fine reparto
+                if iter < len(reparti):
+                    foglio += ','
+
+
+            foglio += ']'           #fine reparti
+
+        foglio += '}'                       #fine json
         return HttpResponse(
             foglio,
             content_type='application/json'
@@ -232,7 +155,25 @@ def controlloPlanning(request, cod_prep):
         print "Nessun match col n_matr passato"
         raise Http404
 
+def orarioPlanning(request, id):
+    try:
+        plan = Settimana.objects.get(pk=id)
+    except:
+        return Http404()
+    else:
+        foglio = '{'
+        foglio += '"orario":{'
+        foglio += '"lun":{"orario":"' + plan.lunedi.getOrario_time() + '"},'
+        foglio += '"mar":{"orario":"' + plan.martedi.getOrario_time() + '"},'
+        foglio += '"mer":{"orario":"' + plan.mercoledi.getOrario_time() + '"},'
+        foglio += '"gio":{"orario":"' + plan.giovedi.getOrario_time() + '"},'
+        foglio += '"ven":{"orario":"' + plan.venerdi.getOrario_time() + '"}'
+        foglio += '}}'
 
+        return HttpResponse(
+            foglio,
+            content_type='application/json'
+        )
 
 
 

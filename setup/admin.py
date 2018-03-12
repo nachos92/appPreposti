@@ -45,7 +45,6 @@ class ControlloAdmin(admin.ModelAdmin):
               ]
 
 
-
 class DipendenteAdmin(admin.ModelAdmin):
     fields = [
         'nome',
@@ -171,7 +170,7 @@ class OrarioAdmin(admin.ModelAdmin):
     ordering = [
         'orario'
     ]
-
+'''
 class UtenteAdmin(admin.ModelAdmin):
     fields = [
 
@@ -192,9 +191,10 @@ class UtenteAdmin(admin.ModelAdmin):
         'nome',
         'cognome',
     ]
+'''
+#admin.site.register(Utente, UtenteAdmin)
 
 admin.site.unregister(User)
-admin.site.register(Utente, UtenteAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Responsabile, ResponsabileAdmin)
 admin.site.register(Preposto, PrepostoAdmin)

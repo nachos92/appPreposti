@@ -105,7 +105,7 @@ class Preposto(User):
     def getCognome(self):
         return self.last_name
 
-
+'''
 class Utente(AbstractBaseUser):
 
     username = models.CharField(unique=True, max_length=15)
@@ -120,7 +120,7 @@ class Utente(AbstractBaseUser):
         'nome',
         'cognome'
     ]
-
+'''
 
 class Dipendente(models.Model):
 
