@@ -4,12 +4,6 @@ from django.db.models import signals
 from datetime import date
 
 
-'''
-IDEA:
-Ad un impiego si associano n controlli.
-Ad un dipendente si associa 1 impiego.
-
-'''
 class Controllo(models.Model):
 
     titolo = models.CharField(max_length=40)
@@ -27,7 +21,6 @@ class Controllo(models.Model):
     class Meta:
         verbose_name_plural = "Controlli"
 
-
 class ControlloAggiuntivo(models.Model):
     titolo = models.CharField(max_length=40)
     descrizione = models.CharField(default='', max_length=250, blank=True)
@@ -41,7 +34,6 @@ class ControlloAggiuntivo(models.Model):
     class Meta:
         verbose_name_plural = "Controlli extra"
 
-
 class Impiego(models.Model):
     impiego = models.CharField(primary_key=True, max_length=20)
     controlli = models.ManyToManyField(Controllo, blank=True)
@@ -54,7 +46,6 @@ class Impiego(models.Model):
 
     class Meta:
         verbose_name_plural = "Impieghi"
-
 
 class Responsabile(User):
     passw = models.CharField(
@@ -71,12 +62,6 @@ class Responsabile(User):
 
     def getEmail(self):
         return self.email
-    '''
-    def save_model(self, request, obj, form, change):
-        super(obj).is_staff = True
-        obj.groups.add(id=2)
-        obj.save()
-    '''
 
 class Preposto(User):
 
@@ -105,22 +90,7 @@ class Preposto(User):
     def getCognome(self):
         return self.last_name
 
-'''
-class Utente(AbstractBaseUser):
 
-    username = models.CharField(unique=True, max_length=15)
-    #password = models.CharField(max_length=15)
-    nome = models.CharField(max_length=20)
-    cognome = models.CharField(max_length=20)
-    n_matr = models.CharField(max_length=8)
-    #superiore = models.ForeignKey(Responsabile, blank=True)
-
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = [
-        'nome',
-        'cognome'
-    ]
-'''
 
 class Dipendente(models.Model):
 
@@ -128,10 +98,11 @@ class Dipendente(models.Model):
     nome = models.CharField(max_length=15)
     cognome = models.CharField(max_length=15)
     impiego = models.ForeignKey(Impiego, blank=True,null=True)
+    fatto = models.BooleanField(default=False)
     controlli_extra = models.ManyToManyField(
         ControlloAggiuntivo,
         blank=True,
-        help_text="Selezionare o inserire ulteriori controlli specifici.",
+        help_text="Controlli specifici."
     )
     class Meta:
         verbose_name_plural = "Dipendenti"
@@ -141,7 +112,11 @@ class Dipendente(models.Model):
 
     def __unicode__(self):
         return self.n_matricola
-
+    def getFatto_string(self):
+        if (self.fatto):
+            return 'T'
+        else:
+            return 'F'
     def getN_matr(self):
         return self.n_matricola
     def getNome(self):
@@ -163,7 +138,6 @@ class Dipendente(models.Model):
         )
         return dipendente
 
-
 class Orario(models.Model):
     nome = models.CharField(max_length=20)
     orario = models.TimeField(unique=True)
@@ -181,8 +155,6 @@ class Orario(models.Model):
         return self.orario.strftime('%H:%M')
     def getOrario(self):
         return self.orario
-
-
 
 class Impostazione(models.Model):
     titolo = models.CharField(max_length=20)
@@ -238,13 +210,12 @@ class Impostazione(models.Model):
         else:
             return False
 
-
-
 class ggChiusura(models.Model):
     data = models.DateField(unique=True)
     def __unicode__(self):
         return str(self.data)
     class Meta:
+        verbose_name = "Giorno chiusura"
         verbose_name_plural = "Giorni chiusura"
         ordering = [
             'data'

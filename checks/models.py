@@ -15,9 +15,10 @@ from setup.views import lista_scelte
 """
 class Settimana(models.Model):
     cod_preposto = models.ForeignKey(Preposto)
-    creazione = models.DateTimeField(auto_now_add=True)
-    data_inizio = models.DateField(help_text="Deve essere un lunedi'.")
+    data_inizio = models.DateField(help_text="Selezionare un lunedi'.")
     area = models.ForeignKey(Impiego)
+
+    creazione = models.DateTimeField(auto_now_add=True)
 
     lunedi = models.ForeignKey(Orario, null=True, related_name='lunedi')
     martedi = models.ForeignKey(Orario, null=True, related_name='martedi')
@@ -67,52 +68,6 @@ class Settimana(models.Model):
         if k==4:
             return self.venerdi.orario
 
-
-    '''
-    def getGiornoInizio(self):
-        return self.data_inizio.strftime("%d")
-    def getMeseInizio(self):
-        return self.data_inizio.strftime("%m")
-    def getAnnoInizio(self):
-        return self.data_inizio.strftime("%Y")
-
-    
-    def getLun_orario(self):
-        return self.lun
-    def getLun_HH(self):
-        return self.lun[:2]
-    def getLun_MM(self):
-        return self.lun[-2:]
-
-    def getMar_orario(self):
-        return self.martedi
-    def getMar_HH(self):
-        return self.mar[:2]
-    def getMar_MM(self):
-        return self.mar[-2:]
-
-    def getMer_orario(self):
-        return self.mer
-    def getMer_HH(self):
-        return self.mer[:2]
-    def getMer_MM(self):
-        return self.mer[-2:]
-
-    def getGio_orario(self):
-        return self.gio
-    def getGio_HH(self):
-        return self.gio[:2]
-    def getGio_MM(self):
-        return self.gio[-2:]
-
-    def getVen_orario(self):
-        return self.ven
-    def getVen_HH(self):
-        return self.ven[:2]
-    def getVen_MM(self):
-        return self.ven[-2:]
-    '''
-
     def periodo_attivo(self):
         """
         Ritorna TRUE se l'ora attuale e' compresa tra l'orario di inizio
@@ -129,14 +84,14 @@ class Settimana(models.Model):
             ora_attuale = datetime.datetime.now().time()
 
 
-            if (ora_attuale > self.getOrario_oggi() and
-                    ora_attuale <= (
+            if (ora_attuale > self.getOrario_oggi()
+                    and ora_attuale <= (
                         datetime.datetime.combine(
                             datetime.date(1,1,1),
                             self.getOrario_oggi()
-                        ) + datetime.timedelta(
-                            hours=imp.getSogliaControllo_ore(),
-                            minutes=imp.getSogliaControllo_minuti()
+                            ) + datetime.timedelta(
+                                hours=imp.getSogliaControllo_ore(),
+                                minutes=imp.getSogliaControllo_minuti()
                     )).time()
             ):
                 return True
@@ -149,6 +104,7 @@ class Settimana(models.Model):
             '-id'
         ]
         verbose_name_plural = 'Planning settimanali'
+        verbose_name = 'Planning settimanale'
 
 class SegnalazionePrep(models.Model):
     data = models.DateTimeField(auto_now_add=True)

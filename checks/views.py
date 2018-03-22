@@ -100,13 +100,14 @@ def controlloPlanning(request, cod_prep):
                             foglio += '{"n_matr":"' + d.getN_matr() + '",'
                             foglio += '"nome":"'+d.getNome()+'",'
                             foglio += '"cognome":"' + d.getCognome() + '",'
-                            foglio += '"fatto":"F",'
+                            foglio += '"fatto":"' + d.getFatto_string()+'",'
                             foglio += '"controlli":['
 
                             iter_controlli = 0
                             for c in controlli_impiego:
                                 iter_controlli+=1
                                 foglio += '{'
+                                foglio += '"id":"'+str(c.id)+'",'
                                 foglio += '"titolo":"' + c.getTitolo() + '",'
                                 foglio += '"value":"F"}'
 
@@ -123,7 +124,8 @@ def controlloPlanning(request, cod_prep):
                             iter_c_adhoc = 0
                             for cc in c_adhoc:
                                 iter_c_adhoc +=1
-                                foglio += '{"titolo":"'+cc.getTitolo()+'","value":"F"}'
+                                foglio += '{"id":"'+str(cc.id + 500)+'",'
+				foglio+='"titolo":"'+cc.getTitolo()+'","value":"F"}'
 
                                 if iter_c_adhoc < len(c_adhoc):
                                     foglio += ','
@@ -132,8 +134,8 @@ def controlloPlanning(request, cod_prep):
 
                             foglio += '}'   #fine dipendente
 
-                        if iter_dip < len(persone):
-                            foglio += ','
+                            if iter_dip < len(persone):
+                                foglio += ','
 
                     foglio += ']'   #fine dipendenti
 
@@ -176,7 +178,10 @@ def orarioPlanning(request, id):
         )
 
 
-
+def visitato(request, n_matricola):
+    d = Dipendente.objects.get(n_matr=n_matricola)
+    d.fatto = True
+    d.save()
 
 
 """

@@ -6,6 +6,7 @@ from . import views
 urlpatterns = [
     url(r'^(?P<cod_prep>[0-9]+)/$', views.controlloPlanning, name='controlloPlanning'),
     url(r'^segnalazione/(?P<n_matricola>[0-9]+)/$', views.ricezione, name='ricezione'),
+    url(r'^dipendente/(?P<n_matricola>[0-9]+)/$', views.visitato, name='visitato'),
     url(r'^planning/daydone/$', views.daydone, name='daydone'),
 
     #Puo' servire
