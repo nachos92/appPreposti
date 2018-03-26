@@ -11,7 +11,7 @@ from django.dispatch import receiver
 
 
 
-def controlloPlanning(request, cod_prep):
+def controlloPlanning(request, matricola):
     """ Es. <url> localhost/8000/checks/56
     Produce un json con la informazioni sui dipendenti da controllare e gli orari dei controlli.
     """
@@ -20,7 +20,7 @@ def controlloPlanning(request, cod_prep):
 
 
     try:
-        preposto = Preposto.objects.get(n_matr=cod_prep)
+        preposto = Preposto.objects.get(n_matr=matricola)
         foglio = '{"n_matr":"'+ preposto.getN_matr()+'",'
         foglio += '"nome":"' + preposto.first_name + '","cognome":"' + preposto.last_name + '",'
         foglio += '"reparti":['
@@ -31,21 +31,6 @@ def controlloPlanning(request, cod_prep):
             data_inizio__lte=date.today()
         )
         print "Numero 'reparti': "+str(len(reparti))
-
-        '''
-        gg = date.today().weekday()
-
-        if (gg == 0):
-            reparti = reparti.filter(lun_fatto=False, lun_check=False)
-        if (gg == 1):
-            reparti = reparti.filter(mar_fatto=False, mar_check=False)
-        if (gg == 2):
-            reparti = reparti.filter(mer_fatto=False, mer_check=False)
-        if (gg == 3):
-            reparti = reparti.filter(gio_fatto=False, gio_check=False)
-        if (gg == 4):
-            reparti = reparti.filter(ven_fatto=False, ven_check=False)
-        '''
 
 
         if len(reparti)==0:
@@ -74,70 +59,73 @@ def controlloPlanning(request, cod_prep):
 
                     foglio += '"dipendenti":['
 
+                    oggi = dt.date.today()
+                    if (ggChiusura.objects.filter(data=oggi).exists() == True):
+                        foglio += ']'
+                    else:
+
+                        gg = date.today().weekday()
+                        r = Settimana.objects.filter(pk=r.id)
+
+                        if (gg == 0):
+                            r = r.filter(lun_fatto=False, lun_check=False)
+                        if (gg == 1):
+                            r = r.filter(mar_fatto=False, mar_check=False)
+                        if (gg == 2):
+                            r = r.filter(mer_fatto=False, mer_check=False)
+                        if (gg == 3):
+                            r = r.filter(gio_fatto=False, gio_check=False)
+                        if (gg == 4):
+                            r = r.filter(ven_fatto=False, ven_check=False)
 
 
-                    gg = date.today().weekday()
-                    r = Settimana.objects.filter(pk=r.id)
+                        if len(r)!=0:
 
-                    if (gg == 0):
-                        r = r.filter(lun_fatto=False, lun_check=False)
-                    if (gg == 1):
-                        r = r.filter(mar_fatto=False, mar_check=False)
-                    if (gg == 2):
-                        r = r.filter(mer_fatto=False, mer_check=False)
-                    if (gg == 3):
-                        r = r.filter(gio_fatto=False, gio_check=False)
-                    if (gg == 4):
-                        r = r.filter(ven_fatto=False, ven_check=False)
+                            persone = Dipendente.objects.filter(impiego=r[0].getArea(), fatto=False)
+                            iter_dip = 0
+                            for d in persone:
+                                iter_dip+=1
+                                foglio += '{"n_matr":"' + d.getN_matr() + '",'
+                                foglio += '"nome":"'+d.getNome()+'",'
+                                foglio += '"cognome":"' + d.getCognome() + '",'
+                                foglio += '"fatto":"' + d.getFatto_string()+'",'
+                                foglio += '"controlli":['
+
+                                iter_controlli = 0
+                                for c in controlli_impiego:
+                                    iter_controlli+=1
+                                    foglio += '{'
+                                    foglio += '"id":"'+str(c.id)+'",'
+                                    foglio += '"titolo":"' + c.getTitolo() + '",'
+                                    foglio += '"value":"F"}'
+
+                                    if iter_controlli < len(controlli_impiego):
+                                        foglio += ','
 
 
-                    if len(r)!=0:
+                                c_adhoc = d.getList_ContrAdHoc()
+                                if len(c_adhoc)>0:
+                                    foglio+=','
+                                #else:
+                                #    foglio += ']'
 
-                        persone = Dipendente.objects.filter(impiego=r[0].getArea())
-                        iter_dip = 0
-                        for d in persone:
-                            iter_dip+=1
-                            foglio += '{"n_matr":"' + d.getN_matr() + '",'
-                            foglio += '"nome":"'+d.getNome()+'",'
-                            foglio += '"cognome":"' + d.getCognome() + '",'
-                            foglio += '"fatto":"' + d.getFatto_string()+'",'
-                            foglio += '"controlli":['
+                                iter_c_adhoc = 0
+                                for cc in c_adhoc:
+                                    iter_c_adhoc +=1
+                                    foglio += '{"id":"'+str(cc.id + 500)+'",'
+                                    foglio+='"titolo":"'+cc.getTitolo()+'","value":"F"}'
 
-                            iter_controlli = 0
-                            for c in controlli_impiego:
-                                iter_controlli+=1
-                                foglio += '{'
-                                foglio += '"id":"'+str(c.id)+'",'
-                                foglio += '"titolo":"' + c.getTitolo() + '",'
-                                foglio += '"value":"F"}'
+                                    if iter_c_adhoc < len(c_adhoc):
+                                        foglio += ','
 
-                                if iter_controlli < len(controlli_impiego):
+                                foglio += ']'   #fine controlli
+
+                                foglio += '}'   #fine dipendente
+
+                                if iter_dip < len(persone):
                                     foglio += ','
 
-
-                            c_adhoc = d.getList_ContrAdHoc()
-                            if len(c_adhoc)>0:
-                                foglio+=','
-                            #else:
-                            #    foglio += ']'
-
-                            iter_c_adhoc = 0
-                            for cc in c_adhoc:
-                                iter_c_adhoc +=1
-                                foglio += '{"id":"'+str(cc.id + 500)+'",'
-				foglio+='"titolo":"'+cc.getTitolo()+'","value":"F"}'
-
-                                if iter_c_adhoc < len(c_adhoc):
-                                    foglio += ','
-
-                            foglio += ']'   #fine controlli
-
-                            foglio += '}'   #fine dipendente
-
-                            if iter_dip < len(persone):
-                                foglio += ','
-
-                    foglio += ']'   #fine dipendenti
+                        foglio += ']'   #fine dipendenti
 
 
                     foglio += '}'       #fine reparto
@@ -178,82 +166,62 @@ def orarioPlanning(request, id):
         )
 
 
-def visitato(request, n_matricola):
-    d = Dipendente.objects.get(n_matr=n_matricola)
-    d.fatto = True
-    d.save()
-
-
 """
 Ricezione del json contenente i controlli con esito negativo di un dipendente.
 Viene quindi creata una Segnalazione che riporta l'accaduto.
 """
 @csrf_exempt
-def ricezione(request, n_matricola):
+def visitato(request, matricola):
 
     received_json_data = json.loads(request.body)
+    print "Ricevuto json da CLIENT:"
     print str(received_json_data)
 
-    if (len(received_json_data['controlli']) == 0):
-        print "0"
-        return HttpResponse('')
+    dip = Dipendente.objects.get(n_matricola=matricola)
+    dip.fatto = True
+    dip.save()
 
-    # Creo una segnalazione di controllo non positivo su un determinato dipendente.
-    dip = Dipendente.objects.get(n_matricola=n_matricola)
-
-    testo = ("Elenco controlli non rispettati da parte di "
-             +dip.getNome()
-             +' '
-             + dip.getCognome()
-             +': \n \n')
-
-
-    for m in received_json_data['controlli']:
-
-        testo += '-'+str(m['titolo'])+'\n'
-
-    Segnalazione.create(dip, testo).save()
-
-    print "Ricevuto json da CLIENT."
-
-    return HttpResponse('')
+    if not received_json_data:
+        print "----> Il dipendente "+matricola+" non ha controlli negativi!"
+    else:
+        dip = Dipendente.objects.get(n_matricola=matricola)
+        testo = ("Elenco controlli non rispettati da parte di "
+                 +dip.getNome()
+                 +' '
+                 + dip.getCognome()
+                 +': \n \n')
 
 
-"""## VARIABILE DI DEBUG ##"""
-"""
-Se la conferma del giro completato arriva fuori orario (prima dell'inizio
-o dopo tempo_inizio+soglia_ore e minuti, non si imposta a True. 
-"""
-@csrf_exempt
-def daydone(request):
-    j = json.loads(request.body)
+        for m in received_json_data['controlli']:
 
-    for s in j['reparti']:
-        plan = Settimana.objects.get(id=int(s['id_settimana']))
+            testo += '-'+'\t'+str(m['titolo'])+'\n'
 
-        k = date.today().weekday()
-        if plan.debug==True or plan.periodo_attivo()==True:
+        Segnalazione.create(dip, testo).save()
 
-            if (k == 0):
-                plan.lun_fatto = True
-            if (k == 1):
-                plan.mar_fatto = True
-            if (k == 2):
-                plan.mer_fatto = True
-            if (k == 3):
-                plan.gio_fatto = True
-            if (k == 4):
-                plan.ven_fatto = True
 
-            plan.save()
+    """
+    Se sono stati visitati tutti i dipendenti,
+    si imposta come Fatto il planning.
+    """
+    persone = Dipendente.objects.filter(impiego=dip.getImpiego())
+    if len(persone.filter(fatto=False))==0:
+        for p in persone:
+            p = Dipendente.objects.get(n_matricola=p.getN_matr())
+            p.fatto = False
+            print "Dip. "+p.getCognome()+": T ---> "+str(p.fatto)
+            p.save()
 
     return HttpResponse('')
 
 
-def fineGiro(request,n_matricola, id_sett):
-    plan = Settimana.objects.get(id=int(id_sett))
+'''
+Devo reimpostare a False tutti gli attributi "Fatto"
+dei dipendenti coinvolti.
+'''
+def fineGiro(request,matricola, id):
+    plan = Settimana.objects.get(id=int(id))
 
-    print "Ricevuto fineGiro dal preposto "+str(n_matricola)
+    print "Ricevuto fineGiro dal preposto "+str(matricola)
     k = date.today().weekday()
 
     if (k == 0):
@@ -266,6 +234,15 @@ def fineGiro(request,n_matricola, id_sett):
         plan.gio_fatto = True
     if (k == 4):
         plan.ven_fatto = True
+
+    persone = Dipendente.objects.filter(impiego=plan.getArea())
+    print "Persone: "
+    print str(persone)
+    for p in persone:
+        d = Dipendente.objects.get(matricola=p.getN_matr())
+        print "Dip. "+d.getCognome()+': T ---> F'
+        d.fatto = False
+        d.save()
 
     plan.save()
 

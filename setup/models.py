@@ -67,7 +67,7 @@ class Preposto(User):
 
     n_matr = models.CharField(unique=True,max_length=8, verbose_name="Num. matricola")
     sottoposti = models.ManyToManyField(Impiego, blank=True)
-    superiore = models.ForeignKey(Responsabile, blank=True)
+    superiore = models.ForeignKey(Responsabile, blank=True, verbose_name="responsabile")
     passw = models.CharField(
         max_length=20,
         default="password",

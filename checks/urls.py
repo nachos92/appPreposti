@@ -4,15 +4,12 @@ from . import views
 
 
 urlpatterns = [
-    url(r'^(?P<cod_prep>[0-9]+)/$', views.controlloPlanning, name='controlloPlanning'),
-    url(r'^segnalazione/(?P<n_matricola>[0-9]+)/$', views.ricezione, name='ricezione'),
-    url(r'^dipendente/(?P<n_matricola>[0-9]+)/$', views.visitato, name='visitato'),
-    url(r'^planning/daydone/$', views.daydone, name='daydone'),
-
-    #Puo' servire
+    url(r'^(?P<matricola>[0-9]+)/$', views.controlloPlanning, name='controlloPlanning'),
+    #url(r'^segnalazione/(?P<matricola>[0-9]+)/$', views.ricezione, name='ricezione'),
+    url(r'^dipendente/(?P<matricola>[0-9]+)/done/$', views.visitato, name='visitato'),
     url(r'^planning/(?P<id>[0-9]+)/$', views.orarioPlanning, name='orarioPlanning'),
     url(
-        r'^(?P<n_matricola>[0-9]+)/planning/(?P<id_sett>[0-9]+)/done/$',
+        r'^(?P<matricola>[0-9]+)/planning/(?P<id>[0-9]+)/done/$',
         views.fineGiro,
         name='fineGiro'
         ),

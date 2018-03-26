@@ -89,7 +89,6 @@ def creaImpostazioniBase(testo):
             messaggio= "Messaggio predefinito.",
         ).save()
     except:
-        #print "Errore creazione 'Impostazione' attuale."
         testo += "ERRORE"
     else:
         testo += "OK"
@@ -103,7 +102,6 @@ def creaImpostazioniBase(testo):
             messaggio="Messaggio (futuro) predefinito.",
         ).save()
     except:
-        #print "Errore creazione 'Impostazione' in programma."
         testo += "ERRORE"
     else:
         testo += "OK"

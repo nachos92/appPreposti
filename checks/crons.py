@@ -1,7 +1,7 @@
 import datetime
 from datetime import date
 from django.core.mail import send_mail
-from setup.models import Responsabile, Impostazione, ggChiusura
+from setup.models import Responsabile, Impostazione, ggChiusura, Dipendente
 from models import Settimana, SegnalazionePrep
 from django.conf import settings
 
@@ -151,11 +151,10 @@ def check_controlli():
     k = date.today().weekday()
 
     for x in totali:
+        persone = Dipendente.objects.filter(impiego=x.getArea(), fatto=False)
 
         if (k == 0):
             if x.lun_check == False:
-                #if datetime.datetime.now().time() > \
-                    #(datetime.datetime.strptime(x.lun,'%H:%M')+ soglia_tot).time():
                 if check_fuoriorario(x.lunedi) == True:
 
                     '''
@@ -168,17 +167,15 @@ def check_controlli():
 
                     if x.lun_fatto == False:
 
-                        try:
+                        if len(persone)== 0:
+                            x.lun_fatto=True
+                        else:
                             SegnalazionePrep.create(
                                 matr= x.getPreposto(),
                                 dett= selezMessaggio(),
                             ).save()
 
-                        except:
-                            print "Errore creazione SegnalazionePrep."
-
-
-                        invio_email(x)
+                            invio_email(x)
 
 
                     x.lun_check = True
@@ -187,23 +184,19 @@ def check_controlli():
 
         if (k == 1):
             if x.mar_check == False:
-                #if datetime.datetime.now().time() > \
-                    #(x.martedi.getOrario_time() + soglia_tot).time():
+
                 if check_fuoriorario(x.martedi) == True:
                     if x.mar_fatto == False:
+                        if len(persone)==0:
+                            x.mar_fatto = True
+                        else:
 
-                        try:
                             SegnalazionePrep.create(
                                 matr= x.getPreposto(),
                                 dett= selezMessaggio(),
                             ).save()
 
-                        except:
-                            print "Errore creazione SegnalazionePrep."
-
-
-                        invio_email(x)
-
+                            invio_email(x)
 
                     x.mar_check = True
                     x.save()
@@ -211,23 +204,19 @@ def check_controlli():
 
         if (k == 2):
             if x.mer_check == False:
-               # if datetime.datetime.now().time() > \
-                    #(datetime.datetime.strptime(x.mer,'%H:%M')+ soglia_tot).time():
-                if check_fuoriorario(x.mercoledi) == True:
 
+                if check_fuoriorario(x.mercoledi) == True:
                     if x.mer_fatto == False:
-                        try:
+                        if len(persone)==0:
+                            x.mar_fatto = True
+                        else:
+
                             SegnalazionePrep.create(
                                 matr= x.getPreposto(),
                                 dett= selezMessaggio(),
                             ).save()
 
-                        except:
-                            print "Errore creazione SegnalazionePrep."
-
-
-                        invio_email(x)
-
+                            invio_email(x)
 
                     x.mer_check = True
                     x.save()
@@ -236,66 +225,46 @@ def check_controlli():
         if (k == 3):
 
             if x.gio_check == False:
-                #if datetime.datetime.now().time() > \
-                #        (datetime.datetime.strptime(x.gio,'%H:%M')+ soglia_tot).time():
                 if check_fuoriorario(x.giovedi) == True:
-
                     if x.gio_fatto == False:
+                        if len(persone)==0:
+                            x.gio_fatto = True
+                        else:
 
-                        try:
                             SegnalazionePrep.create(
                                 matr= x.getPreposto(),
                                 dett= selezMessaggio(),
                             ).save()
 
-                        except:
-                            print "Errore creazione SegnalazionePrep."
-
-
-                        invio_email(x)
-
+                            invio_email(x)
 
                     x.gio_check = True
                     x.save()
 
 
-
         if (k == 4):
 
             if x.ven_check == False:
-                #if datetime.datetime.now().time() > \
-                #        (datetime.datetime.strptime(x.ven,'%H:%M')+ soglia_tot).time():
                 if check_fuoriorario(x.venerdi) == True:
-
-                    x.lun_check = False
+                    x.ven_check = False
 
                     if x.ven_fatto == False:
+                        if len(persone)==0:
+                            x.ven_fatto = True
+                        else:
 
-                        try:
                             SegnalazionePrep.create(
                                 matr= x.getPreposto(),
                                 dett= selezMessaggio(),
                             ).save()
 
-                        except:
-                            print "Errore creazione SegnalazionePrep."
-
-
-                        invio_email(x)
-
+                            invio_email(x)
 
                     x.ven_check = True
                     x.save()
 
 
 def check_impostazioni():
-    '''
-    try:
-        imp = Impostazione.objects.get(pk=1)
-        imp_fut = Impostazione.objects.get(pk=2)
-    except:
-        print "Imp. pk=1 e/o pk=2 mancanti."
-    '''
 
     imp = Impostazione.objects.get(pk=1)
     imp_fut = Impostazione.objects.get(pk=2)
@@ -309,10 +278,7 @@ def check_impostazioni():
 
             imp.sogliaControllo_ore = imp_fut.getSogliaControllo_ore()
             imp.sogliaControllo_minuti = imp_fut.getSogliaControllo_minuti()
-            #manca ORARI SELEZIONE
-
             imp.data_inizio = imp_fut.data_inizio
-
             imp_fut.attiva = False
             imp_fut.save()
 
@@ -320,7 +286,6 @@ def check_impostazioni():
         if (imp_fut.is_today()==False):
             imp_fut.attiva=True
             imp_fut.save()
-
 
     if (imp.is_today()):
         imp.attiva = True
