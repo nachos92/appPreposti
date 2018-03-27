@@ -152,6 +152,18 @@ class ImpostazioneAdmin(admin.ModelAdmin):
                 'sogliaControllo_minuti',
             )
         }),
+        ('Giorni di lavoro', {
+            'classes': ('collapse',),
+            'fields': (
+                'lunedi',
+                'martedi',
+                'mercoledi',
+                'giovedi',
+                'venerdi',
+                'sabato',
+                'domenica',
+            )
+        }),
     )
 
     list_display = [

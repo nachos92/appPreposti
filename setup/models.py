@@ -191,6 +191,15 @@ class Impostazione(models.Model):
         verbose_name="Soglia minuti"
     )
 
+    lunedi = models.BooleanField(default=True)
+    martedi = models.BooleanField(default=True)
+    mercoledi = models.BooleanField(default=True)
+    giovedi = models.BooleanField(default=True)
+    venerdi = models.BooleanField(default=True)
+    sabato = models.BooleanField(default=True)
+    domenica = models.BooleanField(default=True)
+
+
     class Meta:
         verbose_name_plural = "Impostazioni"
         ordering = [
@@ -209,6 +218,8 @@ class Impostazione(models.Model):
             return True
         else:
             return False
+
+
 
 class ggChiusura(models.Model):
     data = models.DateField(unique=True)

@@ -5,7 +5,6 @@ from .models import Settimana, Segnalazione
 import datetime as dt
 from django.views.decorators.csrf import csrf_exempt
 import json
-from crons import inizioSettimana,fineSettimana, check_fuoriorario
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -18,6 +17,7 @@ def controlloPlanning(request, matricola):
 
     print "### Controllo planning in corso... ###"
 
+    i = Impostazione.objects.get(id=1)
 
     try:
         preposto = Preposto.objects.get(n_matr=matricola)
@@ -50,20 +50,71 @@ def controlloPlanning(request, matricola):
                     foglio += '"fatto":"F",'
 
                     foglio += '"orario":{'
-                    foglio += '"lun":{"orario":"'+r.lunedi.getOrario_time()+'"},'
-                    foglio += '"mar":{"orario":"'+r.martedi.getOrario_time()+'"},'
-                    foglio += '"mer":{"orario":"'+r.mercoledi.getOrario_time()+'"},'
-                    foglio += '"gio":{"orario":"'+r.giovedi.getOrario_time()+'"},'
-                    foglio += '"ven":{"orario":"'+r.venerdi.getOrario_time()+'"}'
+                    foglio += '"lun":{"orario":"'
+                    if i.lunedi == False:
+                        foglio += '"},'
+                    else:
+                        foglio += r.lunedi.getOrario_time()+'"},'
+
+                    foglio += '"mar":{"orario":"'
+                    if i.martedi == False:
+                        foglio += '"},'
+                    else:
+                        foglio += r.martedi.getOrario_time()+'"},'
+
+                    foglio += '"mer":{"orario":"'
+                    if i.mercoledi == False:
+                        foglio += '"},'
+                    else:
+                        foglio += r.mercoledi.getOrario_time()+'"},'
+
+                    foglio += '"gio":{"orario":"'
+                    if i.giovedi == False:
+                        foglio += '"},'
+                    else:
+                        foglio += r.giovedi.getOrario_time()+'"},'
+
+                    foglio += '"ven":{"orario":"'
+                    if i.venerdi == False:
+                        foglio += '"},'
+                    else:
+                        foglio += r.venerdi.getOrario_time()+'"},'
+
+                    foglio += '"sab":{"orario":"'
+                    if i.sabato == False:
+                        foglio += '"},'
+                    else:
+                        foglio += r.sabato.getOrario_time()+'"},'
+                    foglio += '"dom":{"orario":"'
+                    if i.domenica == False:
+                        foglio += '"}'
+                    else:
+                        foglio += r.domenica.getOrario_time()+'"}'
+
                     foglio += '},'
 
                     foglio += '"dipendenti":['
-
                     oggi = dt.date.today()
-                    if (ggChiusura.objects.filter(data=oggi).exists() == True):
+                    weekday = dt.date.today().weekday()
+
+
+                    if weekday == 0 and i.lunedi == False:
+                        foglio += ']'
+                    elif weekday == 1 and i.martedi == False:
+                        foglio += ']'
+                    elif weekday == 2 and i.mercoledi == False:
+                        foglio += ']'
+                    elif weekday == 3 and i.giovedi == False:
+                        foglio += ']'
+                    elif weekday == 4 and i.venerdi == False:
+                        foglio += ']'
+                    elif weekday == 5 and i.sabato == False:
+                        foglio += ']'
+                    elif weekday == 6 and i.domenica == False:
+                        foglio += ']'
+                    elif ggChiusura.objects.filter(data=oggi).exists() == True:
                         foglio += ']'
                     else:
-
                         gg = date.today().weekday()
                         r = Settimana.objects.filter(pk=r.id)
 
@@ -80,7 +131,6 @@ def controlloPlanning(request, matricola):
 
 
                         if len(r)!=0:
-
                             persone = Dipendente.objects.filter(impiego=r[0].getArea(), fatto=False)
                             iter_dip = 0
                             for d in persone:
@@ -106,8 +156,6 @@ def controlloPlanning(request, matricola):
                                 c_adhoc = d.getList_ContrAdHoc()
                                 if len(c_adhoc)>0:
                                     foglio+=','
-                                #else:
-                                #    foglio += ']'
 
                                 iter_c_adhoc = 0
                                 for cc in c_adhoc:
@@ -133,7 +181,7 @@ def controlloPlanning(request, matricola):
                     foglio += ','
 
 
-            foglio += ']'           #fine reparti
+            foglio += ']'                   #fine reparti
 
         foglio += '}'                       #fine json
         return HttpResponse(
@@ -185,7 +233,7 @@ def visitato(request, matricola):
         print "----> Il dipendente "+matricola+" non ha controlli negativi!"
     else:
         dip = Dipendente.objects.get(n_matricola=matricola)
-        testo = ("Elenco controlli non rispettati da parte di "
+        testo = ("Elenco controlli con esito negativo da parte di "
                  +dip.getNome()
                  +' '
                  + dip.getCognome()

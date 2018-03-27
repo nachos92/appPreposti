@@ -19,6 +19,8 @@ class SettimanaAdmin(admin.ModelAdmin):
                 'mercoledi',
                 'giovedi',
                 'venerdi',
+                'sabato',
+                'domenica'
 
                 #'lun',
                 #'mar',
@@ -42,6 +44,10 @@ class SettimanaAdmin(admin.ModelAdmin):
                 'gio_check',
                 'ven_fatto',
                 'ven_check',
+                'sab_fatto',
+                'sab_check',
+                'dom_fatto',
+                'dom_check'
                 )
         }
     ))
@@ -63,6 +69,10 @@ class SettimanaAdmin(admin.ModelAdmin):
         'gio_check',
         'ven_fatto',
         'ven_check',
+        'sab_fatto',
+        'sab_check',
+        'dom_fatto',
+        'dom_check'
     ]
 
 class SegnalazioneAdmin(admin.ModelAdmin):

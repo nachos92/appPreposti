@@ -43,7 +43,8 @@ class Migration(migrations.Migration):
                 ('n_matricola', models.CharField(max_length=4, serialize=False, primary_key=True)),
                 ('nome', models.CharField(max_length=15)),
                 ('cognome', models.CharField(max_length=15)),
-                ('controlli_extra', models.ManyToManyField(help_text=b'Selezionare o inserire ulteriori controlli specifici.', to='setup.ControlloAggiuntivo', blank=True)),
+                ('fatto', models.BooleanField(default=False)),
+                ('controlli_extra', models.ManyToManyField(help_text=b'Controlli specifici.', to='setup.ControlloAggiuntivo', blank=True)),
             ],
             options={
                 'ordering': ['cognome'],
@@ -58,6 +59,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'ordering': ['data'],
+                'verbose_name': 'Giorno chiusura',
                 'verbose_name_plural': 'Giorni chiusura',
             },
         ),
@@ -83,6 +85,13 @@ class Migration(migrations.Migration):
                 ('messaggio', models.CharField(default=b'Il preposto non ha eseguito il giro controlli in data odierna.', help_text=b"Contenuto dell'email inviata quando un preposto non esegue un giro di controlli.", max_length=150)),
                 ('sogliaControllo_ore', models.IntegerField(default=1, help_text=b'Ore a disposizione per concludere il giro dei controlli.', verbose_name=b'Soglia ore')),
                 ('sogliaControllo_minuti', models.IntegerField(default=0, help_text=b'Minuti a disposizione per concludere il giro dei controlli.', verbose_name=b'Soglia minuti')),
+                ('lunedi', models.BooleanField(default=True)),
+                ('martedi', models.BooleanField(default=True)),
+                ('mercoledi', models.BooleanField(default=True)),
+                ('giovedi', models.BooleanField(default=True)),
+                ('venerdi', models.BooleanField(default=True)),
+                ('sabato', models.BooleanField(default=True)),
+                ('domenica', models.BooleanField(default=True)),
             ],
             options={
                 'ordering': ['-id'],
@@ -104,7 +113,8 @@ class Migration(migrations.Migration):
             name='Preposto',
             fields=[
                 ('user_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL)),
-                ('n_matr', models.CharField(unique=True, max_length=8)),
+                ('n_matr', models.CharField(unique=True, max_length=8, verbose_name=b'Num. matricola')),
+                ('passw', models.CharField(default=b'password', help_text=b"Default: 'password'", max_length=20, verbose_name=b'Password')),
                 ('sottoposti', models.ManyToManyField(to='setup.Impiego', blank=True)),
             ],
             options={
@@ -119,6 +129,7 @@ class Migration(migrations.Migration):
             name='Responsabile',
             fields=[
                 ('user_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL)),
+                ('passw', models.CharField(default=b'password', help_text=b"Default: 'password'", max_length=20, verbose_name=b'Password')),
             ],
             options={
                 'verbose_name_plural': 'Responsabili',
@@ -128,25 +139,10 @@ class Migration(migrations.Migration):
                 (b'objects', django.contrib.auth.models.UserManager()),
             ],
         ),
-        migrations.CreateModel(
-            name='Utente',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('password', models.CharField(max_length=128, verbose_name='password')),
-                ('last_login', models.DateTimeField(null=True, verbose_name='last login', blank=True)),
-                ('username', models.CharField(unique=True, max_length=15)),
-                ('nome', models.CharField(max_length=20)),
-                ('cognome', models.CharField(max_length=20)),
-                ('n_matr', models.CharField(max_length=8)),
-            ],
-            options={
-                'abstract': False,
-            },
-        ),
         migrations.AddField(
             model_name='preposto',
             name='superiore',
-            field=models.ForeignKey(to='setup.Responsabile', blank=True),
+            field=models.ForeignKey(verbose_name=b'responsabile', blank=True, to='setup.Responsabile'),
         ),
         migrations.AddField(
             model_name='dipendente',

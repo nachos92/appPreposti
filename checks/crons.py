@@ -7,7 +7,7 @@ from django.conf import settings
 
 
 
-
+################## Funzioni e variabili di supporto
 # ----------------------------------------->
 '''
 Gruppo di funzioni che vanno selezionano l'attributo "standard" o inserito in impostazioni,
@@ -69,8 +69,6 @@ def selezSoglia_minuti():
 
 # <-----------------------------------------
 
-################## Funzioni e variabili di supporto
-
 def invio_email(x):
     try:
         send_mail(
@@ -98,13 +96,12 @@ soglia_tot = datetime.timedelta(
     minutes=selezSoglia_minuti()
 )
 
-
+'''
 inizioSettimana = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday())
 fineSettimana = inizioSettimana + datetime.timedelta(days=6)
-
+'''
 
 ################## Fine funzioni e variabili di supporto
-
 
 
 
@@ -164,6 +161,8 @@ def check_controlli():
                     x.mer_check = False
                     x.gio_check = False
                     x.ven_check = False
+                    x.sab_check = False
+                    x.dom_check = False
 
                     if x.lun_fatto == False:
 
@@ -246,8 +245,6 @@ def check_controlli():
 
             if x.ven_check == False:
                 if check_fuoriorario(x.venerdi) == True:
-                    x.ven_check = False
-
                     if x.ven_fatto == False:
                         if len(persone)==0:
                             x.ven_fatto = True
@@ -261,6 +258,45 @@ def check_controlli():
                             invio_email(x)
 
                     x.ven_check = True
+                    x.save()
+
+        if (k == 5):
+            if x.sab_check == False:
+                if check_fuoriorario(x.sabato) == True:
+
+                    if x.sab_fatto == False:
+                        if len(persone) == 0:
+                            x.sab_fatto = True
+                        else:
+
+                            SegnalazionePrep.create(
+                                matr=x.getPreposto(),
+                                dett=selezMessaggio(),
+                            ).save()
+
+                            invio_email(x)
+
+                    x.sab_check = True
+                    x.save()
+        if (k == 6):
+
+            if x.dom_check == False:
+                if check_fuoriorario(x.domenica) == True:
+                    x.lun_check = False
+
+                    if x.dom_fatto == False:
+                        if len(persone) == 0:
+                            x.dom_fatto = True
+                        else:
+
+                            SegnalazionePrep.create(
+                                matr=x.getPreposto(),
+                                dett=selezMessaggio(),
+                            ).save()
+
+                            invio_email(x)
+
+                    x.dom_check = True
                     x.save()
 
 
