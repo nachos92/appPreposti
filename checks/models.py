@@ -132,7 +132,8 @@ class SegnalazionePrep(models.Model):
         ordering = [
             '-id'
         ]
-        verbose_name_plural = 'segnalazioni (preposti)'
+        verbose_name = 'segnalazione preposto'
+        verbose_name_plural = 'segnalazioni preposto'
 
 class Segnalazione(models.Model):
     data = models.DateTimeField(auto_now_add=True)
@@ -154,4 +155,5 @@ class Segnalazione(models.Model):
         ordering = [
             '-id'
         ]
-        verbose_name_plural = 'segnalazioni (dipendenti)'
+        verbose_name = 'segnalazione dipendente'
+        verbose_name_plural = 'segnalazioni dipendente'

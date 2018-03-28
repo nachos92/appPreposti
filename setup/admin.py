@@ -69,21 +69,15 @@ class PrepostoAdmin(admin.ModelAdmin):
     fields = [
         'n_matr',
 
-        'username',
-        'passw',
-        'first_name',
-        'last_name',
-
+        'nome',
+        'cognome',
         'superiore',
 
-        'groups',
-        'is_staff',
     ]
     list_display = [
-        'id',
         'n_matr',
-        'first_name',
-        'last_name',
+        'nome',
+        'cognome',
     ]
 
 

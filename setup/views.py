@@ -38,12 +38,9 @@ def uploadDip(request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             f = request.FILES['file']
-            #reader = f.read().decode("utf-8")
             reader = csv.reader(f)
-            #lines = reader.split("\n")
 
             for row in reader:
-                #Correzioni delle stringhe.
                 row = row[0].split(';')
                 row[0] = "".join(row[0].split())
                 row[1] = "".join(row[1].split())
@@ -56,7 +53,6 @@ def uploadDip(request):
                 dip.nome = row[1]
                 dip.cognome = row[2]
 
-                #print "Row[3]: "+row[3]+", str(row3): "+str(row[3])
                 imp = Impiego.objects.filter(pk=str(row[3]))
                 print "Conteggio: "+str(imp.count())
                 if imp.count()== 1:
@@ -72,11 +68,42 @@ def uploadDip(request):
             'upload_form.html',
             {
                 'form': form,
-                'title': 'Excel file upload and download example',
+                'title': 'Upload dipendenti',
                 'header': ('Seleziona il file CSV dei ' +
-                           'dipendenti da importare:')
+                           'dipendenti:')
     })
 
+def uploadFestivi(request):
+
+    if request.method == 'POST':
+
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            f = request.FILES['file']
+            reader = csv.reader(f)
+
+
+            for row in reader:
+                #Correzioni delle stringhe.
+                row = row[0].split('\n')
+                print "Riga: "+str(row)
+
+                gg = ggChiusura()
+                gg.data = row[0]
+                gg.save()
+
+            return HttpResponse("File valido!!")
+    else:
+        form = UploadFileForm()
+    return render(
+            request,
+            'upload_form.html',
+            {
+                'form': form,
+                'title': 'Upload giorni chiusura',
+                'header': ('Seleziona il file CSV dei ' +
+                           'giorni di chiusura:')
+    })
 
 
 def creaImpostazioniBase(testo):
@@ -324,12 +351,12 @@ def creaPreposto(testo):
         p = Preposto(
             n_matr="56",
 
-            first_name="Mauro",
-            last_name="Bianchi",
-            email="bb@example.com",
+            nome="Mauro",
+            cognome="Bianchi",
+            #email="bb@example.com",
 
-            username="prep1",
-            password="prep",
+            #username="prep1",
+            #password="prep",
 
             superiore=Responsabile.objects.all()[0],
 
@@ -374,14 +401,6 @@ def start(request):
 
 
 ### Handler per assegnare in automatico il gruppo di appartenenza all'utente
-
-@receiver(pre_save, sender=Preposto)
-def signPreposto(sender, instance, **kwargs):
-    print "Pre-save"
-    try:
-        instance.set_password(instance.passw)
-    except:
-        print "Errore set-password Preposto (signPreposto())"
 
 
 @receiver(pre_save, sender=Responsabile)

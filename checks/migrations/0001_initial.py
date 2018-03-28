@@ -19,7 +19,8 @@ class Migration(migrations.Migration):
             ],
             options={
                 'ordering': ['-id'],
-                'verbose_name_plural': 'segnalazioni (dipendenti)',
+                'verbose_name': 'segnalazione dipendente',
+                'verbose_name_plural': 'segnalazioni dipendente',
             },
         ),
         migrations.CreateModel(
@@ -31,7 +32,8 @@ class Migration(migrations.Migration):
             ],
             options={
                 'ordering': ['-id'],
-                'verbose_name_plural': 'segnalazioni (preposti)',
+                'verbose_name': 'segnalazione preposto',
+                'verbose_name_plural': 'segnalazioni preposto',
             },
         ),
         migrations.CreateModel(

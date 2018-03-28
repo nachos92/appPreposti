@@ -22,12 +22,12 @@ def controlloPlanning(request, matricola):
     try:
         preposto = Preposto.objects.get(n_matr=matricola)
         foglio = '{"n_matr":"'+ preposto.getN_matr()+'",'
-        foglio += '"nome":"' + preposto.first_name + '","cognome":"' + preposto.last_name + '",'
+        foglio += '"nome":"' + preposto.getNome() + '","cognome":"' + preposto.getCognome() + '",'
         foglio += '"reparti":['
 
 
         reparti = Settimana.objects.filter(
-            cod_preposto__id=preposto.getID(),
+            cod_preposto__n_matr=preposto.getN_matr(),
             data_inizio__lte=date.today()
         )
         print "Numero 'reparti': "+str(len(reparti))

@@ -2,8 +2,8 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import django.contrib.auth.models
 from django.conf import settings
+import django.contrib.auth.models
 
 
 class Migration(migrations.Migration):
@@ -112,18 +112,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Preposto',
             fields=[
-                ('user_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('n_matr', models.CharField(unique=True, max_length=8, verbose_name=b'Num. matricola')),
-                ('passw', models.CharField(default=b'password', help_text=b"Default: 'password'", max_length=20, verbose_name=b'Password')),
+                ('nome', models.CharField(max_length=20, verbose_name=b'nome')),
+                ('cognome', models.CharField(max_length=20, verbose_name=b'cognome')),
                 ('sottoposti', models.ManyToManyField(to='setup.Impiego', blank=True)),
             ],
             options={
                 'verbose_name_plural': 'Preposti',
             },
-            bases=('auth.user',),
-            managers=[
-                (b'objects', django.contrib.auth.models.UserManager()),
-            ],
         ),
         migrations.CreateModel(
             name='Responsabile',

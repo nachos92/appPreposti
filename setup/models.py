@@ -63,32 +63,27 @@ class Responsabile(User):
     def getEmail(self):
         return self.email
 
-class Preposto(User):
+class Preposto(models.Model):
 
     n_matr = models.CharField(unique=True,max_length=8, verbose_name="Num. matricola")
+    nome = models.CharField(max_length=20, verbose_name="nome")
+    cognome = models.CharField(max_length=20, verbose_name="cognome")
     sottoposti = models.ManyToManyField(Impiego, blank=True)
     superiore = models.ForeignKey(Responsabile, blank=True, verbose_name="responsabile")
-    passw = models.CharField(
-        max_length=20,
-        default="password",
-        verbose_name="Password",
-        help_text="Default: 'password'"
-    )
+
 
     class Meta:
         verbose_name_plural = "Preposti"
     def __unicode__(self):
-        return (self.getN_matr()+' - '+self.last_name)
+        return (self.getN_matr()+' - '+self.cognome)
     def getSuperiore(self):
         return str(self.superiore)
     def getN_matr(self):
         return self.n_matr
-    def getID(self):
-        return str(self.id)
     def getNome(self):
-        return self.first_name
+        return self.nome
     def getCognome(self):
-        return self.last_name
+        return self.cognome
 
 
 
