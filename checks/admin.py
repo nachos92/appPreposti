@@ -21,17 +21,11 @@ class SettimanaAdmin(admin.ModelAdmin):
                 'venerdi',
                 'sabato',
                 'domenica'
-
-                #'lun',
-                #'mar',
-                #'mer',
-                #'gio',
-                #'ven',
-
             ),
             },
          ),
         ('Debug',{
+            'classes': ('collapse',),
             'fields': (
                 'debug',
                 'lun_fatto',

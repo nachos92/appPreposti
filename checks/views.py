@@ -251,13 +251,3 @@ def visitato(request, matricola):
             p.save()
 
     return HttpResponse('')
-
-
-#Handler con uso per debug
-
-'''
-@receiver(post_save, sender=Settimana)
-def my_handler(sender, **kwargs):
-    print "PROVAPROVA"
-    print check_fuoriorario(Settimana.objects.get(pk=4).mercoledi)
-'''

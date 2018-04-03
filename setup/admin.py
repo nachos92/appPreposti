@@ -25,10 +25,8 @@ class UserAdmin(admin.ModelAdmin):
         'first_name',
         'last_name',
         'email',
-        'groups',
         'user_permissions'
     ]
-
 
 class GiornoChiusuraAdmin(admin.ModelAdmin):
     list_display = [
@@ -38,12 +36,10 @@ class GiornoChiusuraAdmin(admin.ModelAdmin):
         'data'
     ]
 
-
 class ControlloAdmin(admin.ModelAdmin):
     fields = ['titolo',
               'descrizione',
               ]
-
 
 class DipendenteAdmin(admin.ModelAdmin):
     fields = [
@@ -51,7 +47,7 @@ class DipendenteAdmin(admin.ModelAdmin):
         'cognome',
         'n_matricola',
         'impiego',
-        'fatto',
+        #'fatto',
         'controlli_extra'
     ]
 
@@ -59,11 +55,9 @@ class DipendenteAdmin(admin.ModelAdmin):
         'n_matricola',
         'cognome',
         'nome',
-        'fatto',
+        #'fatto',
         'impiego',
     ]
-
-
 
 class PrepostoAdmin(admin.ModelAdmin):
     fields = [
@@ -80,8 +74,6 @@ class PrepostoAdmin(admin.ModelAdmin):
         'cognome',
     ]
 
-
-
 class ImpiegoAdmin(admin.ModelAdmin):
     list_display = [
         'impiego',
@@ -90,7 +82,6 @@ class ImpiegoAdmin(admin.ModelAdmin):
         'impiego',
         'controlli',
     ]
-
 
 class ResponsabileAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
@@ -113,7 +104,6 @@ class ResponsabileAdmin(admin.ModelAdmin):
 
         'email',
 
-        'groups',
         'is_staff',
 
     ]
@@ -163,12 +153,11 @@ class ImpostazioneAdmin(admin.ModelAdmin):
     list_display = [
 
         'titolo',
-        'is_today',
+        #'is_today',
         'attiva',
-        'creazione',
+        #'creazione',
         'data_inizio',
     ]
-
 
 class OrarioAdmin(admin.ModelAdmin):
     list_display = [
@@ -178,29 +167,7 @@ class OrarioAdmin(admin.ModelAdmin):
     ordering = [
         'orario'
     ]
-'''
-class UtenteAdmin(admin.ModelAdmin):
-    fields = [
 
-        'username',
-        'password',
-
-        'nome',
-        'cognome',
-
-        'n_matr',
-        #'superiore',
-
-    ]
-    list_display = [
-
-        'username',
-        'n_matr',
-        'nome',
-        'cognome',
-    ]
-'''
-#admin.site.register(Utente, UtenteAdmin)
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)

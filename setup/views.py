@@ -140,106 +140,6 @@ def creaImpostazioniBase(testo):
 
     return testo
 
-def creaGruppi(testo):
-
-    testo += "\nCreazione gruppo 'Responsabile'... \t"
-
-    if len(Group.objects.all())!=2:
-        try:
-            g = Group(name="Responsabile", id=1)
-            g.save()
-        except:
-            testo += "ERRORE"
-        else:
-            elenco_permessi = [
-                'add_user',
-                'change_user',
-                'delete_user',
-                'add_logentry',
-                'change_logentry',
-                'delete_logentry',
-                'add_controllo',
-                'change_controllo',
-                'delete_controllo',
-                'add_controlloaggiuntivo',
-                'change_controlloaggiuntivo',
-                'delete_controlloaggiuntivo',
-                'add_impiego',
-                'change_impiego',
-                'delete_impiego',
-                'add_preposto',
-                'change_preposto',
-                'delete_preposto',
-                'add_dipendente',
-                'change_dipendente',
-                'delete_dipendente',
-                'add_orario',
-                'change_orario',
-                'delete_orario',
-                'change_impostazione',
-                'add_settimana',
-                'change_settimana',
-                'delete_settimana',
-                'change_segnalazioneprep',
-                'change_segnalazione',
-                'add_giornochiusura',
-                'change_giornochiusura',
-                'delete_giornochiusura',
-            ]
-
-            lista_permessi = []
-
-            for p in elenco_permessi:
-                lista_permessi.append(
-                    Permission.objects.get(
-                        codename=p
-                    )
-                )
-            g.permissions = lista_permessi
-
-            g.save()
-            testo += "OK"
-    else:
-        testo += "ERRORE"
-
-
-    testo += "\nCreazione gruppo 'Preposto'... \t\t"
-
-    if len(Group.objects.all())!=2:
-        try:
-            x = Group(name="Preposto", id=2)
-            x.save()
-        except:
-            testo += "ERRORE"
-        else:
-            elenco_permessi = [
-                'add_logentry',
-                'change_logentry',
-                'delete_logentry',
-                'add_controllo',
-                'change_controllo',
-                'delete_controllo',
-                'add_controlloaggiuntivo',
-                'change_controlloaggiuntivo',
-                'delete_controlloaggiuntivo',
-            ]
-
-            lista_permessi = []
-
-            for p in elenco_permessi:
-                lista_permessi.append(
-                    Permission.objects.get(
-                        codename=p
-                    )
-                )
-            x.permissions = lista_permessi
-
-            x.save()
-            testo += "OK"
-    else:
-        testo += "ERRORE"
-    return testo
-
 def creaImpieghi(testo):
 
     testo += "\nCreazione esempi di Impiego... \t\t"
@@ -390,7 +290,6 @@ def start(request):
     messaggio = "Setup in corso:\n"
 
     messaggio = creaImpostazioniBase(messaggio)
-    messaggio = creaGruppi(messaggio)
 
     return HttpResponse(messaggio)
 
