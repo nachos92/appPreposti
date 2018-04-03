@@ -117,12 +117,10 @@ FILE_UPLOAD_HANDLERS = ("django_excel.ExcelMemoryFileUploadHandler",
                         "django_excel.TemporaryExcelFileUploadHandler")
 
 
-#Da mettere a posto i tempi
+#Le funzioni aggiunte vengono eseguite ogni minuto.
 CRONJOBS = [
-    #Esegue ogni minuto.
-    ('*/1 * * * *', 'checks.crons.check_giornochiusura'),
 
-    #Esegue ogni minuto.
+    ('*/1 * * * *', 'checks.crons.check_giornochiusura'),
     ('*/1 * * * *', 'checks.crons.check_impostazioni'),
 ]
 

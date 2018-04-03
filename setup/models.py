@@ -69,8 +69,7 @@ class Preposto(models.Model):
     nome = models.CharField(max_length=20, verbose_name="nome")
     cognome = models.CharField(max_length=20, verbose_name="cognome")
     sottoposti = models.ManyToManyField(Impiego, blank=True)
-    superiore = models.ForeignKey(Responsabile, blank=True, verbose_name="responsabile")
-
+    superiore = models.ForeignKey(Responsabile, verbose_name="responsabile")
 
     class Meta:
         verbose_name_plural = "Preposti"
@@ -87,7 +86,8 @@ class Preposto(models.Model):
 
 class Dipendente(models.Model):
 
-    n_matricola = models.CharField(max_length=4, primary_key=True)
+    n_matricola = models.CharField(max_length=10, primary_key=True,
+                                   help_text="Lunghezza max: 10.")
     nome = models.CharField(max_length=15)
     cognome = models.CharField(max_length=15)
     impiego = models.ForeignKey(Impiego, blank=True,null=True)
@@ -102,7 +102,6 @@ class Dipendente(models.Model):
         ordering = [
             'cognome'
             ]
-
     def __unicode__(self):
         return self.n_matricola
     def getFatto_string(self):
@@ -120,7 +119,6 @@ class Dipendente(models.Model):
         return self.controlli_extra.all()
     def getImpiego(self):
         return str(self.impiego)
-
     @classmethod
     def create(cls, matr, nome, cognome, impiego):
         dipendente = cls(
@@ -165,14 +163,12 @@ class Impostazione(models.Model):
         verbose_name="Data attivazione",
         blank=False,
     )
-
     messaggio = models.TextField(
         max_length=150,
         default="Il preposto non ha eseguito il giro controlli in data odierna.",
         help_text="Contenuto dell'email inviata quando un preposto non esegue un giro di controlli.",
 
     )
-
     sogliaControllo_ore = models.IntegerField(
         default=1,
         help_text="Ore a disposizione per concludere il giro dei controlli.",
@@ -191,7 +187,6 @@ class Impostazione(models.Model):
     venerdi = models.BooleanField(default=True)
     sabato = models.BooleanField(default=True)
     domenica = models.BooleanField(default=True)
-
 
     class Meta:
         verbose_name_plural = "Impostazioni"

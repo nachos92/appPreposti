@@ -9,7 +9,6 @@ from setup.views import lista_scelte
 
 
 """
-
 @ <giorno>_fatto: viene reso True quando il preposto finisce la giornata.
 @ <giorno>_check: viene reso True dopo il primo controllo fatto da crontab. 
 """
@@ -44,19 +43,16 @@ class Settimana(models.Model):
     sab_check = models.BooleanField(default=False)
     dom_check = models.BooleanField(default=False)
 
-    completato = models.BooleanField(default=False)
     debug = models.BooleanField(default=True)
 
     def __unicode__(self):
         return str(self.id)
-
     def getId(self):
         return str(self.id)
     def getCod_preposto(self):
         return str(self.cod_preposto)
     def getPreposto(self):
         return self.cod_preposto
-
     def getArea(self):
         return str(self.area)
     def getDataInizio(self):
@@ -73,7 +69,6 @@ class Settimana(models.Model):
             return self.giovedi.orario
         if k==4:
             return self.venerdi.orario
-
     def periodo_attivo(self):
         """
         Ritorna TRUE se l'ora attuale e' compresa tra l'orario di inizio
@@ -84,7 +79,6 @@ class Settimana(models.Model):
         try:
             imp = Impostazione.objects.get(pk=1)
         except:
-            print "-> periodo_attivo(): errore get Impostazione (pk=1)."
             return False
         else:
             ora_attuale = datetime.datetime.now().time()
@@ -103,8 +97,6 @@ class Settimana(models.Model):
                 return True
             else:
                 return False
-
-
     class Meta:
         ordering = [
             '-id'
@@ -121,19 +113,17 @@ class SegnalazionePrep(models.Model):
     def create(cls, matr, dett):
         segnalazione = cls(matricola=matr, dettaglio=dett)
         return segnalazione
-
     def getMatricola(self):
         return str(self.matricola)
-
     def __unicode__(self):
         return str(self.id)
-
     class Meta:
         ordering = [
             '-id'
         ]
         verbose_name = 'segnalazione preposto'
         verbose_name_plural = 'segnalazioni preposto'
+
 
 class Segnalazione(models.Model):
     data = models.DateTimeField(auto_now_add=True)
@@ -144,13 +134,10 @@ class Segnalazione(models.Model):
     def create(cls, matr, dett):
         segnalazione = cls(matricola=matr, dettaglio=dett)
         return segnalazione
-
     def getMatricola(self):
         return str(self.matricola)
-
     def __unicode__(self):
         return str(self.id)
-
     class Meta:
         ordering = [
             '-id'

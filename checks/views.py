@@ -11,18 +11,20 @@ from django.dispatch import receiver
 
 
 def controlloPlanning(request, matricola):
-    """ Es. <url> localhost/8000/checks/56
+    """
+    Es. <url> localhost/8000/checks/56
     Produce un json con la informazioni sui dipendenti da controllare e gli orari dei controlli.
     """
-
-    print "### Controllo planning in corso... ###"
 
     i = Impostazione.objects.get(id=1)
 
     try:
         preposto = Preposto.objects.get(n_matr=matricola)
+
+        #GENERAZIONE JSON (variabile 'foglio')
         foglio = '{"n_matr":"'+ preposto.getN_matr()+'",'
-        foglio += '"nome":"' + preposto.getNome() + '","cognome":"' + preposto.getCognome() + '",'
+        foglio += '"nome":"' + preposto.getNome() + '",'
+        foglio += '"cognome":"' + preposto.getCognome() + '",'
         foglio += '"reparti":['
 
 
@@ -30,8 +32,6 @@ def controlloPlanning(request, matricola):
             cod_preposto__n_matr=preposto.getN_matr(),
             data_inizio__lte=date.today()
         )
-        print "Numero 'reparti': "+str(len(reparti))
-
 
         if len(reparti)==0:
             foglio += ']'
@@ -180,17 +180,13 @@ def controlloPlanning(request, matricola):
                 if iter < len(reparti):
                     foglio += ','
 
-
             foglio += ']'                   #fine reparti
-
         foglio += '}'                       #fine json
         return HttpResponse(
             foglio,
             content_type='application/json'
         )
-
     except Preposto.DoesNotExist:
-        print "Nessun match col n_matr passato"
         raise Http404
 
 def orarioPlanning(request, id):
@@ -218,19 +214,19 @@ def orarioPlanning(request, id):
 Ricezione del json contenente i controlli con esito negativo di un dipendente.
 Viene quindi creata una Segnalazione che riporta l'accaduto.
 """
+
 @csrf_exempt
 def visitato(request, matricola):
 
     received_json_data = json.loads(request.body)
     print "Ricevuto json da CLIENT:"
-    print str(received_json_data)
 
     dip = Dipendente.objects.get(n_matricola=matricola)
     dip.fatto = True
     dip.save()
 
     if not received_json_data:
-        print "----> Il dipendente "+matricola+" non ha controlli negativi!"
+        print "----> Dipendente "+matricola+": nessuna segnalazione necessaria."
     else:
         dip = Dipendente.objects.get(n_matricola=matricola)
         testo = ("Elenco controlli con esito negativo da parte di "
@@ -247,53 +243,12 @@ def visitato(request, matricola):
         Segnalazione.create(dip, testo).save()
 
 
-    """
-    Se sono stati visitati tutti i dipendenti,
-    si imposta come Fatto il planning.
-    """
     persone = Dipendente.objects.filter(impiego=dip.getImpiego())
     if len(persone.filter(fatto=False))==0:
         for p in persone:
             p = Dipendente.objects.get(n_matricola=p.getN_matr())
             p.fatto = False
-            print "Dip. "+p.getCognome()+": T ---> "+str(p.fatto)
             p.save()
-
-    return HttpResponse('')
-
-
-'''
-Devo reimpostare a False tutti gli attributi "Fatto"
-dei dipendenti coinvolti.
-'''
-def fineGiro(request,matricola, id):
-    plan = Settimana.objects.get(id=int(id))
-
-    print "Ricevuto fineGiro dal preposto "+str(matricola)
-    k = date.today().weekday()
-
-    if (k == 0):
-        plan.lun_fatto = True
-    if (k == 1):
-        plan.mar_fatto = True
-    if (k == 2):
-        plan.mer_fatto = True
-    if (k == 3):
-        plan.gio_fatto = True
-    if (k == 4):
-        plan.ven_fatto = True
-
-    persone = Dipendente.objects.filter(impiego=plan.getArea())
-    print "Persone: "
-    print str(persone)
-    for p in persone:
-        d = Dipendente.objects.get(matricola=p.getN_matr())
-        print "Dip. "+d.getCognome()+': T ---> F'
-        d.fatto = False
-        d.save()
-
-    plan.save()
-
 
     return HttpResponse('')
 

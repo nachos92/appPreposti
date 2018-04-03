@@ -37,33 +37,33 @@ def uploadDip(request):
 
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            f = request.FILES['file']
-            reader = csv.reader(f)
+            try:
+                f = request.FILES['file']
+                reader = csv.reader(f)
 
-            for row in reader:
-                row = row[0].split(';')
-                row[0] = "".join(row[0].split())
-                row[1] = "".join(row[1].split())
-                row[2] = "".join(row[2].split())
-                row[3] = "".join(row[3].split())
+                for row in reader:
+                    row = row[0].split(';')
+                    row[0] = "".join(row[0].split())
+                    row[1] = "".join(row[1].split())
+                    row[2] = "".join(row[2].split())
+                    row[3] = "".join(row[3].split())
 
+                    dip = Dipendente()
+                    dip.n_matricola = row[0]
+                    dip.nome = row[1]
+                    dip.cognome = row[2]
 
-                dip = Dipendente()
-                dip.n_matricola = row[0]
-                dip.nome = row[1]
-                dip.cognome = row[2]
+                    imp = Impiego.objects.filter(pk=str(row[3]))
+                    if imp.count()== 1:
+                        dip.impiego = Impiego.objects.get(pk=row[3])
 
-                imp = Impiego.objects.filter(pk=str(row[3]))
-                print "Conteggio: "+str(imp.count())
-                if imp.count()== 1:
-                    dip.impiego = Impiego.objects.get(pk=row[3])
-
-
-                dip.save()
-            return HttpResponse("File valido!!")
+                    dip.save()
+                return HttpResponse("File valido. Importazione eseguita.")
+            except:
+                return HttpResponse("File NON valido.")
     else:
         form = UploadFileForm()
-    return render(
+        return render(
             request,
             'upload_form.html',
             {
@@ -71,7 +71,8 @@ def uploadDip(request):
                 'title': 'Upload dipendenti',
                 'header': ('Seleziona il file CSV dei ' +
                            'dipendenti:')
-    })
+            }
+        )
 
 def uploadFestivi(request):
 
@@ -390,14 +391,6 @@ def start(request):
 
     messaggio = creaImpostazioniBase(messaggio)
     messaggio = creaGruppi(messaggio)
-    '''
-    messaggio = creaControlli(messaggio)
-    messaggio = creaImpieghi(messaggio)
-    messaggio = creaDipendenti(messaggio)
-    messaggio = creaOrariControlli(messaggio)
-    messaggio = creaSuperiore(messaggio)
-    messaggio = creaPreposto(messaggio)
-    '''
 
     return HttpResponse(messaggio)
 
@@ -408,36 +401,59 @@ def start(request):
 
 
 @receiver(pre_save, sender=Responsabile)
-def signResponsabile(sender, instance, **kwargs):
-    print "Pre-save"
+def setPassword(sender, instance, **kwargs):
     try:
         instance.set_password(instance.passw)
     except:
         print "Errore set-password Responsabile (signResponsabile())"
 
-'''
-@receiver(pre_save, sender=Responsabile)
-def hhh(sender, instance, **kwargs):
-    try:
-        g = Group.objects.get(name="responsabile")
 
-        g.user_set.add(instance)
+@receiver(post_save, sender=Responsabile)
+def permessiResponsabili(sender, instance, **kwargs):
 
-    except:
-        print "Errore assegnazione gruppo: 'Responsabile'"
+    #Assegnazione permessi
+    elenco_permessi = [
+        'add_user',
+        'change_user',
+        'delete_user',
+        'add_logentry',
+        'change_logentry',
+        'delete_logentry',
+        'add_controllo',
+        'change_controllo',
+        'delete_controllo',
+        'add_controlloaggiuntivo',
+        'change_controlloaggiuntivo',
+        'delete_controlloaggiuntivo',
+        'add_impiego',
+        'change_impiego',
+        'delete_impiego',
+        'add_preposto',
+        'change_preposto',
+        'delete_preposto',
+        'add_dipendente',
+        'change_dipendente',
+        'delete_dipendente',
+        'add_orario',
+        'change_orario',
+        'delete_orario',
+        'change_impostazione',
+        'add_settimana',
+        'change_settimana',
+        'delete_settimana',
+        'change_segnalazioneprep',
+        'change_segnalazione',
+        'add_giornochiusura',
+        'change_giornochiusura',
+        'delete_giornochiusura',
+    ]
 
-    else:
-        print g.save()
-        #instance.save()
-'''
+    lista_permessi = []
 
-'''
-@receiver(pre_save, sender=Preposto)
-def bbb(sender, instance, **kwargs):
-    try:
-        super(instance).groups.add(id=2)
-    except:
-        print "Errore assegnazione gruppo: 'Preposto'"
-'''
-
-
+    for p in elenco_permessi:
+        lista_permessi.append(
+            Permission.objects.get(
+                codename=p
+            )
+        )
+    instance.user_permissions = lista_permessi
