@@ -30,7 +30,7 @@ class UserAdmin(admin.ModelAdmin):
     ]
 
 
-class ggChiusuraAdmin(admin.ModelAdmin):
+class GiornoChiusuraAdmin(admin.ModelAdmin):
     list_display = [
         'data'
     ]
@@ -212,4 +212,4 @@ admin.site.register(ControlloAggiuntivo, ControlloAdmin)
 admin.site.register(Impiego, ImpiegoAdmin)
 admin.site.register(Orario, OrarioAdmin)
 admin.site.register(Impostazione, ImpostazioneAdmin)
-admin.site.register(ggChiusura, ggChiusuraAdmin)
+admin.site.register(GiornoChiusura, GiornoChiusuraAdmin)

@@ -1,7 +1,7 @@
 import datetime
 from datetime import date
 from django.core.mail import send_mail
-from setup.models import Responsabile, Impostazione, ggChiusura, Dipendente
+from setup.models import Responsabile, Impostazione, GiornoChiusura, Dipendente
 from models import Settimana, SegnalazionePrep
 from django.conf import settings
 
@@ -107,7 +107,7 @@ fineSettimana = inizioSettimana + datetime.timedelta(days=6)
 
 def check_giornochiusura():
     oggi = datetime.date.today()
-    if(ggChiusura.objects.filter(data=oggi).exists() == True):
+    if(GiornoChiusura.objects.filter(data=oggi).exists() == True):
         pass
     else:
         check_controlli()

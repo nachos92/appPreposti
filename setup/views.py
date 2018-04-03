@@ -78,21 +78,24 @@ def uploadFestivi(request):
     if request.method == 'POST':
 
         form = UploadFileForm(request.POST, request.FILES)
+
+        '''
+        Validazione: controllo che il contenuto sia della forma giusta.
+        '''
         if form.is_valid():
-            f = request.FILES['file']
-            reader = csv.reader(f)
+            try:
+                f = request.FILES['file']
+                reader = csv.reader(f)
 
+                for row in reader:
 
-            for row in reader:
-                #Correzioni delle stringhe.
-                row = row[0].split('\n')
-                print "Riga: "+str(row)
+                    gg = GiornoChiusura()
+                    gg.data = row[0]
+                    gg.save()
 
-                gg = ggChiusura()
-                gg.data = row[0]
-                gg.save()
-
-            return HttpResponse("File valido!!")
+                return HttpResponse("File valido. Importazione eseguita.")
+            except:
+                return HttpResponse("File NON valido.")
     else:
         form = UploadFileForm()
     return render(
@@ -103,7 +106,8 @@ def uploadFestivi(request):
                 'title': 'Upload giorni chiusura',
                 'header': ('Seleziona il file CSV dei ' +
                            'giorni di chiusura:')
-    })
+            }
+    )
 
 
 def creaImpostazioniBase(testo):
@@ -177,9 +181,9 @@ def creaGruppi(testo):
                 'delete_settimana',
                 'change_segnalazioneprep',
                 'change_segnalazione',
-                'add_ggchiusura',
-                'change_ggchiusura',
-                'delete_ggchiusura',
+                'add_giornochiusura',
+                'change_giornochiusura',
+                'delete_giornochiusura',
             ]
 
             lista_permessi = []
@@ -289,7 +293,7 @@ def creaDipendenti(testo):
             d = Dipendente(
                 n_matricola=random.randint(10,100),
                 nome="Nome",
-                cognome=("Esempio "+str(i)),
+                cognome=("Cognome "+str(i)),
             )
             d.impiego= (Impiego.objects.all()[random.randint(0,3)])
             d.save()

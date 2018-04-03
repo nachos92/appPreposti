@@ -112,7 +112,7 @@ def controlloPlanning(request, matricola):
                         foglio += ']'
                     elif weekday == 6 and i.domenica == False:
                         foglio += ']'
-                    elif ggChiusura.objects.filter(data=oggi).exists() == True:
+                    elif GiornoChiusura.objects.filter(data=oggi).exists() == True:
                         foglio += ']'
                     else:
                         gg = date.today().weekday()

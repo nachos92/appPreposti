@@ -85,8 +85,6 @@ class Preposto(models.Model):
     def getCognome(self):
         return self.cognome
 
-
-
 class Dipendente(models.Model):
 
     n_matricola = models.CharField(max_length=4, primary_key=True)
@@ -168,7 +166,7 @@ class Impostazione(models.Model):
         blank=False,
     )
 
-    messaggio = models.CharField(
+    messaggio = models.TextField(
         max_length=150,
         default="Il preposto non ha eseguito il giro controlli in data odierna.",
         help_text="Contenuto dell'email inviata quando un preposto non esegue un giro di controlli.",
@@ -214,9 +212,7 @@ class Impostazione(models.Model):
         else:
             return False
 
-
-
-class ggChiusura(models.Model):
+class GiornoChiusura(models.Model):
     data = models.DateField(unique=True)
     def __unicode__(self):
         return str(self.data)
