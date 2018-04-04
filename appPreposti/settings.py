@@ -126,19 +126,6 @@ CRONJOBS = [
 
 
 
-
-"""
-PARAMETRI EMAIL.
-"""
-
-EMAIL_BACKEND= 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.mail.yahoo.it'
-EMAIL_HOST_USER = "piano_master92@yahoo.it"
-EMAIL_HOST_PASSWORD = "zanarkand92"
-
-
 '''
 Parametri (valori standard)
 '''
@@ -147,3 +134,16 @@ MESSAGGIO = "Messaggio standard (da file settings.py)."
 
 SOGLIA_ORE = 1
 SOGLIA_MINUTI = 0
+
+
+
+
+# PARAMETRI EMAIL.
+
+EMAIL_BACKEND= 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.mail.yahoo.it'
+EMAIL_HOST_USER = "piano_master92@yahoo.it"
+EMAIL_HOST_PASSWORD = "zanarkand92"
+

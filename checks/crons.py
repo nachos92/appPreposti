@@ -84,12 +84,9 @@ def invio_email(x):
             auth_password= selezPassword(),
             fail_silently=False
         )
-        print "INVIO MAIL ----------"
-
+        print "INVIO EMAIL"
     except:
         print "Errore send_mail"
-    else:
-        pass
 
 soglia_tot = datetime.timedelta(
     hours=selezSoglia_ore(),
@@ -117,8 +114,6 @@ def check_fuoriorario(orario):
     '''
     Ritorna true se si e' oltre l'orario limite per eseguire i controlli
     del giorno.
-    :param orario:
-    :return:
     '''
     if datetime.datetime.now().time() > ((datetime.datetime.combine(
             datetime.date(1,1,1),
@@ -134,9 +129,6 @@ dimenticato di fare un giro controlli o che non l'abbiano fatto fuori tempo limi
 secondo caso vuol dire che magari hanno iniziato tardi e all'orario limite devono ancora finire).
 """
 def check_controlli():
-
-
-
 
     #Ottengo gli elem di Settimana nel periodo giusto
     totali = Settimana.objects.filter(data_inizio__lte=date.today())

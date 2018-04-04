@@ -10,26 +10,10 @@ from django.dispatch import receiver
 
 lista_scelte = []
 
-'''
-Funzioni di caricamento automatico.
-Creano le istanze relative, mentre per i preposti e i responsabili creano gli appositi User,
-coi quali effettuare l'accesso all'interfaccia di amministrazione.
 
-La pagina fornira' un form dal quale caricare un file excel, dal quale verranno letti in automatico
-i valori.
-'''
 class UploadFileForm(forms.Form):
     file = forms.FileField()
 
-"""
-Carico un xls con righe del tipo
-<cognome> <nome>
-
-Per ogni riga viene creato un User-Responsabile con
-credenziali del tipo:
--username: cognome+iniziale maiuscola nome
--password: 0000 
-"""
 
 def uploadDip(request):
 
@@ -258,10 +242,6 @@ def creaPreposto(testo):
 
             nome="Mauro",
             cognome="Bianchi",
-            #email="bb@example.com",
-
-            #username="prep1",
-            #password="prep",
 
             superiore=Responsabile.objects.all()[0],
 
