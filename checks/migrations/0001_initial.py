@@ -56,7 +56,6 @@ class Migration(migrations.Migration):
                 ('ven_check', models.BooleanField(default=False)),
                 ('sab_check', models.BooleanField(default=False)),
                 ('dom_check', models.BooleanField(default=False)),
-                ('completato', models.BooleanField(default=False)),
                 ('debug', models.BooleanField(default=True)),
             ],
             options={

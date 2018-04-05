@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Dipendente',
             fields=[
-                ('n_matricola', models.CharField(max_length=4, serialize=False, primary_key=True)),
+                ('n_matricola', models.CharField(help_text=b'Lunghezza max: 10.', max_length=10, serialize=False, primary_key=True)),
                 ('nome', models.CharField(max_length=15)),
                 ('cognome', models.CharField(max_length=15)),
                 ('fatto', models.BooleanField(default=False)),
@@ -52,7 +52,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='ggChiusura',
+            name='GiornoChiusura',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('data', models.DateField(unique=True)),
@@ -82,7 +82,7 @@ class Migration(migrations.Migration):
                 ('attiva', models.BooleanField(default=False)),
                 ('creazione', models.DateTimeField(auto_now_add=True)),
                 ('data_inizio', models.DateField(help_text=b"Inserire data dell'entrata in vigore delle impostazioni.", verbose_name=b'Data attivazione')),
-                ('messaggio', models.CharField(default=b'Il preposto non ha eseguito il giro controlli in data odierna.', help_text=b"Contenuto dell'email inviata quando un preposto non esegue un giro di controlli.", max_length=150)),
+                ('messaggio', models.TextField(default=b'Il preposto non ha eseguito il giro controlli in data odierna.', help_text=b"Contenuto dell'email inviata quando un preposto non esegue un giro di controlli.", max_length=150)),
                 ('sogliaControllo_ore', models.IntegerField(default=1, help_text=b'Ore a disposizione per concludere il giro dei controlli.', verbose_name=b'Soglia ore')),
                 ('sogliaControllo_minuti', models.IntegerField(default=0, help_text=b'Minuti a disposizione per concludere il giro dei controlli.', verbose_name=b'Soglia minuti')),
                 ('lunedi', models.BooleanField(default=True)),
@@ -139,7 +139,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='preposto',
             name='superiore',
-            field=models.ForeignKey(verbose_name=b'responsabile', blank=True, to='setup.Responsabile'),
+            field=models.ForeignKey(verbose_name=b'responsabile', to='setup.Responsabile'),
         ),
         migrations.AddField(
             model_name='dipendente',
