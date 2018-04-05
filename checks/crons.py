@@ -16,54 +16,36 @@ in base allo stato attivo/non attivo dell'oggetto impostazione.
 
 def selezMessaggio():
     try:
-        imp = Impostazione.objects.get(pk=1)
+        imp = Impostazione.objects.get(id=1)
         if (imp.attiva==True):
             return imp.getMessaggio()
     except:
-        print "Impostazione(pk=1) inesistente."
+        print "Errore selezMessaggio()."
     else:
         return getattr(settings, "MESSAGGIO", None)
 
 def selezMittente():
-    try:
-        imp = Impostazione.objects.get(pk=1)
-        if (imp.attiva==True):
-            return imp.getSMTP_username()
-    except:
-        print "Impostazione (pk=1) inesistente."
-    else:
-        return getattr(settings, "EMAIL_HOST_USER", None)
+    return getattr(settings, "EMAIL_HOST_USER", None)
 
 def selezPassword():
-    try:
-        imp = Impostazione.objects.get(pk=1)
-        if (imp.attiva==True):
-            return imp.getSMTP_password()
-    except:
-        print "Impostazione (pk=1) inesistente."
-    else:
-        return getattr(settings, "EMAIL_HOST_PASSWORD", None)
+    return getattr(settings, "EMAIL_HOST_PASSWORD", None)
 
 def selezSoglia_ore():
     try:
-        imp = Impostazione.objects.get(pk=1)
+        imp = Impostazione.objects.get(id=1)
         if (imp.attiva==True):
             return imp.getSogliaControllo_ore()
     except:
-        print "Impostazione (pk=1) inesistente."
-        return 1
-    else:
+        print "Errore selezSoglia_ore()."
         return getattr(settings, "SOGLIA_ORE", None)
 
 def selezSoglia_minuti():
     try:
-        imp = Impostazione.objects.get(pk=1)
+        imp = Impostazione.objects.get(id=1)
         if (imp.attiva==True):
             return imp.getSogliaControllo_minuti()
     except:
-        print "Impostazione (pk=1) inesistente."
-        return 0
-    else:
+        print "Errore selezSoglia_minuti()."
         return getattr(settings, "SOGLIA_MINUTI", None)
 
 
@@ -93,10 +75,6 @@ soglia_tot = datetime.timedelta(
     minutes=selezSoglia_minuti()
 )
 
-'''
-inizioSettimana = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday())
-fineSettimana = inizioSettimana + datetime.timedelta(days=6)
-'''
 
 ################## Fine funzioni e variabili di supporto
 

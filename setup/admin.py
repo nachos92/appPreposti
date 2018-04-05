@@ -151,7 +151,7 @@ class ImpostazioneAdmin(admin.ModelAdmin):
     )
 
     list_display = [
-
+        'id',
         'titolo',
         #'is_today',
         'attiva',
