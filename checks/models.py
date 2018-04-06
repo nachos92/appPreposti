@@ -1,6 +1,6 @@
 from django.db import models
 from setup.models import Preposto, Impiego, Dipendente, Impostazione,Orario
-import datetime
+import datetime as dt
 from datetime import date
 from setup.views import lista_scelte
 
@@ -69,6 +69,10 @@ class Settimana(models.Model):
             return self.giovedi.orario
         if k==4:
             return self.venerdi.orario
+        if k==5:
+            return self.sabato.orario
+        if k==6:
+            return self.domenica.orario
     def periodo_attivo(self):
         """
         Ritorna TRUE se l'ora attuale e' compresa tra l'orario di inizio
@@ -77,26 +81,19 @@ class Settimana(models.Model):
 
         """
         try:
-            imp = Impostazione.objects.get(pk=1)
+            imp = Impostazione.objects.get(id=1)
         except:
+            print "Errore periodo_attivo()"
             return False
         else:
-            ora_attuale = datetime.datetime.now().time()
+            ora_attuale = dt.datetime.combine(dt.date(1,1,1),
+                                    dt.datetime.now().time())
+            orario_controlli = dt.datetime.combine(dt.date(1,1,1),self.getOrario_oggi())
+            ora_max = orario_controlli + dt.timedelta(
+                hours=imp.getSogliaControllo_ore(),
+                minutes=imp.getSogliaControllo_minuti())
 
-
-            if (ora_attuale > self.getOrario_oggi()
-                    and ora_attuale <= (
-                        datetime.datetime.combine(
-                            datetime.date(1,1,1),
-                            self.getOrario_oggi()
-                            ) + datetime.timedelta(
-                                hours=imp.getSogliaControllo_ore(),
-                                minutes=imp.getSogliaControllo_minuti()
-                    )).time()
-            ):
-                return True
-            else:
-                return False
+            return (ora_attuale > orario_controlli) and (ora_attuale <= ora_max)
     class Meta:
         ordering = [
             '-id'

@@ -47,7 +47,7 @@ class DipendenteAdmin(admin.ModelAdmin):
         'cognome',
         'n_matricola',
         'impiego',
-        #'fatto',
+        'fatto',
         'controlli_extra'
     ]
 
@@ -55,7 +55,7 @@ class DipendenteAdmin(admin.ModelAdmin):
         'n_matricola',
         'cognome',
         'nome',
-        #'fatto',
+        'fatto',
         'impiego',
     ]
 
