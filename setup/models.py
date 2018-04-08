@@ -7,7 +7,7 @@ from datetime import date
 class Controllo(models.Model):
 
     titolo = models.CharField(max_length=40)
-    descrizione = models.CharField(default='', max_length=250, blank=True)
+    descrizione = models.TextField(default='', max_length=250, blank=True)
     check = models.BooleanField(default=False)
 
     def __unicode__(self):
@@ -23,7 +23,7 @@ class Controllo(models.Model):
 
 class ControlloAggiuntivo(models.Model):
     titolo = models.CharField(max_length=40)
-    descrizione = models.CharField(default='', max_length=250, blank=True)
+    descrizione = models.TextField(default='', max_length=250, blank=True)
     check = models.BooleanField(default=False)
 
     def __unicode__(self):
@@ -165,18 +165,26 @@ class Impostazione(models.Model):
     )
     messaggio = models.TextField(
         max_length=150,
-        default="Il preposto non ha eseguito il giro controlli in data odierna.",
-        help_text="Contenuto dell'email inviata quando un preposto non esegue un giro di controlli.",
+        default=(
+            "Il preposto non ha eseguito il giro controlli in data odierna."
+        ),
+        help_text=(
+            "Contenuto dell'email inviata quando un preposto non esegue un giro di controlli."
+        ),
 
     )
     sogliaControllo_ore = models.IntegerField(
         default=1,
-        help_text="Ore a disposizione per concludere il giro dei controlli.",
+        help_text=(
+            "Ore a disposizione per concludere il giro dei controlli."
+        ),
         verbose_name="Soglia ore"
     )
     sogliaControllo_minuti = models.IntegerField(
         default=0,
-        help_text="Minuti a disposizione per concludere il giro dei controlli.",
+        help_text=(
+            "Minuti a disposizione per concludere il giro dei controlli."
+        ),
         verbose_name="Soglia minuti"
     )
 
